@@ -6,6 +6,8 @@ Demin Yin - PHP UK Conference 2019
 
 -  [Talk in Youtube](https://youtu.be/_Yjk7EcZ2dI)
 
+🏷️ Tags: `talk`, `2019`, `phpuk19`, `microservice`, `php`, `docker`, `performance`, `high-scalability`, `http`, `cloud`, `conference`
+
 ## General notes
 
 - Talk about how performance microservice is with PHP. How to build high-performance microservices, running extremely fast on production.
