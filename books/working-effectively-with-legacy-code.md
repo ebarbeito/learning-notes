@@ -78,11 +78,90 @@ by Michael C. Feathers
   3. How will we know that **we haven't broken anything**?
 * How much change can you afford if changes are risky?
   * Most teams/people try to manage risk in a very conservative way (...) "_it involves less editing and it's safer_", they think.
-* 
+* Avoiiding change has bad consequences.  When you do it, it becomes routine
+  * The last consequence of avoiding change is fear
+  * Often they aren't aware of how much fear they have until they learn better techniques and the fear starts to fade away
 
 ### Chapter 2. Working with Feedback
 
-* 
+* Changes in systems can be made by two primary ways: Edit and Pray, and Cover and Modify
+* **Edit and Pray** → When you make changes, you are hoping and praying that you'll get them right
+  * You plan changes to make, make sure you understand the code to modify, you make the cnahges and run the system to make sure (Sidenote: "_make sure_" subjectively) you didn't break anything
+  * This way seems like "working with care", a professional thing to do. But "safety" isn't solely a function of care
+  * Working with care diesn't do much for you if you don't use the right tools and techniques
+* **Cover and Modify** → Is different; is working with a safety net when we change software
+  * Covering software means covering it with tests
+  * We still apply the same care, but with the feedback we get, we are able to make changes more carefully
+* We can do "testing to detect change", this is calles regression testing
+* When we have tests that detect change, it is like having a vise around our code (Software Vise). So, we are changing only one piece of behaviour at a time; changing only what you intend to → we're in control of our work
+* The feedback we can get from regression testing is very useful
+* The tests won't catch everything (...) After every little change that we make, we run that little suite of unit tests (...) We add some tests to verify the new behaviour
+* **Unit testing is one of the most important components in legacy code work**. They can give you feedback as you develop and allow you to refactor with much more safety
+
+#### What is Unit Testing?
+
+* They are tests in isolation of individual components of software
+* What are components? → The most atomic behavioral units of a system
+  * In procedural code, the units are often functions
+  * In object-oriented, the units are classes
+* Test Harness → Term for the testing code that we write to exercise some piece of software and the code that is needed to run it
+* Unit tests have qualities to be good: they run fast, and help us localize problems
+  * A unit test that takes 1/10th of a second to run is a slow one
+  * They run fasts. If the  don't, then they aren't unit tests
+* A test is not a unit test if:
+  * It talks to a database
+  * It communicates across a network
+  * It touches the file system
+  * You have to do special things to your environment (editing conf files, e.g)
+* Last is not bad, but not unit ones. It's important to be able to separate them from true unit tests, to keep a set of ones that can be run fast whenever you make changes
+
+##### Test Coverings
+
+* How can we **start** making changes in a legacy system?
+  * The **safest way** (_Sidenote_: the best; given a choice) is to **have tests around** the changes
+* We want to make changes, so we identify a "**change point**". Can we do a test harness around?
+  * Sometimes this might be tricky, because **dependencies**
+  * Dependencies bring us different problems in order to allow to tests first the code you want to change
+* Dependency is one of the **most critical** problems in software development
+  * **Much legacy code involves breaking dependencie**s, so that change can be easier
+  * (_Sidenote_: So, working with legacy code involves knowing a lot about techniques to do this breaks in a safer way)
+* **The Legacy Code Dilema**. When we change code, we should have tests in place. To put tests in place, we often have to change code
+  * This requires dependency breaks. Some basic refactoring techniques (from the Catalog) to this are: "*Primitivize Parameter*", and "*Extract Interface*"
+  * The **trick** is to do these **initial refactorings very conservatively**
+* When you break dependencies in legacy code, you often have to suspend your sense of aesthetics a bit. Some dependencies break cleanly, but others not.
+  * They are like incision points in surgery. There might be a scar left in code after your work
+  * If you can cover code around the point where you broke dependencies later, you can heal the scar too
+
+#### The Legacy Code Change: Algorithm
+
+* Here is an algorithm when you have to make a change in a legacy code base:
+  1. Identify change points
+  2. Find test points
+  3. Break dependencies
+  4. Make changes and refactor
+* Day-to-day goal in legacy code: to make changes. But **functional changes that deliver value** while bringing more of the system under test
+* **Identify change points**
+  * Places you need to make changes, it depends on your architecture
+  * If you're not sure, go to Chapter 16 "*I don't understand the code well enough to change it*", and Chapter 17 "*My application has no structure*"
+* **Find test points**
+  * Sometimes is easy, but often it isn't
+  * Chapters 11 and 12 offer techniques that you can use to determine where you need to write your tests for particular changes
+* **Break dependencies**
+  * Often, the most obvious impediment to testing. Two ways this impediment manifests are:
+    * Difficulty instantiating objects in test harnesses
+    * Difficulty running methods in test harnesses
+  * Go to Chapter 23 to see some practices to make first safer incisions in a system, as you start to bring it under tests
+  * Dependency problems also show up when we have an idea for a test but we can't write it easily. Go to Chapter 22 for this
+  * If you find that you can break dependencies but it takes too long, then go to Chapter 17
+* **Write tests**
+  * Tests that you write for legacy code are different from those that you write for new code
+  * Chapter 13 gives information about the role of tests while working with legacy code
+* **Make changes and refactor**
+  * I advocate **using TDD to add features in legacy code**
+  * Chapter 8 "*How do I add a feature?*" gives description about TDD and some other feature addition technique
+  * Chapters 20, 22 and 21 cover many of the techniques you can use to start to move your legacy code toward better structure
+    * The things described in these chapters are "**baby steps**"
+    * They don't show you how to make your design ideal, clean, or pattern-enriched (not the goal of this book)
 
 ### Chapter 3. Sensing and Separation
 
