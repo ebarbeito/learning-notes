@@ -39,7 +39,7 @@ Matthias Noback - PHP Barcelona 2019
 
   - The most important distinction is Domain vs. Infrastructure
 
-    ![Domain vs Infrastructure](/Users/enrique.barbeito/Projects/_sandbox/learning-notes/talks/.assets/2019–php-barcelona-advanced-web-application-architecture.md/domain_vs_infrastructure.png)
+    ![Domain vs Infrastructure](/Users/enrique.barbeito/Projects/_sandbox/learning-notes/talks/.assets/2019-php-barcelona-advanced-web-application-architecture.md/domain_vs_infrastructure.png)
 
   - If you separate both two, you will be in a very better position and, maybe, you need any other groups as well
 
@@ -56,7 +56,7 @@ Matthias Noback - PHP Barcelona 2019
     - This is the intention that they have
     -  So, make a distinction between what they want and how they actually can do that -> distinction between intention for communication and the supporting implementation
 
-| ![Ports](.assets/2019–php-barcelona-advanced-web-application-architecture.md/ports.png) | ![Adapters](.assets/2019–php-barcelona-advanced-web-application-architecture.md/adapters.png) |
+| ![Ports](.assets/2019-php-barcelona-advanced-web-application-architecture.md/ports.png) | ![Adapters](.assets/2019-php-barcelona-advanced-web-application-architecture.md/adapters.png) |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 
 -  
