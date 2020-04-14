@@ -50,7 +50,7 @@ Matthias Noback - PHP Barcelona 2015
 
   - Input ports for your application, to allow the outside to communicate
 
-    ![Exposing ports](/Users/enrique.barbeito/Projects/_sandbox/learning-notes/talks/.assets/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md/exposing_ports.png)
+    ![Exposing ports](.assets/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md/exposing_ports.png)
 
 - Here is where we start looking at hexagons, because if we are talking about input/output ports, we draw an hexagon
 
@@ -60,13 +60,13 @@ Matthias Noback - PHP Barcelona 2015
 
   - The use of a hexagon metaphor has no sense at all, maybe just because it looks nice. Has some sort of symmetry
 
-    ![Hexagon ports](/Users/enrique.barbeito/Projects/_sandbox/learning-notes/talks/.assets/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md/hexagon_ports.png)
+    ![Hexagon ports](.assets/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md/hexagon_ports.png)
 
 - When you define a port, you need a communication protocol. Each port has its own language
 
 - For example, a Web port talks HTTP
 
-| ![Application layer Zoom in 1](/Users/enrique.barbeito/Projects/_sandbox/learning-notes/talks/.assets/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md/application_layer_zoom_in_1.png) | ![Application layer Zoom in 2](/Users/enrique.barbeito/Projects/_sandbox/learning-notes/talks/.assets/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md/application_layer_zoom_in_2.png) | ![Application layer Zoom in 3](/Users/enrique.barbeito/Projects/_sandbox/learning-notes/talks/.assets/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md/application_layer_zoom_in_3.png) |
+| ![Application layer Zoom in 1](.assets/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md/application_layer_zoom_in_1.png) | ![Application layer Zoom in 2](.assets/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md/application_layer_zoom_in_2.png) | ![Application layer Zoom in 3](.assets/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md/application_layer_zoom_in_3.png) |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 |                                                              |                                                              |                                                              |
 
