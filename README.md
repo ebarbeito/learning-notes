@@ -16,7 +16,8 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 
 ## 🗣️ Talks
 
-* _.gitkeep_
+* [Advanced Web Application Architecture](talks/2019-php-barcelona-advanced-web-application-architecture.md), by **Matthias Noback**, PHP Barcelona 2019
+* [Hexagonal Architecture, Message-Oriented Software Design](talks/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md) by **Matthias Noback**, PHP Barcelona 2015
 
 ## 🏷️ Topics
 
