@@ -42,3 +42,37 @@ As said before, a dedicated branch is created (from `master`) for each resource 
 
 This is a manual process, so even if I try to be as methodical as possible, it doesn't care if I end up not following some of the above conventions in the strictest way. There are no fixed rules, indeed.
 
+#### Reading a book
+
+> 📚 See the the [open pull requests](https://github.com/ebarbeito/learning-notes/pulls?q=is%3Apr+is%3Aopen+label%3Abook) for the current books I am currently studying
+
+It doesn't matter what format I am consuming; can be electronic (epub, pdf, etc.) or paper, but I always try to highlight those chunks of information which consider they teach me or remind me valuable knowledge. Additionally, I like to take sidenotes, going back or googling around while reading.
+
+Right before starting a book, I `pull` the `master` branch and `push` a skeleton for the future notes I will collect here. The steps I follow are:
+
+```
+# Start a new branch for the new book
+git checkout master \
+    && git pull \
+    && git checkout -b book/title-of-the-new-one
+
+# Add the new file writing some skeleton inside
+touch books/title-of-the-new-one.md
+
+# Commit and push the new work-in-progress book
+git add . \
+    && git commit -m'Add book: Title of the new one' \
+    && git push origin book/title-of-the-new-one
+
+# Open a new pull request
+```
+
+The steps I follow opening the pull request are:
+
+* Add the preffix `[wip]` in the title. This is to know which PRs are in progress, and which are pending to merge (once I finish a book and its notes, I update its PR removing the wip-preffix, but before merge I like to read the result to remind it)
+* Add the tag `book`, plus a set of other ones related with the content
+* Fill the description with the title of the book, author, some abstract and link(s) to get more info
+* Attach the PR to the [kanban project](https://github.com/ebarbeito/learning-notes/projects/1) (this action moves it to the *In progress* column)
+
+If the book was first added to the [issue list](https://github.com/ebarbeito/learning-notes/issues) (*the backlog*), then I go and delete its related issue to keep the upcoming backlog clean.
+

@@ -4,17 +4,25 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 
 ## 📓 Articles
 
+> See the [open PRs](https://github.com/ebarbeito/learning-notes/pulls?q=is%3Apr+is%3Aopen+label%3Aarticle) for the current articles I am currently reading
+
 * _.gitkeep_
 
 ## 📚 Books
+
+> See the [open PRs](https://github.com/ebarbeito/learning-notes/pulls?q=is%3Apr+is%3Aopen+label%3Abook) for the current books I am currently studying
 
 * _.gitkeep_
 
 ## 🎓 Courses
 
+> See the [open PRs](https://github.com/ebarbeito/learning-notes/pulls?q=is%3Apr+is%3Aopen+label%3Acourse) for the current courses I am currently attending
+
 * _.gitkeep_
 
 ## 🗣️ Talks
+
+> See the [open PRs](https://github.com/ebarbeito/learning-notes/pulls?q=is%3Apr+is%3Aopen+label%3Atalk) for the current talks I am currently watching
 
 * _.gitkeep_
 
