@@ -63,7 +63,7 @@ Demin Yin - PHP UK Conference 2019
 
   - … see image below
 
-    ![Docker images and tags](/Users/enrique.barbeito/Projects/_sandbox/learning-notes/talks/.assets/2019-phpuk19-massively-scaled-high-performance-web-services-with-php.md/docker_images_tags.png)
+    ![Docker images and tags](.assets/2019-phpuk19-massively-scaled-high-performance-web-services-with-php.md/docker_images_tags.png)
 
 - These images are being built and deployed manually. They don’t have any CI jobs to do that automatically (because it’s dangerous)
 
