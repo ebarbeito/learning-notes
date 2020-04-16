@@ -70,7 +70,7 @@ Matthias Noback - PHP Barcelona 2015
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 |                                                              |                                                              |                                                              |
 
-- 
+-
   - When at some port there is some kind of communication, there is also some translation going on inside the application
   - This translation is called adapter code. For instance, a translation from Web-requests to things that can be processed to the domain layer
   - Ports: allow communication to happen. Adapters: translation code. Translate messages from the outside world to inside
@@ -81,4 +81,3 @@ Matthias Noback - PHP Barcelona 2015
 - Then, we have standalone use cases. We can have commands and we have command handlers which are basically application services which take the actual actions
 - A lot of code that is used to put in the controllers, can be moved to command handlers as long as we are aware of the necessity to actually not depend on anything concrete like the request or the form, or the entity manager, etc.
 - Hexagonal architecture is a good fit for TDD, BDD, DDD, CQRS, Event Sourcing. Is very supportive about all this things
-

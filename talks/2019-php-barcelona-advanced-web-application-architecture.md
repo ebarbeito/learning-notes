@@ -35,7 +35,7 @@ Matthias Noback - PHP Barcelona 2019
     - All the things related to your domain model
     - All the things related to you database
 
-- But not too may groups, because now you don't where how to look 
+- But not too may groups, because now you don't where how to look
 
   - The most important distinction is Domain vs. Infrastructure
 
@@ -59,8 +59,8 @@ Matthias Noback - PHP Barcelona 2019
 | ![Ports](.assets/2019-php-barcelona-advanced-web-application-architecture.md/ports.png) | ![Adapters](.assets/2019-php-barcelona-advanced-web-application-architecture.md/adapters.png) |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 
--  
-  -  
+-
+  -
     - **Ports**. A way of communicating intention
     - **Adapters**. Are the implementations that make it possible to support this communication
     - Adapters can be replaced without affecting ports
@@ -76,4 +76,3 @@ Matthias Noback - PHP Barcelona 2019
   - Example: if you want to have a valid email address in your domain, then you don't want to write the code yourself to check email validation. You just import a library that does it for you. There is code reuse
   - But as soon as you start using something like the ORM, or like a file functions, or try to use an HTTP client to talk to some external service in my domain, ..all of this is a warning sign that is not vendor code or reusable code in general
   - It's about which code makes (or uses) I/O, like a network connection, file system operations. As soon as a library does that, it should not be used in the domain
-

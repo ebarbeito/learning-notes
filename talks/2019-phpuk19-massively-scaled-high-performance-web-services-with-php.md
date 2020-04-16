@@ -128,4 +128,3 @@ Demin Yin - PHP UK Conference 2019
 
 - Use other network protocols: HTTP/2, Tars
 - Tars protocol, is a binary protocol different from other solutions like plain JSON. For example, can convert some kilobytes of JSON into a binary data that requires less space
-
