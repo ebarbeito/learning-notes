@@ -4,7 +4,7 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 
 ## 📓 Articles
 
-* _.gitkeep_
+* [A Journey into Pair Programming](articles/a-journey-into-pair-programming.md), by **Jennifer Schrader**. php[architect] Feb. 2020
 
 ## 📚 Books
 
