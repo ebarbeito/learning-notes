@@ -59,6 +59,8 @@ git checkout master \
 # Add the new file writing some skeleton inside
 touch books/title-of-the-new-one.md
 
+# Update README.md indexing the new book
+
 # Commit and push the new work-in-progress book
 git add . \
     && git commit -m'Add book: Title of the new one' \
