@@ -6,7 +6,8 @@ by Mark Seemann
 
 > This course teaches how to build an application from the outside in - starting with tests targeting actual features or use cases of an application, but gradually working towards a more and more detailed specification of the components of an application. The focus is on the technical side of TDD, not the business side. Approximately half of the content is a series of C# demos, building a small RESTful service from scratch.
 
-* [Course in Pluralsight](https://www.pluralsight.com/courses/outside-in-tdd)
+* [Course in Pluralsight](https://www.pluralsight.com/courses/outside-in-tdd) (also [recommended](https://app.pluralsight.com/library/courses/outside-in-tdd/recommended-courses) ones)
+* [Original sample implementation by Mark](https://github.com/ploeh/RunningJournalApi)
 * [My demo implementation](https://github.com/ebarbeito/running-journal-api)
 
 ------
@@ -429,92 +430,196 @@ by Mark Seemann
 * In this module, you'll learn about behavior verification
 * You'll also learn about something called characterization tests
 
-### Prerequisites
+### Outside-In versus Bottom-Up
 
-* Apart from the pre-requisites generally required for this course, in this module I'm going to assume that you know some extra steps. First of all I'm going to touch on the concept of dependency injection but since this isn't a course about dependency injection I'm going to assume that you have at least a general idea about how it works at least in the conceptual level. I'm not going to use any particular library in this course so you don't have to know say Unity Castle Windsor or Ninject to follow along here. Still if you feel that you need to brush up on dependency injection you can view the Pluralsight course on inversion of control. Secondly, I'm going to assume that you are familiar with the concept of dynamic mocks. This was covered in the test first development Part I Pluralsight course. Specifically I'm going to be using the library called mock with a q. Even if you don't know this specific library you should be able to follow along if you understand the general concepts. Still if you'd like to learn about mock, Pluralsight obviously also have a course called mocking with mock.
+* There are two major approaches to TDD; outside in and bottom up
+* .In the previous module, you learned about the bottom up approach. In this module, you'll learn more about the outside in approach
+* The names London School of TDD Behavior Verification and mockist are more or less synonyms but I prefer behavioral verification because it's the most descriptive.
 
-Outside-In versus Bottom-Up
-In Module 1, you learned that there are two major approaches to test-driven development; outside in and bottom up. In the previous module, you learned about the bottom up approach. In this module, you'll learn more about the outside in approach. The names London School of TDD Behavior Verification and mockist are more or less synonyms but I prefer behavioral verification because it's the most descriptive.
+### Behavior Verification
 
-Behavior Verification
-Quickly told behavior verification can be used to prove that each unit interacts correctly with its dependencies. This can be used to reduce the number of permeations required to fully cover the functionality of a system under test reducing the number of test cases you'd have to write.
+* Quickly told behavior verification can be used to prove that each unit interacts correctly with its dependencies
+  * This allows to reduce the number of permeations required to fully cover the functionality of a SUT, reducing the number of test cases you'd have to write
 
-How many things can go wrong here?
-The last demo in the previous module enabled the client to transmit a user name to the service but the supporting code isn't the most robust code you've ever seen. How many things can go wrong in these three lines of code? If the TryParse method returns false, SWT will be null and the next line of code will grow in our reference exception. If the authorization header is null, another null reference exception will be thrown. If there's no user name claim, the single method will throw an invalid operation exception. If your authorization scheme isn't Bearer, no exception will be thrown but the code might interpret the header incorrectly. Finally, if this request is null, yet another null reference exception will be thrown. What if this request header is null? Well, it turns out that due to the way the http request message class is implemented the header property is never null. No one said that the dot net base class library is consistent. All in all there's 5 ways to fail plus 1 happy path for total of 6 test cases we'll have to write in order to test drive this code block to one or more robust implementation. In the demo code, how many times does this code block appear? It appears in the get method and in the post method so the answer is twice. Keep in mind that getting the user name is a very common thing to do so the only reason it only appears twice is that currently there aren't more controllers in the code base. Wouldn't it help to extract it into a helper method then? Not really because from the internal perspective tests can't verify that this private helper method is being used. All an external test read can see is that the public methods correctly interact with the http request. Tests which still have to test the get method and the post method independently covering all test cases. If they don't, a future developer may change the code so that one or none of the public methods no longer use the private helper method and yet no tests would fail.
+### How many things can go wrong here?
 
-Triangulate all the things!
-So, if you stay only at the service boundary and try to triangulate the robust implementation you'd have to write not 1 or 2 test cases but 2 times 6 test cases; that's 12 in all just to make the user name code more robust. However, it would be naive to think that only the user name code would need an overhaul. In the post method, the code currently inserts a new user every time a journal entry is being added. So far this has worked because no test cases have tried to add two journal entries for the same user. If you were to try that, an exception would be thrown because you can't add a user with the same user name as an existing user making this code block more robust requires us to check to see if the user already exists and only insert the new row if not. That's 2 test cases instead of just 1. Keep in mind that the user name block is still there requiring 6 test cases to be properly covered.
+* How many things can go wrong in these three lines of code?
+* All in all there's 5 ways to fail plus 1 happy path (permutations) for total of 6 test cases we'll have to write in order to test drive this code block to one or more robust implementation
+* In the demo code, how many times does this code block appear? (...) Wouldn't it help to extract it into a helper method then? Not really because from the internal perspective tests can't verify that this **private** helper method is being used
+* All an external test read can see is that the public methods correctly interact with the http request
 
-Triangulate all the things - not
-To cover the new brands through the code in combination with all the test cases for the user name it's necessary to write 6 new test cases. This brings the total test cases up to 18 and that's for a very small system. For a larger system, the total number of test cases you'd have to write would be enormous if you only write test against the external boundary of the system. This is one of the forces motivating the test pyramid; it's impractical to test only by the external boundary even if that's the most business centric thing to do clearly triangulation isn't the whole solution.
+### Triangulate all the things!
 
-Cyclomatic Complexity
-The number of test cases you have to write is related to the cyclematic complexity of the solution. Cyclematic complexity is an old and established measurement of software complexity. Essentially time counts the number of paths through a member. The minimum possible cyclematic complexity is 1 because there's always going to be 1 path there a member. To measure the complexity of a given block of code start with 1 and add 1 every time you find the key words such as if, else, case, for, for each, do, while, catch. Because cyclematic complexity measures the number of ways through a block of code they also correlate strongly to the number of test cases you'd have to write in order to cover the code.
+* So, if you stay only at the service boundary and try to triangulate the robust implementation you'd have to write not 1 or 2 test cases but 2 times 6 test cases; that's 12 in all just to make the user name code more robust
 
-Code Coverage
-A quick note on code coverage is in order. Code coverage is a measure of how much of the code of the system on the test is being exercised by giving test read. It's a relative number between 0 and 100%. That number may not mean a lot in itself but it can be interesting to watch the trend. If coverage decreases regularly, you should look into why that is happening. To keep coverage constant the number of test cases should correlate with the cyclematic complexity of the system. As you add more complexity, you should also add more test cases although in TDD you should add the test cases first. Please be aware that code coverage is not a measure of quality and not even a measure of quality of the test code but the trend can be interesting.
+### Triangulate all the things - not
 
-Componentization
-Because of the problem of having to test all possible permitations of a system it can help tremendously to split the system into smaller components. Imagine, for example, that we split the user name code into separate public class called SimpleWebTokenUserNameProjection. As you have learned, it takes 6 test cases to turn that into a robust implementation. The code that says a new journal entry into the database can be extracted into a public class called at journal entry command. You just saw how it would be necessary to check whether or not the user already exists so at least 2 test cases are required to cover that class. The code that reads the existing journal entries from the database can be extracted to a public class called journal entries query. So, far we've only identified a single test case for that; that would be great but now we have all these independent classes and we don't know whether or not the journal controller uses them or if it uses them correctly. In order to be sure of that, we'd have to write a single test of the get method using steps to ensure that data flows correctly through the system. Similarly, we'd have to write a single test of the post-method using steps and mock to verify that an entry is being correctly saved. All in all that's 6 plus 2 plus 1 plus 1 plus 1 for a total of 11 test cases. Eleven is less than 18 and that difference is going to be more pronounced the larger the system becomes.
+* Triangulatin all the things bring the total test cases up to 18 and that's for a very small system
+* For a larger system, the total number of test cases you'd have to write would be enormous if you only write test against the external boundary of the system
+* This is one of the forces motivating the test pyramid; it's impractical to test only by the external boundary even if that's the most business centric thing to do clearly triangulation isn't the whole solution
 
-Dependency Injection required
-This is where dependency injection or loose coupling is required. In the rest of the module, I'm going to assume that you are familiar with the construction injection pattern and the concept of programming against interfaces. If you want to learn more about dependency injection, you can watch the Pluralsight course inversion of control or you can read my book.
+### Cyclomatic Complexity
 
-Formal proofs
-In the previous module, you learned how triangulation is similar to the scientific method. You measure a stimulus response path until you have gained so much confidence that you decide that you're done. Behavioral verification on the other hand offers something more resembling a formal mathematical proof. Steps can prove how data flows and mocks can prove that side effects occurs or that they don't occur. In the demos, you're going to see some examples.
+* The number of test cases you have to write is related to the cyclematic complexity of the solution
+* Cyclematic complexity is an established measurement of software complexity
+  * It counts the number of paths through a member
+  * The minimum possible cyclematic complexity is 1
+  * Measuring the complexity of a given block of code:
+    * start with 1
+    * add 1 every time you find the key words such as `if`, `else`, `case`, `for`, `for each`, `do`, `while`, `catch`
+* Because cyclematic complexity measures the number of ways through a block of code, they also correlate strongly to the number of test cases you'd have to write in order to cover the code (to cover the permulations)
 
-Data Flow
-Looking at the journal control from the outside we don't have to care about every detail of the implementation. Rather we can concentrate on how data flows. When the get method is involved, it should first get the user name then it should use that user name to get the journal entries and return the entries to the client. If we can prove that this flow happens, we're closer to proving that the overall system works correctly with fewer test cases.
+### Code Coverage
 
-Side Effects
-Similarly, when methods have side effects such as the post method, we would expect the method to first get the user name and then use that user name to get the posted entry to add the entry to the data store. If we can prove that this happens, we're verifying the behavior of the system unrelated to any specific implementation.
+* Code coverage is a measure of how much of the code of the system is being exercised (covered) by giving test read
+* It's a relative number between 0 and 100%. That number may not mean a lot in itself but it can be interesting to watch the trend
+  * If coverage decreases regularly, you should look into why that is happening
+  * To keep coverage constant the number of test cases should correlate with the cyclematic complexity of the system
+* As you add more complexity, you should also add more test cases although in TDD you should add the test cases first
+*  Please be aware that code coverage is not a measure of quality and not even a measure of quality of the test code but the trend can be interesting
 
-Observation
-To contrast behavior verification with triangulation, a major difference lies in what is being observed. With behavior verification we have served what happens between the components whereas with triangulation we have served what is externally visible.
+### Componentization
 
-Stimulus/Response
-In the pattern language of external test patterns, we say that with behavior verification the stimulus is often in direct input that is input into the system under test from one of its internal components. It may be that it raised an event or that time returned a value from a query. When the system under test supplies data to its components, we call that indirect output. This form of indirection of stimulus and response is very closely related to the concept of back door manipulation you learned about in Module 2. Triangulation on the other hand is more direct. So, we call the stimulus for it direct input and the response for direct output.
+* Because of the problem of having to test all possible permitations of a system it can help tremendously to split the system into smaller components
+* As an example, spliting the code to get `SimpleWebTokenUserNameProjection (takes 6 test cases to turn that into a robust implementation), `JournalEnntryCommand` (2 test cases), `JournalEntriesQuery` (1 test case), ...
+* That would be great but now we have all these independent classes and we don't know whether or not the journal controller uses them or if it uses them correctly
+* In order to be sure of that
+  * we'd have to write a single test of the get method using stubs to ensure that data flows correctly through the system
+  * we'd have to write a single test of the post-method using stubs and mock to verify that an entry is being correctly saved
+* All in all that's 6 + 2 + 1 + 1 + 1 for a total of 11 test cases. Eleven is less than 18 and that difference is going to be more pronounced the larger the system becomes
 
-Initial coverage from Outside-In
-Consider how much coverage we already have components. When you've completed Module 3, only a single path was being exercised through the user name code and the same is true for each other area. Because I strictly follow the TTD rule of only adding code in response to a failing test, the code coverage of the demo code is currently at 100% but it's only exercising a single path through the entire system. Clearly I need to add more tests.
+### Dependency Injection required
 
-Number of tests per unit
-When we look at coverage at the unit level, things are worse. Apart from the simple web token class, which is covered by unit tests, all other code is only exercised by the acceptance tests. This means that while the code is being exercised by automatic tests it's not being exercised by any unit tests. On the unit test level, code coverage of journal control and its sub-components is 0. In order to prove that data flows correctly through the system, unit test coverage of the existing code is required.
+* This is where dependency injection or loose coupling, and programming against interfaces are required
 
-Characterization Tests
-To cover existing code with unit tests you can write characterization tests which is a term introduced by Michael Feathers. A characterization test is written after the system under test code. Normally that's a bad sign, but in the context of outside in TDD it's sometimes necessary in order to reduce the number of permeations you'd otherwise have to cover. Your write a seemingly redundant tests in order to save yourself from writing a lot of other tests. A characterization test characterizes the current behavior of the system under test. You could say that it captures a snapshot of its externally visible behavior.
+### Formal proofs
 
-Demo introduction
-That's a lot of theory to digest. So it's time for a demo. This demo continues the demos from the previous modules but it doesn't quite pick up where the previous demo ended. In between the end of Module 3 and the demo you're about to see, I did some refacturing. Since this isn't a course on refracturing, I didn't want to walk you through every single refracturing step but in the demo I'm going to give you a brief overview of what has changed. If you're interested, the exercise files available for download with this course includes a get repository where you can see all the small green commits I did in order to safely refracture the code. All the way through that process I kept a close eye on the code coverage of the system in order to be sure that I didn't accidently add any new logic while I was refracturing. The coverage stayed steady at 100% throughout. After a quick tour of the refracturing changes, you'll see how to write two characterization tests of the journal controller. These two tests established the overall behavior of and data flow through the journal controller.
+* In the previous module, you learned how triangulation is similar to the scientific method
+  * You measure a stimulus response path until you have gained so much confidence that you decide that you're done
+* Behavioral verification on the other hand offers something more resembling a formal mathematical proof
+  * Stubs can prove how data flows
+  * Mocks can prove: "that side effect occurs" or "that side effect doesn't occur"
+* In the demos, you're going to see some examples.
 
-Demo: Refactor review; Characterization Tests
-The journal controller was the main target of the refracturing, but the overall behavior is the same as in Module 3. The get method now gets the username from a helper method and then uses that user name to get the journal entries from a class field of the interface type journal entries query. The post method also gets the user name from the helper method and saves the entry using a class field of the type at journal entry command. The get user name method is currently a private helper method and as you can see it's just as horrible as where we left it in Module 3. Both class fields are injected into journal controller using the constructor injection pattern. The code that actually reads the entries from the database implements the I journal entries query interface but has been moved to a new public class called general entries query. The code is the same as before. The code that saves a new entry to the database implements the I add journal entry command interface but has been moved to a new public class called add journal entry command. Here as you can see I've also added a piece of logic that checks if the user already exists, but I also wrote an acceptance to cover that test case. In order to enable dependency injection for the asp. net web api, I'm replacing the default I http controller activator with this composition route. You can read more about this in my blog post dependency injection and lifetime management with asp. net web api. For good measure I would like to point out that all tests still pass. While the journal control of classes covered by acceptance tests it's not yet covered by unit tests. So I first have to add a class called journal controller tests. In the new class, I add the first characterization test calling it get returns correct results. Now that journal controller uses constructor injection, I must first define the test toggles to inject into it. The queryStub variable is an instance of mock of I journal entries query. The mock of T class is defined by the mock with a q library. The journal controller also requires a command to save an entry, but I don't need to interact with it in this test case so I simply name it command dummy. It's still required in order to satisfy the compiler, but I don't need it so dummy is the correct term. It's an instance of the mock of I add journal entry command class. The set is the journal controller itself injected with the query stop and the command dummy objects. The journal control is request properties being used in order to find the user name so in order to prevent a non-reference exception it must be assigned a value. Here's a little nasty secret of asp. net web api. When unit testing controllers, you must add the configuration to the request properties. This is a dictionary of objects. The key is well known and defined by the http property keys, http configuration key and the value must be an http configuration instance. If you don't do that, the test is going to throw an exception. Finally, the authorization header of the request should have a Bearer scheme and a simple web token containing a claim of the user name type with a value of foo (phonetic). That's a lot of fixtures set up required to unit test a controller and there's quite a bit of accidental complexity. Normally I have ways to deal with that but in a demo I think it's easier to follow along if I just leave it like this. The query stop must be able to return some entries and these are going to be the entries the test will expect. So it's necessary to find them upfront. It's an array of journal entry model instances each with a time, distance and duration value. I write the first instance copy and paste it twice and added the individual values for slight variations. Everything I need to define the data flow is now in place. I use the query stop to define the data flow stating that if get journal entries is called with value foo it returns the expected array. The test can now get a response by invoking get and get the actual model return by reading the responses content as a journal model instance. Finally, to verify that the result is correct according to the specified data flow the expected array is compared with the actual entries. All test pass including the new test I just wrote. That's different from the normal red green refractor cycle where we would expect the new test to fail, but it makes sense because this is a characterization test. Still, I need to make sure that I wrote a correct assertion and not a so-called false negative, which is a test that always passes even if the system on the test is faulty. In order to verify that, I change the implementation to return an empty array and as expected the test now fails in the correct manner. Good. It means I can go back and undo the change I just made. All tests now pass once more. That was the characterization test for the get method, but I also need to write one for the post method. So I add a new test called post inserts entry. Most of the fixture setup code is the same as before. So I copy that path from the previous test and paste it into the new test method. For the post-test case, I don't need the query test double so I rename it to query dummy to more accurately convey the role it plays in this test. I also rename the command test double to command mock because I'm going to use it as a mock. To exercise the system under test, I create a new journal entry model instance and post it. Finally, I can verify that the add journal entry method was invoked with the entry and the user name foo. All the tests pass including the one I just added. Once again I must change the implementation to verify that I wrote the correct assertion I just comment out the line where it saves to the data store. Now the test fails in the expected manner stating that the mock expected an invocation at least once but that it was never performed. That's good because it means that I wrote the correct test and I can now undo the change that I just made. Now all tests pass once more.
+### Data Flow
 
-Demo recap
-In this demo, I first showed you an overview of the refracturing I've done since the demos in Module 3. The most important points is that I've decoupled the journal controller into multiple units using lose coupling. The other thing I changed was that I implemented a check for the existing user in the post method so that if the user already exists the code doesn't try to insert a new role for that user in the database. After that I wrote a couple of characterization tests of the Get and Post methods. This ensures that the get and post methods are also covered by unit tests as well as the automated acceptance test that we already have.
+* Looking at the journal controller from the outside (from the client, eg) we don't have to care about every detail of the implementation
+* Rather we can concentrate on how data flows
+  * GET method is involved → it should first get the user name → then it should use that user name to get the journal entries → then return the entries to the client
+* If we can prove that this flow happens, we're closer to proving that the overall system works correctly with fewer test cases
 
-Demo introduction
-Now that you have seen how to write a characterization test it's time to see some test driven behavior verification. In the next demo, you'll see how to define data flow and how to specify that side effects should occur. You'll see both of these variations applied to the journal controller class.
+### Side Effects
 
-Demo: Data Flow; Side Effects
-Once again before this demo I've implemented a few off-screen changes. The only thing I've done is that I've extracted the private get user name method to a class that implements an interface called I username projection, which is injected into the journal controller along with its other dependencies. The public simple web token projection class implements the interface with the same not very robust code you've now seen quite a few times already. In the journal control a test class, I've also modified the characterization test to reflect that change. The projection stuff is a mock of I username projection and injected into the sut. Notice that this is now a parameterized test with the username as the parameter. The projection stop is configured to return this username. Likewise the test of the post method has undergone the exact same changes. Parameterized over the username the projection stop that is injected into the sut are configured to return the username. The whole point of this exercise is to establish what happens in the journal controller if the get username method can't extract a username from the http request. So, I add a new test called get without user name returns correct response. To deal with the complex fixed setup required for these test cases, I copy the code from the previous test and paste it into the new test. Normally I wouldn't be doing so much copy and pasting, but for demo purposes I do it this way because I think it makes the similarities as well as the differences between the various test cases clearer. This test case defines what happens when the get username method can't project a username from an http request. So it doesn't matter which specific request object it is. To indicate that protection wasn't possible, I configure the stop to return null. Here I need to stop and give a warning. Normally I consider returning null at poor design decision but throwing in an exception isn't a good solution either. In cases like this, I'd much rather than a cue from functional programming and return an option type or a maybe monad, but since this isn't a course on multi-parametric design, for educational purposes I use null as a compromise. The response is the result of invoking the get method and I expect the response to have a status code of unauthorized which I compare with the actual status code. The test fails in the expected manner; the actual status code is okay; not unauthorized. The failing test prompts me to check if the username is null and return an error response of unauthorized if that's the case. All tests now pass. That takes care of the get method but I also need to do with the same with the post-method. So I add a new test called post without user name returns correct response. As before, I covered the fixture setup from a previous test but take care to rename command mock to command dummy since this test double isn't being used in this test case. Once again I configure the get user name method to return null. A dummy entry is required in order to invoke the post method. As before, the test expects that the http response is unauthorized which it compares with the actual response from the sut. This test also fails as expected so I go to the post method to make it pass. The scenario is the same as for the get method so I copy the code from there and paste it into the post method. All tests now pass. That's good but just because we're now doing behavior verification we shouldn't forget about the Devil's Advocate technique. Could I change this implementation and still pass all tests? What if I take this username check and move it to after the add journal entry call? All tests still pass. That can't be right because that's going to mean that the add journal entry method can be involved with a null username. That's very likely to throw an exception if the data store can't handle that but even if no exception is thrown, it would be incorrect because that would mean that the entry was actually saved but the client was told that the request failed with an unauthorized status code. It turns out I need the command test double as a mock after all. Using it I want to verify that the add journal entry method is never invoked no matter which journal entry was supplied and no matter the value of the username. To indicate that it should never be invoked, I passed times never. The test now fails because of the mock that states that it expected that an invocation of the mock should never have been performed but was performed at one time. So, in the post method, I move the add journal entry call to a position after the null check. All tests now pass.
+* Similarly, when methods have side effects such as the post method
+  * we would expect the method to first get the user name → then use that user name to add the entry to the data store
+* If we can prove that this happens, we're verifying the behavior of the system unrelated to any specific implementation
 
-Demo recap
-In this demo, you saw how to specify data flow. When we combine the language of the command query separation principle with the xunit test patterns language, we can say that specifying data flow is relevant for queries such as the get method and we use stops for the specification. You also saw how I specified side effects using mocks. This makes sense because the post method is a command. Finally, you saw that the devil's advocate technique also makes sense for behavior verification and that we may need to apply a mock to verify that under certain conditions some events don't occur.
+### Observation
 
-Demo introduction
-Now that we know that the journal controller interacts correctly with the username protection, we can finally turn our attention to the get username method in order to make it more robust.
+* To contrast behavior verification with triangulation, a major difference lies in what is being observed
+* With behavior verification → we observe what happens between the components
+* With triangulation → we observe what is externally visible
 
-Demo: making the user name code robust
-Now that we have established the behavior of the journal controller class it's time to turn our attention to the simplewebtokenusername projection class. So I add a new unit test class called simple web token username projection tests. There's no unit test coverage of the simple web token username projection class so the first test must be yet another characterization test. I call it get username from proper simple web token returns correct result. The sut is obviously a new instance of the simple web token username projection class. I also need a request variable as a new http request message instance. To continue simple web token its authorization header must have a scheme of bearer and a value of simple web token with a claim with the username type and foo as a value. The actual value is the result of invoke and get username with the request. Finally, the test asserts that the expected value foo is equal to the actual value. All tests pass. As this is a characterization test, I need to see it fail in order to verify that I wrote the correct assertion. You may find this just a tad compulsive, but you'd be surprised how easy it is to inadvertently add a false/negative. These can be quite subtle and difficult to spot. So I choose to err on the side of caution. At least once a week it prevents me from doing something stupid. In the sut, I hard code bar as a return value and this causes the new test to fail as expected stating that foo was expected but bar was returned. To fix this I undo my change and all tests now pass. Playing devil's advocate on the other hand I realize that if I change the return value to foo, all tests still pass. As you learned in Module 3, the best way to address this is to convert the test to a parameterized test. So, I change the fact attribute into a theory attribute and add an in-line data attribute with a value foo. This is the expected value and in the test method's body I replace all instances of foo with the expected parameter. This is the same test case as before just expressed in a different way. All tests still pass. Now it's easy to add two new test cases -- bar and baz -- which fail as expected. This prompts me to go back into the sut and undo my change. All tests now pass. This fully characterizes the current behavior of the simple web token username projection class. So now it's time to add test cases for all the failure conditions. I start with the simple test case and get username from null request throws. The sut is a new simple web token username projection instance and I assert that it throws an argument null exception when I invoke the get username method with a null request. The test throws a non-reference exception at this line in the sut. This doesn't count as a properly failing test so I must first put the sut into a state where I see that the assertion is being exercised. I add a null guard and return the empty string and run the test again. This time the assertion is exercised stating that it expected an argument null exception but that no exception was thrown. To past that test, I threw an argument null exception from the get user name method. All tests now pass. The next test case is get username from request without authorization header returns correct result. The sut is a new simple web token username protection instance. I also need an http request message instance but now I do something unusual. I add an assertion in the fixture setup face of the test. This is called a got assertion and the reasoning goes like this. The condition for this test case is that the authorization header should be null. The default value for the authorization property is, indeed, null, but I can't be sure that this is always going to be the case. The http request message class doesn't belong to me; it belongs to Microsoft and I don't think it would be a break in change if they decide to change the default in the future. Perhaps they would decide to apply the null object pattern; I know I would. However, since it's an essential part of this test case that the authorization property is null I added this null assertion here. It's not the actual test, but if the http request message defaults, if a change after a service pack, I'll get a correct test failure right there and I'll know that there's nothing wrong with my code but that my assumptions about the default authorization property no longer holds. Anyway, now I can involve the get username with the request and assert that the actual value is null. The test fails with a null reference exception at this line of sut code. I add an if statement that checks whether the authorization property is null and returns foo if it is. This enables me to see that I wrote the correct assertion because it now fails correctly stating that an expected null but that the actual value was foo. Now I can change the return values to null. All tests now pass. The next test case is get user name from request with incorrect authorization scheme returns correct result. The sut is a new simple web token username protection instance and the request is a new http request message instance. This time I assign a value to the authorization property with the scheme value of invalid. Since this is the incorrect input I should keep everything else in the test correct so the authorization value is going to be a simple web token with a claim with a type of username and a value of dummy. Invoking get username with this request I assert that the actual value is null. However, running the tests shows that the actual value is instead dummy; the username value from the simple web token. Now I'm playing devil's advocate again and implement the scheme check exactly as the test case specifies. I check if the scheme is invalid and return null if it is. This passes all tests. By now you should know what that triggers; a parameterized test. I change the fact attribute to a theory attribute and add an inline attribute with the string invalid. In the test method body, I replace the hard-coded string with the invalid scheme test parameter. This is the same test as before and it still passes. Knowing my own gollum tendencies I add new test cases making sure to prevent myself from doing another round of devil's advocate by doing an ends with contains or starts with comparison. As expected, the three new test cases fail so I change the get username method to correctly check for the bearer string. All tests now pass. The next test case is get username from invalid symbol web token returns correct result. The sut is a new simple web token username protection instance and the request a new http request message instance. This time the authorization header gets the correct scheme Bearer but an invalid token value invoking the get user name method the test asserts that the actual value is null. However, when running the test, a null reference exception is thrown at this line of sut code because the S-W-T variable is null. In order to see the test fail correctly, I check the return value from the try pass method and return foo if it's false. Now the test fails as expected stating that it expected null but that the actual value was foo. This causes me to return null instead of foo. All tests now pass. The final test case is get username from simple web token with no username claim returns correct result. The sut is a new simple web token username protection instance and they request a new http request message instance. This time the authorization header gets the correct scheme bearer and correct simple web token with a claim with the type some claim and the value dummy but without a username claim. Invoking the get username method, the test asserts that the actual value is null; however, when running the test, an invalid operation exception is thrown at this line of sut code because the single method doesn't find a username claim. In order to see the test fail correctly, I check to see if there are any username claims in the simple web token and return foo if there's none. Now, the test fails as expected stating that an expected null but that the actual value was foo. This causes me to return null instead of foo. All tests now pass. We shouldn't forget about the red green refractor cycle. I've been doing a lot of red and green but refactoring is long overdue. The last few statements can be turned into a link query so that it includes only the claims where the type is username then selects the claims value and returns the single matching value or the default which is null. All tests still pass and now the get username method looks much more robust.
+### Stimulus/Response
 
-Demo recap
-In this demo, you saw how behavioral verification enabled me to isolate the simple web token username protection class so that I could test it properly 'ceteris paribus' or all other things equal, but did you notice something? I used triangulation on the simple web token username protection class. This is quite normal. The behavior verification technique is more impure than pure triangulation because it mainly concerns itself with verifying that the interaction between units is correct. What each unit does can be tested with more behavioral verification or with triangulation.
+|              | Behavious Verification | Triangulation |
+| ------------ | ---------------------- | ------------- |
+| **Stimulus** | Indirect Input         | Direct Input  |
+| **Response** | Indirect Output        | Direct Output |
 
-Monolith
-Throughout this course you've seen me build a single monolithic demo and you may be wondering is this now supposed to be good? What happened to layout architectures? Doesn't this spit in the face of years of best practices? Well, the code base I've created is actually very loosely coupled. This tends to be a side effect of developing code with test-driven development technique. There's nothing preventing me from now decoupling my monolithic code into multiple libraries; however, this isn't a course I'm building loosely coupled systems, but if you want to know more about that you can always read my book.
+* Indirection
+  * Indirect input → Input into the SUT from one of its internal components (eg: it may be that it raised an event or that time returned a value from a query)
+  * Indirect input → When the SUT supplies data to its components
+  * This form of indirection of stimulus and response is very closely related to the concept of backdoor manipulation
+* Triangulation on the other hand is more direct
+  * So, we call the stimulus for it direct input and the response for direct output
 
-Summary
-In this module, you learned about behavior verification which is one of two major approaches to unit testing. Using steps it enables you to define how data flows through a unit. Using mocks it enables you to measure whether or not side effects happened. While triangulation reminds me of the scientific method, behavior verification is a bit more like math. It's almost as if from established pre-requisites it could be proven that a given unit always behaves in a certain way. Sometimes when starting at the boundary of a system and working our way in, we may leave some classes uncovered by unit tests although they are covered by acceptance tests. In order to establish the behavior of such units, we may sometimes have to write characterization tests to capture the current behavior of a unit. This enables us to properly isolate each unit independently of each other but still verify that they interact correctly with each other. This, again, helps us to reduce the number of tests we have to write. This is the final module of the outside in test driven development course. My name is Mark Seemann, and I hope that you found it as exciting to watch the course as making it was for me.
+### Initial coverage from Outside-In
 
+* Consider how much coverage we already have components
+* Strictly following the TDD rule of only adding code in response to a failing test, the code coverage of the demo code is currently at 100%
+* But it's only exercising a single path through the entire system
+* Clearly I need to add more tests.
+
+### Number of tests per unit
+
+* When we look at coverage at the unit level, things are worse
+* Apart from the simple web token class, which is covered by unit tests, all other code is only exercised by the acceptance tests
+* This means that while the code is being exercised by automatic tests it's not being exercised by any unit tests
+* On the unit test level
+  * code coverage of journal control and its sub-components is 0
+* In order to prove that data flows correctly through the system, unit test coverage of the existing code is required
+
+### Characterization Tests
+
+* To cover existing code with unit tests you can write characterization tests which is a term introduced by Michael Feathers
+* A characterization test is written after the SUT code
+* Normally that's a bad sign, but in the context of Outside-in TDD it's sometimes necessary in order to reduce the number of permutations you'd otherwise have to cover
+* Your write a seemingly redundant tests in order to save yourself from writing a lot of other tests
+* A characterization test characterizes the current behavior of the SUT
+* You could say that it captures a snapshot of its externally visible behavior
+
+### Demo introduction
+
+* After a quick tour of the refracturing changes, you'll see how to write two characterization tests of the journal controller
+* These two tests established the overall behavior of and data flow through the journal controller
+
+### Demo: Refactor review; Characterization Tests
+
+* The journal controller was the main target of the refracturing, but the overall behavior is the same as in Module 3
+* The code that actually reads the entries from the database implements the `IJournalEntriesQuery` interface
+* The code that saves a new entry to the database implements the `IAddJournalEntryCommand` interface
+* Here as you can see I've also added a piece of logic that checks if the user already exists, but I also wrote an acceptance to cover that test case
+* ...
+* All test pass including the new test I just wrote
+  * That's different from the normal red green refractor cycle where we would expect the new test to fail, but it makes sense because this is a characterization test
+* Still, I need to make sure that I wrote a correct assertion and not a so-called false negative, which is a test that always passes even if the system on the test is faulty
+* In order to verify that, I change the implementation to return an empty array and as expected the test now fails in the correct manner
+
+### Demo recap
+
+* In this demo, I first showed you an overview of the refracturing I've done since the demos in Module 3
+* After that I wrote a couple of characterization tests of the Get and Post methods
+  * This ensures that the get and post methods are also covered by unit tests as well as the automated acceptance test that we already have
+
+### Demo introduction
+
+* Now that you have seen how to write a characterization test it's time to see some test driven behavior verification
+* In the next demo, you'll see how to define data flow and how to specify that side effects should occur
+* You'll see both of these variations applied to the journal controller class
+
+### Demo recap: Data Flow; Side Effects
+
+* In this demo, you saw how to specify data flow. When we combine the language of the command query separation principle with the xunit test patterns language, we can say that specifying data flow is relevant for queries such as the get method and we use stops for the specification
+* You also saw how I specified side effects using mocks. This makes sense because the post method is a command
+* Finally, you saw that the devil's advocate technique also makes sense for behavior verification and that we may need to apply a mock to verify that under certain conditions some events don't occur
+
+### Demo introduction
+
+* Now that we know that the journal controller interacts correctly with the username protection, we can finally turn our attention to the get username method in order to make it more robust
+
+### Demo recap: making the user name code robust
+
+* In this demo, you saw how behavioral verification enabled me to isolate the `SimpleWebTokenUserNameProtection` class so that I could test it properly
+* I used triangulation on the `SimpleWebTokenUserNameProtection` class. This is quite normal
+* The behavior verification technique is more impure than pure triangulation because it mainly concerns itself with verifying that the interaction between units is correct
+* What each unit does can be tested with more behavioral verification or with triangulation
+
+### Monolith
+
+* Throughout this course you've seen me build a single monolithic demo and you may be wondering is this now supposed to be good? What happened to layout architectures?
+* Well, the code base I've created is actually very loosely coupled. This tends to be a side effect of developing code with TDD technique
+* There's nothing preventing me from now decoupling my monolithic code into multiple libraries
+
+### Summary
+
+* In this module, you learned about behavior verification which is one of two major approaches to unit testing
+  * Using steps it enables you to define how data flows through a unit
+  * Using mocks it enables you to measure whether or not side effects happened
+* While triangulation reminds me of the scientific method, behavior verification is a bit more like math
+  * It's almost as if from established pre-requisites it could be proven that a given unit always behaves in a certain way
+* Sometimes when starting at the boundary of a system and working our way in, we may leave some classes uncovered by unit tests although they are covered by acceptance tests
+* In order to establish the behavior of such units, we may sometimes have to write characterization tests to capture the current behavior of a unit
+* This enables us to properly isolate each unit independently of each other but still verify that they interact correctly with each other
+  * This, again, helps us to reduce the number of tests we have to write
 
