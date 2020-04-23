@@ -12,7 +12,7 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 
 ## 🎓 Courses
 
-* _.gitkeep_
+* [Outside-In Test-Driven Development](courses/outside-in-tdd-pluralsight.md), by **Mark Seemann**. Pluralsight
 
 ## 🗣️ Talks
 
