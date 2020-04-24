@@ -36,7 +36,7 @@ Related resources
 
 ## Part I. Decoupling from infrastructure
 
-### Preface and Introduction
+### Introduction
 
 * Why is separating infrastructure concerns from your core application logic so important?
   * It leads to a domain model that can be developed in a *domain-driven* way
@@ -58,8 +58,14 @@ Related resources
   * Automated test for core code will be very easy to write (no database setup/teardown, no internet connection, no hard disk I/O, etc.)
 * Notes about the Rule 2
   * Only if code doesn't require a special context, **and also** hasn't been designed to run in a special context, can it be considered core code
-  * Not having to create a soecial context for code to run it makes easy to write automated tests
+  * Not having to create a special context for code to run it makes easy to write automated tests
 * All of the domain code and the application's use cases should be core code, and not rely on or be coupled to surrounding infrastructure
+
+**As a summary**
+
+* Distintion between core and infrastructure code
+  * **Core** code is code that can be executen in **any context**
+  * **Infrastructure** code is the opposite, it **needs external systems, special setup, or** is designed to run in a **specific context** only
 
 ### The domain model
 
