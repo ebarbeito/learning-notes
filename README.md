@@ -12,6 +12,7 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 
 ## 🎓 Courses
 
+* [Contributing to an Open Source Project on GitHub](courses/contributing-to-an-open-source-project-on-gitHub.md), by **Kamran Ayub**. Pluralsight
 * [Outside-In Test-Driven Development](courses/outside-in-tdd-pluralsight.md), by **Mark Seemann**. Pluralsight
 
 ## 🗣️ Talks
