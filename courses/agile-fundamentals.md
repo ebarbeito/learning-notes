@@ -533,29 +533,135 @@ by Stephen Haunts
 
 * Without force controlling the integration of code, developers test their code and integrate on their machines believing all is well, but because of parallel integration with other programming pairs, there is a combination of source code which has not been tested together, which means integration problems can happen without detection
 * Further problems happen when there is no clear cut latest version of the entire source tree. This applies, not only to the source code, but to the unit test suite, which must verify the source code's correctness
-* If you cannot lay your hands on a complete, correct, and consistent test suite, you'll be chasing bugs that do not exist and parsing of bugs that d
-*  It is now a common practice to use some form of continuous integration system integrated with your source control repository. What this will do is when a developer checks in some code, the code is integrated with a main source code tree built and the tests are executed. If any part of this process fails, the development team will be notified immediately so that the issue can be resolved
-* It's also common to have a source control system failure check‑in if the compiling test one fails. In team foundations server, for example, this is called a gated build. Once you submit your code to the repository, the code is compiled on a build server and the tests are executed. If this process fails for any reason, the developer will not be able to check in their code. This process helps to ensure your code base is in a continual working state and of high quality. Developers should be integrated and committing code into the source code repository at least every few hours or when they have written enough code to make their current unit test pass. In any case, you should never hold onto changes for more than a day. Continuous integration often avoids diversion of fragmented development efforts where developers are not communicating with each other about what can be reused or what can be shared. Everyone needs to work with the latest version, and changes should not be made to obsolete code causing integration headaches. Each development pair is responsible for integrating their own code whenever a reasonable break presents itself, and generally, as we discussed previously, will happen via an automated continuous integration system. 
+* It is now a common practice to use some form of continuous integration system integrated with your source control repository
+  *  What this will do is when a developer checks in some code, the code is integrated with a main source code tree built and the tests are executed
+  *  If any part of this process fails, the development team will be notified immediately so that the issue can be resolved
+* It's also common to have a source control system failure check‑in if the compiling test one fails.
+  * Once you submit your code to the repository, the code is compiled on a build server and the tests are executed
+  * If this process fails for any reason, the developer will not be able to check in their code
+  * This process helps to ensure your code base is in a continual working state and of high quality
 
 ##### Integrate often
 
-* 
+* Developers should be integrated and committing code into the source code repository at least every few hours or when they have written enough code to make their current unit test pass
+* In any case, you should never hold onto changes for more than a day
+* Everyone needs to work with the latest version, and changes should not be made to obsolete code causing integration headaches
+* Each development pair is responsible for integrating their own code whenever a reasonable break presents itself, and generally, as we discussed previously, will happen via an automated continuous integration system
 
 ##### Use a dedicated integration machine
 
-* A single machine dedicated to sequential releases works really well when a development team is code located. Generally, this will be a build server that is controlled by checking commits from a source control repository like team foundations server. This machine acts as a physical tokens control releasing and this is also an objective last word on what the current build contains. The latest combined unit test suite can be run before releasing when the code is integrated on the build machine. Because a single machine is used, the test suite is always up to date. If unit tests pass 100%, the changes are committed. If they fail for any reason, then the check‑in is rejected and the developers have to fix the problem. Collective code ownership encourages everyone to contribute new ideas to all segments of the projects. Any developer can change any line of code to add functionality, fix bugs, improve designs, or refactor. Not one person becomes a bottleneck for changes. It can seem hard to understand at first and it can't feel inconceivable with an entire team can be responsible for a system's design, but it really makes sense not to have developers pegged into their own particular silos. For a start, if you have developers who only know they're part of a system, what happens if that developer decides to leave? You have a situation where you have to try and cram a lot of knowledge transfer into a short space of time, which in my experience, never works out too well as a developer is taking over and not building up a good level of experience in the new area. By spreading knowledge around the team, regularly swapping pairs and encouraging developers to work on different parts of the system, you minimize risks to not having certain members of staff available. Next, we'll take a look at the final roles category for testing
+* A single machine dedicated to sequential releases works really well when a development team is code located
+* Generally, this will be a build server that is controlled by checking commits from a source control repository
+* The latest combined unit test suite can be run before releasing when the code is integrated on the build machine
+* Because a single machine is used, the test suite is always up to date
+  * If unit tests pass 100%, the changes are committed
+  * If they fail for any reason, then the check‑in is rejected and the developers have to fix the problem
 
 ##### Use collective ownership
 
-* 
+* Collective code ownership encourages everyone to contribute new ideas to all segments of the projects
+* Any developer can change any line of code to add functionality, fix bugs, improve designs, or refactor
+* Not one person becomes a bottleneck for changes
+* It can seem hard to understand at first and it can't feel inconceivable with an entire team can be responsible for a system's design, but it really makes sense not to have developers pegged into their own particular silos
+* For a start, if you have developers who only know they're part of a system, what happens if that developer decides to leave?
+  * You have a situation where you have to try and cram a lot of knowledge transfer into a short space of time
+  * which in my experience, never works out too well as a developer is taking over and not building up a good level of experience in the new area
+* By spreading knowledge around the team, regularly swapping pairs and encouraging developers to work on different parts of the system, you minimize risks to not having certain members of staff available
 
 #### Testing
 
-* Unit tests on one of the cornerstones of Extreme Programming. First, you should decide on what unit testing framework you want to use. For .NET, for example, this might be NUnit or MSTest. Second, you should test all the classes in your system except trivial getters and setters as these are usually omitted. You would also create your test first before writing the actual application code. This doesn't mean you have to write all of the tests for the entire system up front. But before you tackle a new section, module, or class, you will develop a set of tests as you go along with the coding. By incrementally building up your tests and writing code to make the tests pass, you will, before you know it, have created a robust testing suite that can be executed over and over again. Unit tests are released into the code repository along with the code that they test, and code without test should not be released into production. If a unit test is found to be missing, then it should be created at that time and checked in. Normally, the biggest resistance to dedicating this amount of time to unit tests is a fast‑approaching deadline. But during the life of a project, an automated test can save you hundreds of times the cost it takes to create it by finding and guarding against bugs. The harder the test is to write, the more you need it because the greater your savings will be. Automated unit tests offer a payback far greater than the cost of their creation. Another common misconception is that unit tests can be written in the last few months of a project. Unfortunately, without unit tests, the development drags on and eats up those last few months of the project and then some. Even if the time is available, a good unit test suite takes time to evolve. Just having a suite of unit tests is meaningless if any of the tests fail for any reason. Should you find that a test is failing, you should fix it straight away and not continue coding until all the tests are passing. It doesn't matter if it's your test or someone else's, but strive to get it fixed there and then. If you have an automated continuous integration system set up, then you should be alerted straightaway if any of your tests start to fail. Even better, you'll be blocked from checking in the code if you have any check‑in policies in force. When a bug is found, tests should be created to detect the bug and guard against it coming back. A bug in production also requires an acceptance test to be written to guard against it. Creating an acceptance test first before debugging helps customers concisely define the problem and communicate that problem to the programmers. Given a failed acceptance test, developers then create unit tests to show the defects from a more source code‑specific point of view. Failing unit tests give immediate feedback to the development effort when the bug has been repaired. When the unit test runs 100%, then the failing acceptance test can be run again to validate that the bug is fixed. Acceptance tests are created from users stories. During an iteration, the user story selected during the iteration planning meeting will be translated into acceptance tests. The customer specifies scenarios to test when the user story has been correctly implemented. The story can have one or many acceptance tests, whatever it takes to ensure the functionality works. Acceptance tests are black box system tests. Each acceptance test represents some expected result from the system. Customers are responsible for verifying the correctness of the acceptance tests and reviewing test scores to decide which failed tests are of highest priority. Acceptance tests also used as regression tests prior to the production release. A user story is not considered complete until it has passed all of its acceptance tests.
+##### All code must have unit tests
+
+* Unit tests are one of the cornerstones of XP
+* You should test all the classes in your system except trivial getters and setters as these are usually omitted
+* You would also create your test first before writing the actual application code
+  * This doesn't mean you have to write all of the tests for the entire system up front
+  * But before you tackle a new section, module, or class, you will develop a set of tests as you go along with the coding
+* By incrementally building up your tests and writing code to make the tests pass, you will, before you know it, have created a robust testing suite that can be executed over and over again
+* Unit tests are released into the code repository along with the code that they test, and code without test should not be released into production
+* If a unit test is found to be missing, then it should be created at that time and checked in
+* The harder the test is to write, the more you need it because the greater your savings will be
+* Another common misconception is that unit tests can be written in the last few months of a project
+  * Unfortunately, without unit tests, the development drags on and eats up those last few months of the project and then some
+  * Even if the time is available, a good unit test suite takes time to evolve
+  * Just having a suite of unit tests is meaningless if any of the tests fail for any reason
+
+##### All code must pass all unit tests
+
+* Should you find that a test is failing, you should fix it straight away and not continue coding until all the tests are passing
+* It doesn't matter if it's your test or someone else's, but strive to get it fixed there and then
+* If you have an automated continuous integration system set up, then you should be alerted straightaway if any of your tests start to fail
+* Even better, you'll be blocked from checking in the code if you have any check‑in policies in force
+
+##### When a bug is found tests are created
+
+* When a bug is found, tests should be created to detect the bug and guard against it coming back
+* A bug in production also requires an acceptance test to be written to guard against it
+  * Creating an acceptance test first before debugging helps customers concisely define the problem and communicate that problem to the programmers
+  * Given a failed acceptance test, developers then create unit tests to show the defects from a more source code‑specific point of view
+  * Failing unit tests give immediate feedback to the development effort when the bug has been repaired
+* When the unit test runs 100%, then the failing acceptance test can be run again to validate that the bug is fixed
+
+##### Acceptance tests are run often and the score is published
+
+* Acceptance tests are created from users stories
+* During an iteration, the user story selected during the iteration planning meeting will be translated into acceptance tests
+* The customer specifies scenarios to test when the user story has been correctly implemented
+* The story can have one or many acceptance tests, whatever it takes to ensure the functionality works
+* Acceptance tests are black box system tests
+* Each acceptance test represents some expected result from the system
+* Customers are responsible for verifying the correctness of the acceptance tests and reviewing test scores to decide which failed tests are of highest priority
+* Acceptance tests also used as regression tests prior to the production release
+* A user story is not considered complete until it has passed all of its acceptance tests
 
 ### Extreme Programming Diagram
 
-* Now that we've covered extreme programming in detail, let's express some of what we have learned as a diagram. Here we have some of the different stages of XP, user stories, the architectural spike, release planning, spikes, iterations, acceptance tests, and small releases. From the user story writing stage, we end up with a set of requirements and a series of test scenarios that form our acceptance tests. From the architectural system spike, we end up with a system metaphor, which is a story that everyone‑‑customers, programmers, and managers‑‑can tell about how the system works. During the release planning phases, we determine what requirements are included in which near‑term releases and when they should be delivered. The customers and developers are both part of this. If we're uncertain about particular estimates, we can create a spike application where a developer or developers spend the timebox amount of time to write a small example program to quickly solve the problem and, therefore, provide a more confident estimate. The release plan then feeds into the development iteration where the code and unit tests are developed. Any news stories that come up during the iteration feeds back into the release planning. From the iteration, you should have a working piece of software. This software should pass the acceptance test set out from the user stories. If there are any bugs, then they are fixed by the developers. There'll typically be multiple iterations for a project. Once the acceptance test passed from the iteration and the customer approves a system that has been developed in that iteration, a small release can take place at that point, which gives the users access to real working code where they can start to reap the benefits early.
+* Once XP has been covered in detail, let's express some of what we have learned as a diagram
+* Here we have some of the different stages of XP (*green boxes in the diagram*):
+  * User stories
+  * The architectural spike
+  * Release planning
+  * Spikes
+  * Iterations
+  * Acceptance tests
+  * Small releases
+* From the **User Story** stage, we end up with a set of **Requirements** and a series of **Test Scenarios** that form our **Acceptance Tests**
+* From the **Architectural System Spike**, we end up with a **System Metaphor**, which is a story that everyone (customers, programmers, and managers) can tell about how the system works
+* During the **Release Planning** phases, we determine what requirements are included in which near‑term releases and when they should be delivered
+  * The customers and developers are both part of this
+  * If we're **Uncertain about particular Estimates**, we can create a **Spike application** where a developer or developers spend the timebox amount of time to write a small example program to quickly solve the problem and, therefore, provide a more **Confident Estimate**
+* The **Release Plan** then feeds into the **Development Iteration** where the **Unit Tests** and **Code** are developed
+* Any **News Stories** that come up during the iteration feeds back into the release planning
+* From the iteration, you should have a working piece of software
+* This software should pass the **Acceptance Test** set out from the user stories
+* If there are any **Bugs**, then they are fixed by the developers
+* There'll typically be **multiple iterations for a project**
+* Once the acceptance test passed from the iteration and the customer **Approves** a system that has been developed in that iteration, a **Small Release** can take place at that point, which gives the users access to real working code where they can start to reap the benefits early
 
-Summary
-Extreme programming was created by Kent Beck during his work on the struggling cries of a Comprehensive Compensation Systems Payroll Project, or C3 as it is known. Fundamentally, the C3 team focused on the business value the customer wanted and discarded anything that did not work towards that goal. Extreme programming was created by developers for developers. Extreme programming is a software development methodology which is intended to improve software quality and responsiveness to changing customer requirements. As a type of agile software development, it advocates frequent releases and short development cycles, which is intended to improve productivity and introduce checkpoints where new customer requirements can be adopted. Extreme programming can be described as a software development discipline that organizes people to produce high‑quality software more productively. Extreme programming attempts to reduce the cost of changes in requirements by having multiple short development cycles rather than a long one like Waterfall. With XP, changes are natural, inescapable, and desired aspects of software development projects and should be planned for instead of attempting to define a set of stable requirements upfront. Extreme programming also introduces four activities such as coding, testing, listening, and designing. XP also has five values, such as communication, simplicity, feedback, courage, and respect. There are also three principles, such as feedback, assuming simplicity, and embracing change. There are also 12 practices that are split into 4 groups. These groups are fine‑ scaled feedback, continuous process, shared understanding, and programmer welfare. And, finally, there are 29 rules that are split into the following 5 groups. These groups are planning, managing, designing, coding, and testing. Extreme programming is an agile discipline that requires a lot of effort to put into place and maintain. But the effort of doing so is rewarded with high‑quality, well‑tested, well‑designed software that can be frequently delivered into production. Some people think that XP is a little too strict and complicated to run, and it's easy to see why with its many principles, practices, activities, values, and rules. Perhaps what people need is a simpler, more lightweight process. This is where Scrum comes in. We'll take a detailed look at Scrum in the next module.
+![Extreme Programming Diagram](.assets/agile-fundamentals.md/xp_diagram.png)
+
+### Summary
+
+* XP was created by Kent Beck during his work on C3 project
+  * Fundamentally, the C3 team focused on the business value the customer wanted and discarded anything that did not work towards that goal
+  * XP was born from developers for developers
+* XP is a software development methodology which is intended to improve software quality and responsiveness to changing customer requirements
+* As a type of agile software development, it advocates frequent releases and short development cycles
+  * which is intended to improve productivity
+  * introduce checkpoints where new customer requirements can be adopted
+* XP can be described as a software development discipline that organizes people to produce high‑quality software more productively
+* XP attempts to reduce the cost of changes in requirements by having multiple short development cycles rather than a long one like Waterfall
+* With XP, changes are natural, inescapable, and desired aspects of software development projects and should be planned for instead of attempting to define a set of stable requirements upfront
+* XP also introduces four activities such as coding, testing, listening, and designing
+* XP also has five values, such as communication, simplicity, feedback, courage, and respect
+* There are also three principles, such as feedback, assuming simplicity, and embracing change
+* There are also 12 practices that are split into 4 groups
+  * These groups are fine‑scaled feedback, continuous process, shared understanding, and programmer welfare
+* And, finally, there are 29 rules that are split into the following 5 groups
+  * These groups are planning, managing, designing, coding, and testing
+* XP is an agile discipline that requires a lot of effort to put into place and maintain
+* But the effort of doing so is rewarded with high‑quality, well‑tested, well‑designed software that can be frequently delivered into production
+* Some people think that XP is a little too strict and complicated to run, and it's easy to see why with its many principles, practices, activities, values, and rules
+* Perhaps what people need is a simpler, more lightweight process
+  * This is where Scrum comes in
+
