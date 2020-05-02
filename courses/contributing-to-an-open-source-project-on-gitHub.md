@@ -228,4 +228,8 @@ Summary
 
 ## Staying Updated With Social Features
 
-.
+* Keeping updated on your interests
+* Following a project by Stargazing and Watching
+* Subscribing to issues and pull requests
+* Following and unfollowing users
+* Setting your activity status
