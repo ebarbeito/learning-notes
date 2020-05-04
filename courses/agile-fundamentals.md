@@ -4,17 +4,19 @@ by Stephen Haunts
 
 > Agile Fundamentals explores how working on an Agile project has benefits for your development team, your end users, and your organization as a whole
 
+🏷️  Tags: `agile`, `extreme-programming`, `xp`
+
 ------
 
 ## Extreme Programming (XP)
 
 ### Introduction
 
-* XP is a software development methodology, is intended to improve software quality and responsiveness to changing customer requirements
-* It advocates frequent releases in shorter development cycles
+* XP is a software development methodology, is intended to **improve software quality** and responsiveness to changing customer requirements
+* It advocates **frequent releases** in **shorter cycles** of development
   * Intended to improve productivity
   * Introduce checkpoints where new customer requirements can be adopted
-* Other elements of XP include:
+* Other elements of XP include
   * programming in pairs, or doing extensive code reviews
   * unit testing all of the code
   * avoiding programming of features until they're actually needed
@@ -23,8 +25,7 @@ by Stephen Haunts
   * expecting changes in customers' requirements as time passes and the problem is later understood
   * frequent communication with the customer
 * XP takes its name from the idea that the beneficial elements of traditional software engineering practices are taken to extreme levels
-  * As an example, code reviews are considered a beneficial practice
-  * Taken to the extreme, code can be reviewed continuously with the practice of pair programming
+  * As an example, code reviews are considered a beneficial practice → Taken to the extreme, code can be reviewed continuously with the practice of pair programming
 * XP was created by Kent Beck during his work on the Chrysler Comprehensive Compensation System (C3) payroll project, around 1996 and 1999
   * C3 team was focused on business value the customers wanted, discarding anything else
   * The XP team at Chrysler was able to deliver their first working system within one year
@@ -32,32 +33,32 @@ by Stephen Haunts
 
 ### Overview of Extreme Programming
 
-* Software development discipline that organizes people to produce high‑quality software
+* Software development discipline that organizes people to **produce high‑quality** software
 * XP attempts to reduce the cost of changing requirements
-  * By having multiple short development cycles
-  * By embracing changes. They are a natural, inescapable, and desirable aspect of software development projects that should be planned for, instead of attempting to define a stable set of requirements up front
+  * By having **multiple short** development cycles
+  * By **embracing changes**. They are a natural, inescapable, and desirable aspect of software development projects that should be planned for, instead of attempting to define a stable set of requirements up front
 * 4xActivities; 5xValues; 3xPrinciples; 12xPractices; 29xRules
-* XP introduces 4 activities
+* XP introduces **4 activities**
   * Coding
   * Testing
   * Listening
   * Designing
-* There are also 5 values such as
+* There are also **5 values** such as
   * Communication
   * Simplicity
   * Feedback
   * Courage
   * Respect
-* 3 principles such as
+* **3 principles** such as
   * Feedback
   * Assuming simplicity
   * Embracing change
-* There're also 12 practices that split into 4 groups. These groups are
+* There're also **12 practices** that split into **4 groups**. These groups are
   * Fine-scale feedback
   * Continuous process
   * Shared understanding
   * Programmer welfare
-* Finally, there are 29 roles split into the following 5 groups
+* Finally, there are **29 rules** split into the following **5 groups**
   * Planning
   * Managing
   * Designing
@@ -81,7 +82,7 @@ by Stephen Haunts
 
 #### Listening
 
-* Programmers must listen to what the customers need the system to do and what business logic is required (requirements)
+* Programmers must listen to what the customers need the system to do and what business logic is required (*requirements*)
 * They must understand these needs and give the customer feedback about the technical aspects of how the problem can be solved or cannot be solved.
 * The requirements are documented as a series of user stories
 * These help to drive out a series of acceptance tests
@@ -639,29 +640,4 @@ by Stephen Haunts
 * Once the acceptance test passed from the iteration and the customer **Approves** a system that has been developed in that iteration, a **Small Release** can take place at that point, which gives the users access to real working code where they can start to reap the benefits early
 
 ![Extreme Programming Diagram](.assets/agile-fundamentals.md/xp_diagram.png)
-
-### Summary
-
-* XP was created by Kent Beck during his work on C3 project
-  * Fundamentally, the C3 team focused on the business value the customer wanted and discarded anything that did not work towards that goal
-  * XP was born from developers for developers
-* XP is a software development methodology which is intended to improve software quality and responsiveness to changing customer requirements
-* As a type of agile software development, it advocates frequent releases and short development cycles
-  * which is intended to improve productivity
-  * introduce checkpoints where new customer requirements can be adopted
-* XP can be described as a software development discipline that organizes people to produce high‑quality software more productively
-* XP attempts to reduce the cost of changes in requirements by having multiple short development cycles rather than a long one like Waterfall
-* With XP, changes are natural, inescapable, and desired aspects of software development projects and should be planned for instead of attempting to define a set of stable requirements upfront
-* XP also introduces four activities such as coding, testing, listening, and designing
-* XP also has five values, such as communication, simplicity, feedback, courage, and respect
-* There are also three principles, such as feedback, assuming simplicity, and embracing change
-* There are also 12 practices that are split into 4 groups
-  * These groups are fine‑scaled feedback, continuous process, shared understanding, and programmer welfare
-* And, finally, there are 29 rules that are split into the following 5 groups
-  * These groups are planning, managing, designing, coding, and testing
-* XP is an agile discipline that requires a lot of effort to put into place and maintain
-* But the effort of doing so is rewarded with high‑quality, well‑tested, well‑designed software that can be frequently delivered into production
-* Some people think that XP is a little too strict and complicated to run, and it's easy to see why with its many principles, practices, activities, values, and rules
-* Perhaps what people need is a simpler, more lightweight process
-  * This is where Scrum comes in
 
