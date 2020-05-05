@@ -2,7 +2,11 @@
 
 by Kamran Ayub
 
+------
+
 * [An example open source project for this course, for demo purposes](https://github.com/wired-brain/wired-espresso)
+
+🏷️ Tags: `git`, `github`, `open-source`, `teamwork`
 
 ------
 
