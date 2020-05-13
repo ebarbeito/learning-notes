@@ -4,6 +4,8 @@ by Stephen Haunts
 
 > Agile Fundamentals explores how working on an Agile project has benefits for your development team, your end users, and your organization as a whole
 
+* [Course materials](.assets/agile-fundamentals.md/agile-fundamentals.zip)
+
 🏷️  Tags: `agile`, `extreme-programming`, `xp`
 
 ------
