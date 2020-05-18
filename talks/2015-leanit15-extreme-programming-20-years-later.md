@@ -33,4 +33,4 @@ Kent Beck - Lean IT Summit 2015
   * The thing is, how do you get 13k employees to take that poster seriously when they're providing an essential service for a billion and a halt people every month
   * There's a culture of personal responsability at Facebook that's just still he can't believe it
 
-![Lessons - Mind Map](/Users/enrique.barbeito/Projects/_sandbox/learning-notes/talks/.assets/2015-leanit15-extreme-programming-20-years-later.md/lessons_mind_map.png)
+![Lessons - Mind Map](.assets/2015-leanit15-extreme-programming-20-years-later.md/lessons_mind_map.png)
