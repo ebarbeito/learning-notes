@@ -348,6 +348,57 @@ final class ActiveRecordOrderRepository implements OrderRepository {
 
 ### Read models and view models
 
+* Different solutions for implementing a read model repository
+  * Hiding query complexity behind view models
+* Scenario: retrieving the price of an ebook
+  * Hiding the low-level implementation details (database, ebooks table, price column, etc)
+  * Do it behind a high-level interface, which represents what information we're interested in
+* Entity to represent the ebook and retrieve it from its repository
+
+#### Reusing the write model
+
+* Assuming we already have an `Ebook` entity and an `EbookRepository` interface in our project
+
+  ```php
+  final class Ebook
+  {
+      private EbookId $ebbokId;
+      private int $price;
+      // ...
+      public function changePrice(int $newPrice): void {...}
+      public function show(): void {...}
+      public function hide(): void {...}
+  }
+  ```
+
+* Seems that the `Ebook`entity is a convenient object to quickly get the information. But there are a couple of issues with reusing an existing entity in a diferent context
+
+  1. Existing object was not designed to **retrieve** information from. Instead, it was designed **to add** new ebooks to our catalog
+
+     So, anywhere we load this entity, we do **with the intention** to manipulate it and save it. If we reuse it in a "retrieval context", we gain access to all other methods that can change state (`changePrice`, `hide`, `show`)
+
+     It's generally a smart idea to limit the number of methods that a client of an object has access to
+
+  2. About reusing objects in general, not just entities. Doing this, the object starts to play too many roles at the same time (...) Soon, it becomes too big to read the code and understand what it does (...) Also, object becomes *resistant* to change, which is a bad quality for objects in general
+
+* But, without any reuse it would become really hard to accomplish anything
+
+  * Keep track of the intended use of objects, and watch for tension in the design
+  * You can prevent a lot of this design tension by introducing separate objects foir changing and retrieving information
+
+* Client that needs an object to retrieve information (read) should not use the same object as client that want to make changes to it (write)
+
+* `Ebook` read-only model that its intention is to know the price of the ebook
+
+* Anyway, write `Ebook`entity can have some read methods (getters) that should be necessary as well. Like get the ID of the entity, or the internally recorded events
+
+#### Creating a separate read model
+
+* Frame the question in such a way that it's easy for you to ask. And design the type of answer you want to retrieve
+  * sample question: *give me the price of an ebook with ID <...>*
+  * sample answer; an object that represents the price of the ebook (it's intention)
+* Two options for modeling the question with code
+  * 
 * 
 
 ### Use cases
