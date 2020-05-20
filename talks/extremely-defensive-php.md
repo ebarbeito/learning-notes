@@ -1,3 +1,17 @@
+# Extremely defensive PHP
+
+Marco Pivetta - GrUSP phpDay 2017
+
+------
+
+**Available resources**
+
+-  [Talk in Youtube](https://www.youtube.com/watch?v=HwkhpRUYIdc)
+-  [Slides](https://ocramius.github.io/extremely-defensive-php)
+
+🏷️ Tags: `talk`, `2017`, `phpday17`, `php`, `poka-yoke`, `yagni`, `immutability`, `strict`, `programming`, `object-design`
+
+------
 
 ## Introduction
 
@@ -126,3 +140,8 @@
 * Try designing up front, try designing the interface before the code
 * Reduce features to the bare minimum. Follow the YAGNI principle: you don't need it, you don't write it
 * Go for strict imnariants, in and out
+
+## Further reading
+
+* [When to declare classes final](https://ocramius.github.io/blog/when-to-declare-classes-final/)
+* [Fluent Interfaces are Evil](https://ocramius.github.io/blog/fluent-interfaces-are-evil/)
