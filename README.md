@@ -19,9 +19,10 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 ## 🗣️ Talks
 
 * [Extreme Programming 20 years later](talks/2015-leanit15-extreme-programming-20-years-later.md), by **Kent Beck**. Lean IT Summit 2015
-* [Advanced Web Application Architecture](talks/2019-php-barcelona-advanced-web-application-architecture.md), by **Matthias Noback**. PHP Barcelona 2019
 * [Hexagonal Architecture, Message-Oriented Software Design](talks/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md) by **Matthias Noback**. PHP Barcelona 2015
+* [Extremely defensive PHP](talks/extremely-defensive-php.md), by **Marco Pivetta**- GrUSP phpDay 2017
 * [Massively Scaled High Performance Web Services with PHP](talks/2019-phpuk19-massively-scaled-high-performance-web-services-with-php.md), by **Demin Yin**. PHP UK Conference 2019
+* [Advanced Web Application Architecture](talks/2019-php-barcelona-advanced-web-application-architecture.md), by **Matthias Noback**. PHP Barcelona 2019
 
 ## 🏷️ Topics
 
