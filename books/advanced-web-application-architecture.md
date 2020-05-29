@@ -12,6 +12,7 @@ by Matthias Noback
 
 * [Leanpub](https://leanpub.com/web-application-architecture/)
 * [Source code application sample](https://enjoy.gitstore.app/repositories/matthiasnoback/read-with-the-author)
+* [Link registry for the book](https://advwebapparch.com)
 
 Related resources
 
