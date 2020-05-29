@@ -394,14 +394,163 @@ final class ActiveRecordOrderRepository implements OrderRepository {
 
 #### Creating a separate read model
 
-* Frame the question in such a way that it's easy for you to ask. And design the type of answer you want to retrieve
+* Frame the question in such a way that it's easy for you to ask. And design the type of answer you want to retrieve:
   * sample question: *give me the price of an ebook with ID <...>*
   * sample answer; an object that represents the price of the ebook (it's intention)
 * Two options for modeling the question with code
-  * 
-* 
 
-### Use cases
+  * the repository pattern, once more (more common solution)
+
+    ```php
+    interface EbookRepository
+    {
+        /** @throws CouldNotFindEbook */
+        public function getById(EbookId $ebookId): Ebook;
+    }
+    ```
+
+    Useful when you want to group and retrieve more information inside `Ebook`, the `price()` and `title()` for instance.
+
+  * create classes with the same or a similar name as the entity classes themselves. In this case, you have to put the code in a different namespace, to make it easy to distinguish between the read and write model
+
+    ```php
+    interface GetPrice
+    {
+        /** @throws CouldNotFindEbook */
+        public function ofEbook(EbookId $ebookId): int;
+    }
+    ```
+
+    If on the other hand, you only need one single piece of information (the price), you could let go for this solution: a pseudo-entity
+
+  * Taking the first or second approach, as always, would depend on your situation
+
+
+#### First approach. Read model repository implementations
+
+* Wheter a new Ebook **entity** gets created (by an employee, e.g), there should also be a corresponding `Ebook` **read model** that exposes the ebook price (to the clients e.g)
+* Whenever the entity changes, the corresponding read model should also be updated
+
+##### Sharing the underlying data usage
+
+* The simplest solutions. The read model use the same data source of the entity. So, the read model's repository gets its data from the same table and creates an `Ebook read model from the entity's data source
+* When write and read models share the same data source, this can lead to new problems
+  * Sample: `price` column contains the price of the ebook, in cents. But what if the write model switches to a native decimal representation? The read model would start to provide bad prices, because "1.5€" in the database when cast to an integer (in the read model) will become 1 cent in the application
+* One way to reduce the previous risk is to write integration tests for your read model repositories
+* Another alternative, is having a single class implementing both the write and read model repository interfaces
+
+##### Using write model domain events to synchronize the read model
+
+* Dispatch a **domain event** for every important change inside the entity
+
+* The read model is then able to update its own state based on the information contained in those events
+
+* What is needed to have
+
+  * An entity that can record domain events internally
+  * A domain event for every state change that is relevant to the read model(s)
+    * Sample: `PriceChanged` an object that holds the `EbookId`, as well the new price (`int`)
+  * A service that subscribes to these domain events and updates the read model according to the changes indicated by the events
+
+* Note that setting the price on the read model **isn't the same** thing as changing the price on the entity
+
+  * The change on the entity is the real change
+
+  * Updating the read model, we're merely **reflecting** that original/real change onto our read model (using information from the dispatched event `PriceChanged`)
+
+    ```php
+    final class UpdateEbookReadModel
+    {
+        // ...
+        public function whenPriceChanges(PriceChanged $event): void
+        {
+            $readModel = $this->readModelRepository->getById($event->ebookId());
+            $readModel->setPrice($event->newPrice());
+            $this->readModelRepository->save($readModel);
+        }
+    }
+    ```
+
+    * what happens inside save() method? This is an infrastructural concern: do we save it to the same database where we save entities? different databases? are read models stored as documents within Elasticsearch? etc.
+    * None of this really matters for the core of the application, since we already have a read model repository interface (a port, an abstraction) which indicates "*I have a particular need, but I don't care how you'll fullfill this need; don't care if you need to talk to something outside the application for it*"
+    * What matters is that any client can use the repository interface to get the information it needs
+
+##### Using value objects with internal read models
+
+* A read model is often designed to supoprt a specific use case for one of its clients
+
+* If clients code looks like
+
+  ```php
+  // ...
+  $ebookPrice = $ebook->price(); // int
+  $orderAmountInCents = (int)$request->get('quantity') * $ebookPrice
+  // ...
+  ```
+
+* What happens if $ebook-price() returns a string instead of an integer?
+
+  * Changing the underlaying data type of a read model's property will affect the clients of that read model
+
+* By using a value object, we can ensure that clients won't rely on raw data, nor on the particular primitive type of that data
+
+* An added benefit is that using value objects allows you to decouple from th einfrastructure
+
+  * Clients can keep using value objects wven if the underlying data type changes
+
+##### A specific typer of read model: the view model
+
+* Introducing a dedicated read model and read model repository because an `OrderController` needed the price of an ebook, this could classify the resulting model as an **internal read model**, since the data it provides is **only used internally** (by the application itself) and never directly shared with or displayed to the user
+* On the other hand, there're places in our application where we fetch data in order to show it to the user
+* When we need to have a view model for users that needs to render a view model with an HTML template
+
+```php
+interface Ebooks
+{
+    /** @return array<Ebook> */
+    public function listAvailableEbooks(): array
+}
+```
+
+* This `Ebook` class is not the same as the entity class
+* Objects of this type will serve as read models for displaying data on an HTML page
+* Such read models can be calles **view models**, since they are used to dusplay data to users of external systems
+* Most of the data exposed by a view model should be of type `string`, because rendering it (within a Twig template, e.g) is basically an exercise in string concatenation
+  * In a view model, `price()` doesn't return a `Price` value object.Returns a string, properly formatted money, including the currency sign and with the correct precission
+* Templates in particular shouldn't need to know anything about the domain objects that our application uses internally
+  * This means, our view model should only return primitive-type values
+
+##### “ I'm afraid we'll end up with too many classes... ”
+
+* You will definitely have more classes and interfaces when you separate core from infrastructure code
+
+* The interface represents the answer, and the other class is an implementation of the query interface
+
+* After decoupling a query from underlying inrastructure, you will have three elements
+
+  .![Decoupling query from underlying infrastructure](.assets/advanced-web-application-architecture.md/query_decoupling_from_infrastructure.png)
+
+* If you want to decouple from infrstructure, this is the way to go
+* Anyway, there're several ways to keep the number of elements manageable:
+  * Only introduce an interface for objects that actually communicate with something outside your application (this saves some interfaces)
+  * Combine several interface methods in a single interface
+  * Let a single class implement multiples interfaces (this save some classes)
+  * Reuse the "answer" class for different queries (this also saves some classes)
+* Keep an eye on tension in the design. Reducing elements has also downsides
+  * With fewer interfaces, it can be harder to replace an actual service implementation with a test double. If this happens, reintroduce the interface
+  * An interface with many methods can give clients access to many unrelated methods
+  * A class that implements multiple interfaces will become hard to maintain. So, only implement intefraces with the exact methods that are truly related
+  * If a class starts to be used in too many places, it will be harder to change it, since there are many clients that need to be updated and may potentially break
+
+##### Summary
+
+* We recognize the need to get information about a related entity
+* We decided not to combine write and read responsibilities in the same object
+* An immutable `Ebook`read model, specialized in providing information; that comes with its own  read model repository interface
+* Different alternstives to repository implementations
+* Another need is to show some data to the user; created a dedicated view model
+
+### Application services
 
 * 
 
