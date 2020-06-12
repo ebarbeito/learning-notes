@@ -108,4 +108,3 @@ https://www.scrum.org/resources/scrum-guide
 * The five points presented in "Uses of Scrum" section, they seem like bullshit to me
 * The "complex work" that this guide refers when mention the words "develop" and "development" definitily **is not related to** technical-work in software development. Not only the guide, also the Scrum framework by itself
 * 
-
