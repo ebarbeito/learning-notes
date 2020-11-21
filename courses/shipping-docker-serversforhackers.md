@@ -314,7 +314,7 @@ nginx
 
 From our host machine (my Mac in this case) we can curl request it on `localhost:80`, since we're forwarding my Mac's port 80 to port 80 in the container.
 
-```bash
+```sh
 curl localhost
 > Welcome to nginx! (and other html output)
 ```
@@ -329,7 +329,7 @@ To do that, we'll learn a new flag for the Docker run command, the `-v` flag. Th
 
 Let's see how that might work:
 
-```bash
+```sh
 # Create a new directory and get into to
 mkdir dockertest
 cd dockertest
@@ -344,7 +344,7 @@ docker run -it -p 80:80 -v ~/dockertest:/var/www/html ubuntu:16.04 bash
 
 Then we can quickly install nginx and run it:
 
-```bash
+```sh
 # Install Nginx
 apt-get update && apt-get install -y nginx
 
@@ -361,7 +361,7 @@ nginx
 
 Then we can `curl` request it from our host machine!
 
-```bash
+```sh
 curl localhost
 > Hello, Shipping Docker!
 ```
@@ -1189,13 +1189,13 @@ We have 3 variables (one used twice):
 
 The `docker-compose` command will fill these in from environment variables, so we can just set those to use this. For example:
 
-```bash
+```sh
 APP_PORT=8888 APP_ENV=local DB_PORT=33060 docker-compose -f docker-compose.var.yml up -d
 ```
 
 Or in a bash script:
 
-```bash
+```sh
 export APP_PORT=8888
 export APP_ENV=local
 export DB_PORT=33060
@@ -1214,7 +1214,7 @@ We'll see:
 
 In both cases, we start with a `docker-compose.base.yml` file, which is essentially a slimmed-down `docker-compose.yml` file.
 
-## Adding to Base File
+#### Adding to Base File
 
 We'll start to see how you can use a 2nd file to add onto a base compose file.
 
@@ -1288,7 +1288,7 @@ docker-compose -f docker-compose.base.yml -f docker-compose.dev.yml up -d
 
 We'll see that the port and environment settings were sucked in and used!
 
-## Extending a Base File
+#### Extending a Base File
 
 Next we'll use a 2nd compose file which extends the first in a little bit of a nicer way.
 
@@ -1351,7 +1351,187 @@ docker-compose -f docker-compose.extends.yml up -d
 
 This method is generally how I use multiple compose files. I do often use multiple files, which we'll see in later videos.
 
+## Remote servers with Docker Machine
 
+### Introducing Docker Machine
+
+We move to a next section, which is Continious Integration with Docker. A territory where we need to spin up remote servers, install Docker and set some automations.So, before diving into CI we will cover Docker Machine
+
+The command `docker-machine` is used to spin up new servers and install Docker on them. it enables you to provision and manage Docker systems in the cloud directly from your own terminal.
+
+Docker Machine is a tool that lets you install Docker Engine on virtual hosts, and manage the hosts with `docker-machine` commands. You can use Machine to create Docker hosts on your local Mac or Windows box, on your company network, in your data center, or on cloud providers like Azure, AWS, or DigitalOcean.
+
+![Docker Machine](.assets/shipping-docker-serversforhackers.md/docker-machine.png)
+
+### Docker Machine with AWS
+
+We'll spin up a server on AWS and use `docker-machine` to have it install and control Docker on that new host.
+
+We'll start by getting the `amazonec2` driver-specific help menu:
+
+```sh
+docker-machine create --driver=amazonec2
+```
+
+We can see a lot of options. To handle AWS credentials, I'll setup a local profile so I don't accidentally show you my AWS api keys.
+
+```sh
+$ ls -lah ~/.aws
+
+total 16
+drwxr-xr-x   4 fideloper  staff   136B Sep 14 07:18 .
+drwxr-xr-x+ 76 fideloper  staff   2.5K Oct 20 12:33 ..
+-rw-------   1 fideloper  staff    88B Aug 16 08:10 config      # Profile default output/region
+-rw-------   1 fideloper  staff   348B Sep 14 07:18 credentials # Profile credentials
+```
+
+Lets try it out. We'll need to check out our default VPC, a subnet within it, and we can make some tags. The video covers where you can find all of these values.
+
+```sh
+# Retrieve our region and credentials
+export AWS_PROFILE=shippingdocker
+
+# Setup some specifics for our AWS account
+export AWS_VPC=vpc-7199c914
+export AWS_SUBNET=subnet-f59bf682
+export AWS_AMI=ami-fd6e3bea
+export AWS_TAGS="Name,Dckr1,Project,Shipping Docker"
+
+docker-machine create --driver amazonec2 \
+                      --amazonec2-vpc-id $AWS_VPC \
+                      --amazonec2-subnet-id $AWS_SUBNET \
+                      --amazonec2-instance-type t2.medium \
+                      --amazonec2-ami $AWS_AMI \
+                      --amazonec2-region "us-east-1" \
+                      --amazonec2-zone a \
+                      --amazonec2-tags $AWS_TAGS \
+                      Dckr1
+```
+
+Here we let `docker-machine` create a new instance within Amazon EC2.
+
+Notes/Caveats:
+
+1. This will create it's own security group. If you find this fails, you may need to delete that security group manually before trying again.
+2. This will create it's own keypair. Again, delete this and let it recreate it if it fails.
+3. Create an instance in a subnet that will assign a public IP address and has an Internet Gateway (important if you're not using the default VPC. If you don't know what that means, then you're using the default).
+
+Now we wait a while for it to finish, then:
+
+```sh
+docker-machine ls
+docker-machine status Dckr1
+
+# Outputs important things!
+docker-machine env Dckr1
+
+# Let's use this as if we're running it locally
+eval $(docker-machine env Dckr1)
+```
+
+Then we can run commands on it as if we're using it locally!
+
+```sh
+docker ps
+docker images
+
+docker run --rm -p 80:80 nginx:alpine
+```
+
+After allowing external port 80 traffic into the server it created (by editing its security group), we can then see the default Nginx page by hitting the server's public IP address in our browser.
+
+To deactive the `docker-machine` environment, we can either close the shell and start a new one, or run the following:
+
+```sh
+eval $(docker-machine env -u)
+```
+
+### Docker Compose with Docker Machine
+
+I create new `docker-compose.yml` file. This is similar to the other ones we've seen, with a few tweaks.
+
+```yaml
+version: '2'
+services:
+  nginx:
+    image: shippingdocker/nginx:latest
+    ports:
+     - "80:80"
+    volumes:
+     - /srv/application:/var/www/html
+    networks:
+     - appnet
+    restart: always
+  php:
+    image: shippingdocker/php:latest
+    volumes:
+     - /srv/application:/var/www/html
+    networks:
+     - appnet
+  redis:
+    image: redis:alpine
+    volumes:
+     - redisdata:/data
+    networks:
+     - appnet
+    restart: always
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+    volumes:
+     - data:/var/lib/mysql
+    networks:
+     - appnet
+    restart: always
+networks:
+  appnet:
+    driver: "bridge"
+volumes:
+  data:
+    driver: "local"
+  redisdata:
+    driver: "local"
+```
+
+1. Most notably, we use "restart: always" so it will restart if any container fails
+2. I use absolute paths for the host machine (`/srv/application`) rather than relative paths, since I don't want my local Mac directories to be used by `docker-compose` within the server that will not have machine directory structures
+3. Redis gets a named volume this time, but only because I didn't want it spinning up a new, randomly-named (hash) volume everytime we re-spun up the compose environment
+
+#### Running Compose Commands
+
+```sh
+eval $(docker-machine env Docker)
+
+docker-compose ps
+
+# If you get SSL errors with the above `ps` command:
+CURL_CA_BUNDLE=~/.docker/machine/machines/Docker/ca.pem
+
+# Run the environment
+docker-compose up -d
+```
+
+* This env variable will get the certificate authority file used when the machine was created, and Docker Compose commands should then work fine.
+
+## Docker Swarm
+
+### What is Docker Swarm
+
+Docker Swarm is a **cluster management** and **orchestration** tool that makes it easy to scale and manage your already existing docker services. So, it's used with multiple servers.
+
+A swarm consists of multiple Docker **hosts** that run in the so-called **swarm mode** and act eighter as **managers** (managing member relationships) or as **workers** (run the services). A given Docker host can be a manager, worker or can perform both roles.
+
+When creating a **service** in a swarm you define the optimal state of your service (number of replicas, ports of the service, network and storage resources, and more). Docker will try to maintain this desired state by restarting/rescheduling unavailable tasks and balancing the load between different **nodes**.
+
+![Docker Swarm](.assets/shipping-docker-serversforhackers.md/docker-swarm.png)
+
+**References**
+
+* [The definitive guide to Docker Swarm](https://gabrieltanner.org/blog/docker-swarm)
 
 ## ADDENDUM
 
