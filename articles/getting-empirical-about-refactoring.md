@@ -6,7 +6,7 @@ https://www.stickyminds.com/article/getting-empirical-about-refactoring
 
 > Often when we refactor, we look at local areas of code. If we take a wider view, using information from our version control systems, we can get a better sense of the effects of our refactoring efforts.
 
-🏷️ Tags: `refactoring`, `churn`, `complexity`, `vcs`, `metrics`
+🏷️ Tags: `refactoring`, `churn`, `complexity`, `vcs`, `metrics`, `legacy-code`
 
 ## Introduction
 
