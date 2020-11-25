@@ -27,6 +27,13 @@ J. B. Rainsberger - DevConFu
   * He isn't interested in testing, but in checking
 * Difference between testing and  checking
 
+## Why are a scan?
+
+* Why don't we just use isolated test for everything?
+  * There's a problem. Isolated modules works but then, a module doesn't talk correctly with another module, etc.
+  * It can be bugs that we only find when we try to run the system all together
+* 
+
 ## References
 
 * Checking vs Testing Michael Bolton [[1](https://www.satisfice.com/blog/archives/856)], [[2](https://www.infoq.com/news/2009/12/testing-or-checking/)], [[3](https://www.google.com/search?q=Checking+vs+Testing+Michael+Bolton)]
