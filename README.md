@@ -27,6 +27,7 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 * [Massively Scaled High Performance Web Services with PHP](talks/2019-phpuk19-massively-scaled-high-performance-web-services-with-php.md), by **Demin Yin**. PHP UK Conference 2019
 * [CQRS and Event Sourcing](talks/2019-ipc19-cqrs-and-event-sourcing.md), by **Oliver Sturm**. International PHP Conference 2019
 * [Advanced Web Application Architecture](talks/2019-php-barcelona-advanced-web-application-architecture.md), by **Matthias Noback**. PHP Barcelona 2019
+* [A view in the PHP Virtual Machine](talks/2019-symfonycon19-a-view-in-the-php-vm.md), by **Julien Pauli**. SymfonyCon 2019 Amsterdam
 
 ## 🏷️ Topics
 
