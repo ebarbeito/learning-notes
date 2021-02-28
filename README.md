@@ -21,6 +21,7 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 ## 🗣️ Talks
 
 * [Integrated Tests are a Scan](talks/2013-devconfu13-integrated-tests-are-a-scam.md), by **J. B. Rainsberger**. DevConFu 2013
+* [Fundamental Theorem of Agile Software Development](talks/2013-oredev13-fundamental-theorem-of-agile-software-development.md), by **J. B. Rainsberger**. Øredev conference 2013
 * [Extreme Programming 20 years later](talks/2015-leanit15-extreme-programming-20-years-later.md), by **Kent Beck**. Lean IT Summit 2015
 * [Hexagonal Architecture, Message-Oriented Software Design](talks/2015-phpbcn15-hexagonal-architecture-message-oriented-software-design.md) by **Matthias Noback**. PHP Barcelona 2015
 * [Extremely defensive PHP](talks/2017-phpday17-extremely-defensive-php.md), by **Marco Pivetta**- GrUSP phpDay 2017
