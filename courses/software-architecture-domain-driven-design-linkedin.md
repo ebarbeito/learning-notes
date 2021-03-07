@@ -1,14 +1,16 @@
 # Software Architecture: Domain-Driven Design
 
-by Allen Holub
+by Allen Holub – Linkedin Learning
 
 ----
 
 > It's tough to be agile if you're working with a system that can't handle rapid change. Domain-driven design (DDD)—one of the most effective architectural approaches for both agile environments in general and microservices in particular—can help you build systems that can stand up to change. In this course, Allen Holub provides programmers, software architects, business analysts, and product managers/owners with an overview of this essential architectural process, demonstrating how to use DDD to develop a microservice or other domain-focused system. Alan goes over the basics of DDD (and how it fits with agile), microservices, and bounded contexts and entities. Plus, he compares reactive and declarative systems and details how to approach an event storming session.
 
-Course in [Linkedin Learning](https://www.linkedin.com/learning/software-architecture-domain-driven-design)
+**Available resources**
 
-🏷️ Tags: `architecture`, `software-design`, `ddd`, `agile`, `microservices`, `event-storming`
+* Course in [Linkedin Learning](https://www.linkedin.com/learning/software-architecture-domain-driven-design)
+
+🏷️ Tags: `course`, `2019`, `linkedin`, `architecture`, `software-design`, `ddd`, `agile`, `microservices`, `event-storming`
 
 ---
 
