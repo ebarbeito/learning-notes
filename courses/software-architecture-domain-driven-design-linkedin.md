@@ -205,3 +205,14 @@ Course in [Linkedin Learning](https://www.linkedin.com/learning/software-archite
   * who's handling all those events
   * Contexts to which people belong
 
+### Context maps
+
+* They show relationship between the larger bounded contexts
+* Useful diagram when the map gets really large, 'cause this one is not particularly large
+* It's only handling one small story
+* There are two things that we're trying to capture in these other diagrams
+  * The relationship between the larger bounded contexts
+  * The individual endings and what sort of work do they have to do?
+* What I've drawn here, then, is a map of the system which is showing me the bounded contexts and the relationships that they have between them
+* A diagram like this can be extremely useful when you are trying to get a big picture
+
