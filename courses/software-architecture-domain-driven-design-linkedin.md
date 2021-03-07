@@ -20,7 +20,7 @@ Course in [Linkedin Learning](https://www.linkedin.com/learning/software-archite
 
 * The techniques that we're going to look at work just as well in the monolith as they do with the set of microservices
 
-* This class are introductory. In order to suplement them and dive into the details, I strongly recommend Vaughn Vernon's book called Domain-Driven Design Distilled
+* This class is introductory. In order to supplement them and dive into the details, I strongly recommend Vaughn Vernon's book called Domain-Driven Design Distilled
   
   * It covers all of the critical stuff that Eric's book covers but it's a little bit more up-to-date and it's a little bit more concise
   
@@ -33,7 +33,7 @@ Course in [Linkedin Learning](https://www.linkedin.com/learning/software-archite
     * All collaborators (even business users) can make sense of the structure
     * Changes happen in the domain. They don't happen in the code, they happen in the domain. So when that happens, you need to be able to get the equivalent change in the code as easily and as quickly as possible
   3. It is **incremental**.
-    * You don't come up with a big architecture up front before you do any coding. Instead, you come up with just enough architecture to solve the inmediate problem
+    * You don't come up with a big architecture up front before you do any coding. Instead, you come up with just enough architecture to solve the immediate problem
     * The code evolves as you learn more about the problem, and more architecture is added
       * That means that you have to go and change the architecture in order to accommodate whatever new things you learn as the code evolves
     * That's the agile way of working. DDD was designed with that in mind
@@ -52,10 +52,10 @@ Course in [Linkedin Learning](https://www.linkedin.com/learning/software-archite
 * It is possible to implement a DDD architecture inside a large monolith
 * What microservices actually are
   * They solve a specific problem and that problem is the monolith, the giant program that has everything in it
-  * Monoliths very complicated and hard to deal with. That complexity is the biggest problem
+  * Monoliths are very complicated and hard to deal with. That complexity is the biggest problem
   * The idea of the microservice is to take that monolith and make it tractable, to solve some of the problems associated with them
 * Problems with the Monolith
-  * Lot of internal connections. Lot of dependencies within the monolith that make it almost impossible to work on
+  * Lots of internal connections. Lot of dependencies within the monolith that make it almost impossible to work on
   * It is giant, hard to work on and not organize appropriately
   * It tends to focus on data / access to data. So, when the data model changes, the monolith and the code has to change also, but it's so difficult to do it
   * As a consequence, the monolith is very, very hard to update because of all the internal dependencies
@@ -111,7 +111,7 @@ Course in [Linkedin Learning](https://www.linkedin.com/learning/software-archite
 * How the entities will communicate with each other as they're getting work done.
 * There are two ways to do communication. One easy and the other one better
 
-### Orchestrated / Declararative systems
+### Orchestrated / Declarative systems
 
 * The easy way to do things is orchestrated or declarative systems
 
