@@ -10,7 +10,7 @@ by Eric Freeman – Linkedin Learning
 
 -  [Course in Linkedin Learning](https://www.linkedin.com/learning/advanced-design-patterns-design-principles/)
 
-🏷️ Tags: `course`, `2020`, `linkedin`, `oop`, `software-design`, `patterns`, `solid`
+🏷️ Tags: `course`, `2020`, `linkedin`, `oop`, `software-design`, `patterns`, `solid`, `principles`
 
 ------
 
