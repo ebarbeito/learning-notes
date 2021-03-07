@@ -1,16 +1,18 @@
 # Outside-In Test-Driven Development
 
-by [Mark Seemann](https://blog.ploeh.dk/)
+by [Mark Seemann](https://blog.ploeh.dk/) – Pluralsight
 
 ------
 
 > This course teaches how to build an application **from the outside in** - starting with tests targeting actual features or use cases of an application, but gradually working towards a more and more **detailed specification** of the components of an application. The focus is on the **technical side of TDD**, not the business side. Approximately half of the content is a series of C# demos, building a small RESTful service from scratch.
 
+**Available resources**
+
 * [Course in Pluralsight](https://www.pluralsight.com/courses/outside-in-tdd) (also [recommended](https://app.pluralsight.com/library/courses/outside-in-tdd/recommended-courses) ones)
 * [Original sample implementation by Mark](https://github.com/ploeh/RunningJournalApi)
 * [My demo implementation](https://github.com/ebarbeito/running-journal-api)
 
-🏷️ Tags: `acceptance`, `agile`, `bottom-up`, `outside-in`, `software-design`, `tdd`, `testing`, `unit`, `xp`, `yagni`
+🏷️ Tags: `course`, `2013`, `pluralsight`, `acceptance`, `agile`, `bottom-up`, `outside-in`, `software-design`, `tdd`, `testing`, `unit`, `xp`, `yagni`
 
 ------
 

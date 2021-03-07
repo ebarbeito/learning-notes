@@ -1,12 +1,16 @@
 # Agile Fundamentals
 
-by Stephen Haunts
+by Stephen Haunts – Pluralsight
+
+------
 
 > Agile Fundamentals explores how working on an Agile project has benefits for your development team, your end users, and your organization as a whole
 
-* [Course materials](.assets/agile-fundamentals.md/agile-fundamentals.zip)
+**Available resources**
 
-🏷️  Tags: `agile`, `extreme-programming`, `xp`
+* [Course materials](.assets/agile-fundamentals-pluralsight.md/agile-fundamentals.zip)
+
+🏷️ Tags: `course`, `2020`, `pluralsight` `agile`, `extreme-programming`, `xp`
 
 ------
 
@@ -641,5 +645,5 @@ by Stephen Haunts
 * There'll typically be **multiple iterations for a project**
 * Once the acceptance test passed from the iteration and the customer **Approves** a system that has been developed in that iteration, a **Small Release** can take place at that point, which gives the users access to real working code where they can start to reap the benefits early
 
-![Extreme Programming Diagram](.assets/agile-fundamentals.md/xp_diagram.png)
+![Extreme Programming Diagram](.assets/agile-fundamentals-pluralsight.md/xp_diagram.png)
 

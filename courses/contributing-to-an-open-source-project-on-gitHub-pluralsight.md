@@ -1,12 +1,16 @@
 # Contributing to an Open Source Project on GitHub
 
-by Kamran Ayub
+by Kamran Ayub – Pluralsight
 
 ------
 
+> Where do you begin to get involved in an open source project? In this course, Contributing to an Open Source Project on GitHub, you will learn foundational knowledge of how to be an effective open source contributor. First, you will explore how to find a project that suits your interests. Next, you will discover how to tackle common pull request scenarios in the real world by working with others. Finally, you will learn how to leverage GitHub's social features to keep updated on what you care about most. When you are finished with this course, you will have the skills and knowledge of working with open source projects needed to make high-quality contributions you will be proud of
+
+**Available resources**
+
 * [An example open source project for this course, for demo purposes](https://github.com/wired-brain/wired-espresso)
 
-🏷️ Tags: `git`, `github`, `open-source`, `teamwork`
+🏷️ Tags: `course`, `2019`, `pluralsight` `git`, `github`, `open-source`, `teamwork`
 
 ------
 
