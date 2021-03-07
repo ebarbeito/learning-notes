@@ -216,3 +216,15 @@ Course in [Linkedin Learning](https://www.linkedin.com/learning/software-archite
 * What I've drawn here, then, is a map of the system which is showing me the bounded contexts and the relationships that they have between them
 * A diagram like this can be extremely useful when you are trying to get a big picture
 
+### Entity maps
+
+* They show work for individual entities. Entity map shows you
+  * All entities in system
+  * Relationships by means of event system
+* How do we put jobs of individual entities into a concise format?
+* The basic idea here comes from something called a CRC card
+  * They were developed by Kent Beck and Ward Cunningham when they were teaching object-oriented design
+  * Rebecca Wirfs-Brock did a lot of work with CRC cards
+  * The basic idea of the CRC card is to try and identify the classes in the system, the responsibilities they have, and the collaborators, who do they talk to?
+* We're not interested in other words of defining methods or something like that at this point. We're trying to figure out what responsibilities the individual entities have
+
