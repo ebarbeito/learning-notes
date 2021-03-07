@@ -40,3 +40,9 @@ by Eric Freeman – Linkedin Learning
   * Now there's another set of principles known as the SOLID principles
     * Which were introduced by the software engineer Robert Martin
 
+## Encapsulate what varies
+
+* 
+
+
+
