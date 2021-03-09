@@ -64,3 +64,18 @@ by Eric Freeman – Linkedin Learning
   * That's your signal that something needs to be pulled out and encapsulated on its own
   * Pay attention to how each pattern makes use of this principle, that let some part of the system vary independent of the other parts.
 
+* The only constant thing about requirements is that they change
+
+## Favor composition over inheritance
+
+* Has-a is better than is-a
+* With inheritance, duplication behaviours can be avoided
+* Is a powerfull technique, but also one can easily be overused.
+* It's also a technique that can lead to designs that are far too rigged and not extensible
+* Many design patterns make use of composition to solve different typ
+* Instead of inheriting behaviour, we can compose our objects with new behaviours
+* Composition gives us more flexibility. Even allowing behavior changes dynamically, at runtime
+
+## Loose coupling
+
+* 
