@@ -42,7 +42,25 @@ by Eric Freeman – Linkedin Learning
 
 ## Encapsulate what varies
 
-* 
+* Many consider it as the most important design principle. It forms the basis for every design pattern
 
+  * Think of the encapsulate what varies principle as kind of the master principle
 
+* Identify the aspects of your application that vary and separate them from what stays the same
+
+* Is the same code changing with every new requirement? Then, you've got a behavior that really needs to be pulled out and separated from all the stuff that doesn't change
+
+  * Then you can alter or extend the parts that vary, but do it without affecting the parts that don't vary
+
+* There are many ways to pull something out of your design to encapsulate it, and that's often where patterns actually come in because patterns demonstrate different methods of separating aspects of your design
+
+  ![Encapsulate what varies](.assets/advanced-design-patterns-design-principles-linkedin.md/encapsulate_what_varies.png)
+
+* An example is the simple factory pattern, which is a very simple way of encapsulating what varies
+
+* It's all about letting one part of the system vary independently of another part
+
+  * To make use of encapsulate what varies, always look for code that's changing often
+  * That's your signal that something needs to be pulled out and encapsulated on its own
+  * Pay attention to how each pattern makes use of this principle, that let some part of the system vary independent of the other parts.
 
