@@ -31,6 +31,7 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 * [CQRS and Event Sourcing](talks/2019-ipc19-cqrs-and-event-sourcing.md), by **Oliver Sturm**. International PHP Conference 2019
 * [Advanced Web Application Architecture](talks/2019-php-barcelona-advanced-web-application-architecture.md), by **Matthias Noback**. PHP Barcelona 2019
 * [A view in the PHP Virtual Machine](talks/2019-symfonycon19-a-view-in-the-php-vm.md), by **Julien Pauli**. SymfonyCon 2019 Amsterdam
+* [Domain Modeling Made Functional](talks/2019-eddd19-domain-modeling-made-functional.md), by **Scott Wlaschin**. Explore DDD 2019
 
 ## 🏷️ Topics
 
