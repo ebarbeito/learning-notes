@@ -25,7 +25,7 @@ Scott Wlaschin - Explore DDD 2019
 
 ### Part I: The importance of DDD
 
-![DDD in a nutshell — Shared mental model](/Users/enrique.barbeito/Projects/_sandbox/learning-notes/talks/.assets/2019-eddd19-domain-modeling-made-functional.md/importance_of_ddd_shared_mental_model.png)
+![DDD in a nutshell — Shared mental model](.assets/2019-eddd19-domain-modeling-made-functional.md/importance_of_ddd_shared_mental_model.png)
 
 * All involved people have a shared mental model
 
