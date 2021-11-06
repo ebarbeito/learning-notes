@@ -20,7 +20,7 @@ Scott Wlaschin - Explore DDD 2019
 ## Notes
 
 * There's an intersection between functional programming and domain-driven design, but not a lot of people practice it
-* Is FP scary? It isn't, and adoptiong  it (at least some of its *goodies*) is very powerfull while doing DDD
+* Is FP scary? It isn't, and adopting  it (at least some of its *goodies*) is very powerful while doing DDD
   * FP is really good for Boring Line Of Business Applications (BLOBAs)
 
 ### Part I: The importance of DDD
@@ -51,8 +51,8 @@ Scott Wlaschin - Explore DDD 2019
     type PickupCard = (Hand * Card) -> Hand
   ```
 
-  * Shared language: CardGame, Suit, Rank, Club, Diamon, Ten, Jack, Queen, Name, Hand, Deal, ...
-  * `|` represents a choice (`OR`). it means "pick one from the list". e.g. `Suit` can be only `Club`, or `Diamond`, or `Spade`, or `Heart`. Nothing more, nothing else
+  * Shared language: CardGame, Suit, Rank, Club, Diamond, Ten, Jack, Queen, Name, Hand, Deal, ...
+  * `|` represents a choice (`OR`). It means "pick one from the list". e.g. `Suit` can be only `Club`, or `Diamond`, or `Spade`, or `Heart`. Nothing more, nothing else
   * `*` represents a pair (`AND`). It means "choose one from each type" e.g. `Card` is a `Suit`and a `Rank`
   * F# has list types built in (`list`keyword)
   * `X -> Y` means a function; input of X, output of Y
@@ -87,19 +87,19 @@ Scott Wlaschin - Explore DDD 2019
 
   * There's nothing about implementation here, nothing about databases, foreign keys, etc.
   * Design is what Eric Evans calls persistent ignorance
-  * Also, is not "object oriented" either. There's no base classes, no managers, no factories, no inheritance, there's no all that stuff
+  * Also, it is not "object oriented" either. There's no base classes, no managers, no factories, no inheritance, there's no all that stuff
 
-* The design is based in the real word, using its vocabulary: Suit, Rank, Card, Hand, Deck, ...
+* The design is based on the real word, using its vocabulary: Suit, Rank, Card, Hand, Deck, ...
 
   * In your code, you also want to have the same vocabulary
   * The domain code should be in sync with real world vocabuñary
   * If we learn new things about the domain, the code should reflect that
 
-* This is the right way to design our domain. What we shouldn't do the other way around, where the domain contsains programmer jargon: something what domain experts do not understand
+* This is the right way to design our domain. What we shouldn't do the other way around, where the domain contains programmer jargon: something what domain experts do not understand
 
   * The "domain" code should not use programmer jargon
   * Don't place in the domain things like PlayerManager, DeckBase, AbstractCardProxyFactoryBean, ... This things are not domain concepts, something that domain experts need to know
-  * Of course the implementation gets some of this, and you might to have this kind of things. But is in the side of implementation things, and not in the domain modeling side of things
+  * Of course the implementation gets some of this, and you might have this kind of thing. But is in the side of implementation things, and not in the domain modeling side of things
 
 * It's not just about the result of doing things, but actually the process of getting everyone in the same page
 
@@ -162,21 +162,21 @@ Scott Wlaschin - Explore DDD 2019
     | Cherry of CherryVariety
   ```
 
-  * Then, a snack will be just one thing but an apple, or a banana or a cherry. Nothing more, nothing else. Also, if is an apple then what kind of apple is it (variety), if is a banana then what kind of, etc.
-  * This are called choice types, also called discriminated unions, or also some types, or co-product types. Scott likes to use "choice types" because is how you think about it in domain modeling
+  * Then, a snack will be just one thing but an apple, or a banana or a cherry. Nothing more, nothing else. Also, if it is an apple then what kind of apple is it (variety), if it is a banana then what kind of, etc.
+  * These are called choice types, also called discriminated unions, or also some types, or co-product types. Scott likes to use "choice types" because is how you think about it in domain modeling
 
 * While modeling domain, we get rid of primitives
 
-* Is usual to think that types is for type checking. The type it just stops you passing in a string by mistake
+* Is usual to think that types are for type checking. The type it just stops you passing in a string by mistake
 
   * A lot of people find the type checking an annoyance, especially when it's kind of very verbose
   * But Scott thinks of type as a domain modeling tool
 
-* So, is possible to use types for both, for type checking and as a domain modeling tool. Is a powerful technique
+* So, it is possible to use types for both, for type checking and as a domain modeling tool. Is a powerful technique
 
 * A good static type system is like having compile-time unit tests
 
-  * Start statically type all the things. This is the way to go forward
+  * Start statically typing all the things. This is the way to go forward
 
 ### Paret III: Domain modeling with composable types
 
@@ -221,7 +221,7 @@ Scott Wlaschin - Explore DDD 2019
     | None
   ```
 
-* This is a way to modeling optional values. In F# is built-in, but also is easier to write it in any other language
+* This is a way to model optional values. In F# is built-in, but also is easier to write it in any other language
 
 * So the MiddleInitial value can be changed to: `MiddleInitial: string option`
 
@@ -235,7 +235,7 @@ Scott Wlaschin - Explore DDD 2019
 * Modeling constrained values
 
   * Is really unusual to have an unbounded value. Like a string which can be a million characters long
-  * Normally there's some sort of contraints
+  * Normally there's some sort of constraints
 
 * What we do in FP domain modeling is create wrapper types around this primitives
 
