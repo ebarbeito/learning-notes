@@ -165,5 +165,112 @@ Scott Wlaschin - Explore DDD 2019
   * Then, a snack will be just one thing but an apple, or a banana or a cherry. Nothing more, nothing else. Also, if is an apple then what kind of apple is it (variety), if is a banana then what kind of, etc.
   * This are called choice types, also called discriminated unions, or also some types, or co-product types. Scott likes to use "choice types" because is how you think about it in domain modeling
 
-* 
+* While modeling domain, we get rid of primitives
+
+* Is usual to think that types is for type checking. The type it just stops you passing in a string by mistake
+
+  * A lot of people find the type checking an annoyance, especially when it's kind of very verbose
+  * But Scott thinks of type as a domain modeling tool
+
+* So, is possible to use types for both, for type checking and as a domain modeling tool. Is a powerful technique
+
+* A good static type system is like having compile-time unit tests
+
+  * Start statically type all the things. This is the way to go forward
+
+### Paret III: Domain modeling with composable types
+
+* Original code (with poor domain modeling)
+
+  ```F#
+  type PersonalName = {
+    FIrstName: string      // required
+    MiddleInitial: string  // optional
+    LastName: string       // required
+  }
+  ```
+
+* How represent optional values
+
+  * `null` is not the right answer
+  * `null` is the Saruman of static typing. It's like something pretends to be your friend principle good but they said they're going to turn around and stab you in the back
+  * Do not use `null` anywhere, even to don't represent something if is missing
+
+* How to represent something which is missing
+
+  * e.g. having a set of strings "a", "b", "c", or *missing*
+
+  * So, we talk about if there's a string `OR` it's missing
+
+  * So it's a choice either is it one of the things in the set of strings or it's missing, which is like the empty set
+
+  * So we can combine them, and write a new type
+
+    ```F#
+    type SomeString of string
+    type OptionalString =
+      | SomeString of string
+      | Nothing
+    ```
+
+* Then, we can want to have optional integers, optional booleans, etc. Too much duplicated code, so it can be generic
+
+  ```F#
+  type Option<'T> =
+    | Some of 'T
+    | None
+  ```
+
+* This is a way to modeling optional values. In F# is built-in, but also is easier to write it in any other language
+
+* So the MiddleInitial value can be changed to: `MiddleInitial: string option`
+
+* Use required by default. So, if a value is not optional then is required
+
+* Modeling simple values
+
+  * Avoid "primitive obsession". Don't use ints, floats, strings, etc. in your domain
+  * e.g. "float" jeans nothing to the domain expert, or to the average non-developer
+
+* Modeling constrained values
+
+  * Is really unusual to have an unbounded value. Like a string which can be a million characters long
+  * Normally there's some sort of contraints
+
+* What we do in FP domain modeling is create wrapper types around this primitives
+
+  * This provides two benefits: Clearer domain modeling, and can't mix them up accidentally
+
+* The original code can be better modeled with
+
+  ```F#
+  type PersonalName = {
+    FIrstName: String50
+    MiddleInitial: String1 option
+    LastName: String50
+  }
+  ```
+
+* "Make illegal states unrepresentable!" — Yaron Minsky
+
+  * If there's something you don't want somebody to do, don't even allow it to compile
+  * Don't say: let it compile, then I'll have some validation. No, don't make it even possible
+
+* Communication is a two-way street, so it's OK to push back
+
+### Summary
+
+* Use code to represent the shared mental model and ubiquitous language
+* Designs will evolve Embrace change
+  * Refactor towards deeper insight
+  * Static types give you confidence to make changes
+* The power of a composable type system
+  * Choices rather than inheritance
+  * Options instead of null
+  * Wrappers for constrained types
+  * Make illegal states unrepresentable
+
+### References
+
+* Book "[Domain Modeling Made Functional](https://fsharpforfunandprofit.com/ddd/#book)"
 
