@@ -16,28 +16,28 @@ by Eric Freeman – Linkedin Learning
 
 ## Design principles
 
-* Design principles help us to improve our object-oriented design
-* They're guidelines and/or advice, but not absolute laws that have to be followed
-* Help us avoid bad object-oriented design. Symptoms of this?
-  * Regidity. Design that is rigid
-  * Fragility. Hard to change due to some dependencies
-  * Immobility. It's hard to reuse, not possible to reuse it in places it wasn't designed for
-  * Inflexible design, hard to maintain and not resilient to change
+* Design principles help us to improve our **object-oriented design**
+* They're guidelines and/or advice, but **not absolute laws** that have to be followed
+* Help us avoid **bad** object-oriented design. Symptoms of this?
+  * **Regidity**. Design that is rigid
+  * **Fragility**. Hard to change due to some dependencies
+  * **Immobility**. It's hard to reuse, not possible to reuse it in places it wasn't designed for
+  * **Inflexible design**, hard to maintain and not resilient to change
 * Design principles go beyond those core object-oriented principles: Inheritance, Encapsulation, Polymorphism, Abstraction
 * Blindly following these core concepts can often lead in the other direction to the bad quality
-* Design principles, bring an additional set of guidelines on top of the core object-oriented concepts
-* They give us key insights into how to and not to approach object-oriented design
+* Design principles, bring an **additional set of guidelines** on top of the core object-oriented concepts
+* They give us **key insights** into how to and not to approach object-oriented design
 
 ![Object-oriented Design](.assets/advanced-design-patterns-design-principles-linkedin.md/object-oriented-design.png)
 
-* For design patterns, we have standard catalogs that document them
-* There are no standard catalogs for design principles
+* For **design patterns**, we have standard catalogs that document them
+* There are no standard catalogs for **design principles**
 * That said, there are a set of fundamental principles:
   * **Encapsulate what varies**. It tells us that if we have part of our design that is changing, say with every new requirement, well then we should encapsulate that part away from the rest of the design
   * **Favor composition over inheritance**. It warrants against the overuse of inheritance and suggests composition as a powerful alternative for extending behavior in our designs
   * **Program to interfaces not implementations**. It encourages us to keep our designs high-level and referring where possible to abstractions or interfaces and not concrete implementations
   * **The loose coupling principle**. It tell us to strive for loosely coupled designs between objects that interact
-  * Now there's another set of principles known as the SOLID principles
+  * Now there's another set of principles known as the **SOLID principles**
     * Which were introduced by the software engineer Robert Martin
 
 ## Encapsulate what varies
@@ -46,11 +46,11 @@ by Eric Freeman – Linkedin Learning
 
   * Think of the encapsulate what varies principle as kind of the master principle
 
-* Identify the aspects of your application that vary and separate them from what stays the same
+* Identify the aspects of your application that vary and **separate them** from what stays the same
 
-* Is the same code changing with every new requirement? Then, you've got a behavior that really needs to be pulled out and separated from all the stuff that doesn't change
+* Is the same code changing with **every** new requirement? Then, you've got a behavior that really needs to be pulled out and separated from all the stuff that doesn't change
 
-  * Then you can alter or extend the parts that vary, but do it without affecting the parts that don't vary
+  * Then you can **alter or extend** the parts that vary, but do it without affecting the parts that don't vary
 
 * There are many ways to pull something out of your design to encapsulate it, and that's often where patterns actually come in because patterns demonstrate different methods of separating aspects of your design
 
