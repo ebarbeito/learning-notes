@@ -72,10 +72,77 @@ by Eric Freeman – Linkedin Learning
 * With inheritance, duplication behaviours can be avoided
 * Is a powerfull technique, but also one can easily be overused.
 * It's also a technique that can lead to designs that are far too rigged and not extensible
-* Many design patterns make use of composition to solve different typ
+* Many design patterns make use of composition to solve different types of design problems
 * Instead of inheriting behaviour, we can compose our objects with new behaviours
 * Composition gives us more flexibility. Even allowing behavior changes dynamically, at runtime
 
 ## Loose coupling
 
+* Loose coupled designs between objects that interacts
+* Components are independent, relying on knoledge of other ones as little as possible
+* The dependency between components is reduced
+
+## Program to Interfaces, not Implementations
+
+* Components depend on / use contracts (*interfaces*) instead of concrete implementations
+* This enables the loose coupling
+* The principle encourages to program against abstractions, thinking in the intentions before going for the concrete implementation
+* It allows to better exploit polymorphism by programming to super types
+  * Super types seen as free classes from knowledge of concrete types
+* Drives the code for caring about extensibility and maintanability, instead of just getting the more direct solution coupled to concrete implementations
+
+## Single Responsibility Principle
+
+* A class should have only one **reason** to change
+  * The key is limiting the **impact of change** within a class
+* As less responsibilities a class is, as smaller it gets, we minimize the probabilities of change of that class in the future
+* Look at change in your class: are parts of it **changing often, while other aren't**?
+  * If so, that can be an indicator for separating them
+  * If not, then there's really no reason
+* SRP increase the amount of components, so apply SRP only on real need
+
+## Open / Closed Principle
+
+* Our object-oriented design should be open for extension, but closed for modification
+* There are OO techniques for allowing to extend systems even if we can't change the underlying code
+  * Many design patterns give us time-tested designs respecting this principle
+* It enhances maintainability and extensibility of a design
+
+## Liskov's Substitution Principle
+
+* We have to be careful when creating class hierarchies / inheritance
+  * So easy to create herarchies that doesnt adhere well with the OCP
+* LSP strives to create hierarchies where you always are able to substitute sub types for their base class
+* Rather than viewing a sub class as an `IsA`super class, the LSP offers stronger guidance. It says that a sub type should be substitutable for the super type
+* In order to don't break the LSP, the code must be designed by contract
+  * That is to specify a set of pre-conditions and post-conditions in a variance
+  * Ensuring that we treat the inputs of our classes the same way, and also the return values. Having contracts that ensure it
+* So, don't assume that an `IsA` relationship will always result in a hierarchies. You need to consider how substitutable a base class is for it's super type as well
+
+## Interface Segregation Principle
+
+* Classes should not be forced to depend on methods that they don't use
+  * If this happen, then we talk that the interface is polluted
+  * Interface pollution is related with low cohesion
+* Cohesion describes how related a class or interfaces methods and data are
+  * A class is highly cohesive if its methods are related
+  * Low cohesion mean some methods aren't that somewhere and serve different purposes
+* One way to think in cohesion is to think about the clients that make use of the class or interface
+  * Do they use all the methods of the class?
+  * Then, the class probably has high cohesion. If not, it may be low
+* Highly cohesive classes and interfaces leads a sofware that is generally easier to maintain and to extend
+* So keep an eye on cohesion in your interfaces. Keep them highly cohesive by segregating them and allowing clients don't being dependent on methods the're not interested in
+
+## Dependency Inversion Principle
+
+* High-level modules should not depend on low-level modules
+
+  * It guides us to not design our high-level modules to depend on our low-level modules
+
+* Typical Object-Oriented Thinking. We usually think as top-down decompositions
+
+  ![Typical Object-Oriented Thinking](.assets/advanced-design-patterns-design-principles-linkedin.md/typical_oo_thinking.png)
+
+* Taking a problem, we factor it into a high-level set of components that depend on a low-level set of components
+* The most common problem with this approach is that tightly couples out high-level components to our low-level ones
 * 
