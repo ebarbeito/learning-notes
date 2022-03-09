@@ -19,7 +19,7 @@ by Eric Freeman – Linkedin Learning
 * Design principles help us to improve our **object-oriented design**
 * They're guidelines and/or advice, but **not absolute laws** that have to be followed
 * Help us avoid **bad** object-oriented design. Symptoms of this?
-  * **Regidity**. Design that is rigid
+  * **Rigidity**. Design that is rigid
   * **Fragility**. Hard to change due to some dependencies
   * **Immobility**. It's hard to reuse, not possible to reuse it in places it wasn't designed for
   * **Inflexible design**, hard to maintain and not resilient to change
@@ -34,7 +34,7 @@ by Eric Freeman – Linkedin Learning
 * There are no standard catalogs for **design principles**
 * That said, there are a set of fundamental principles:
   * **Encapsulate what varies**. It tells us that if we have part of our design that is changing, say with every new requirement, well then we should encapsulate that part away from the rest of the design
-  * **Favor composition over inheritance**. It warrants against the overuse of inheritance and suggests composition as a powerful alternative for extending behavior in our designs
+  * **Favor composition over inheritance**. It warrants against the overuse of inheritance and suggests composition as a powerful alternative for extending behaviour in our designs
   * **Program to interfaces not implementations**. It encourages us to keep our designs high-level and referring where possible to abstractions or interfaces and not concrete implementations
   * **The loose coupling principle**. It tell us to strive for loosely coupled designs between objects that interact
   * Now there's another set of principles known as the **SOLID principles**
@@ -48,7 +48,7 @@ by Eric Freeman – Linkedin Learning
 
 * Identify the aspects of your application that vary and **separate them** from what stays the same
 
-* Is the same code changing with **every** new requirement? Then, you've got a behavior that really needs to be pulled out and separated from all the stuff that doesn't change
+* Is the same code changing with **every** new requirement? Then, you've got a behaviour that really needs to be pulled out and separated from all the stuff that doesn't change
 
   * Then you can **alter or extend** the parts that vary, but do it without affecting the parts that don't vary
 
@@ -70,16 +70,16 @@ by Eric Freeman – Linkedin Learning
 
 * Has-a is better than is-a
 * With inheritance, duplication behaviours can be avoided
-* Is a powerfull technique, but also one can easily be overused.
+* Is a powerful technique, but also one can easily be overused.
 * It's also a technique that can lead to designs that are far too rigged and not extensible
 * Many design patterns make use of composition to solve different types of design problems
 * Instead of inheriting behaviour, we can compose our objects with new behaviours
-* Composition gives us more flexibility. Even allowing behavior changes dynamically, at runtime
+* Composition gives us more flexibility. Even allowing behaviour changes dynamically, at runtime
 
 ## Loose coupling
 
 * Loose coupled designs between objects that interacts
-* Components are independent, relying on knoledge of other ones as little as possible
+* Components are independent, relying on knowledge of other ones as little as possible
 * The dependency between components is reduced
 
 ## Program to Interfaces, not Implementations
@@ -89,7 +89,7 @@ by Eric Freeman – Linkedin Learning
 * The principle encourages to program against abstractions, thinking in the intentions before going for the concrete implementation
 * It allows to better exploit polymorphism by programming to super types
   * Super types seen as free classes from knowledge of concrete types
-* Drives the code for caring about extensibility and maintanability, instead of just getting the more direct solution coupled to concrete implementations
+* Drives the code for caring about extensibility and maintainability, instead of just getting the more direct solution coupled to concrete implementations
 
 ## Single Responsibility Principle
 
@@ -111,9 +111,9 @@ by Eric Freeman – Linkedin Learning
 ## Liskov's Substitution Principle
 
 * We have to be careful when creating class hierarchies / inheritance
-  * So easy to create herarchies that doesnt adhere well with the OCP
+  * So easy to create hierarchies that doesn't adhere well with the OCP
 * LSP strives to create hierarchies where you always are able to substitute sub types for their base class
-* Rather than viewing a sub class as an `IsA`super class, the LSP offers stronger guidance. It says that a sub type should be substitutable for the super type
+* Rather than viewing a sub class as an `IsA` super class, the LSP offers stronger guidance. It says that a sub type should be substitutable for the super type
 * In order to don't break the LSP, the code must be designed by contract
   * That is to specify a set of pre-conditions and post-conditions in a variance
   * Ensuring that we treat the inputs of our classes the same way, and also the return values. Having contracts that ensure it
@@ -130,8 +130,8 @@ by Eric Freeman – Linkedin Learning
 * One way to think in cohesion is to think about the clients that make use of the class or interface
   * Do they use all the methods of the class?
   * Then, the class probably has high cohesion. If not, it may be low
-* Highly cohesive classes and interfaces leads a sofware that is generally easier to maintain and to extend
-* So keep an eye on cohesion in your interfaces. Keep them highly cohesive by segregating them and allowing clients don't being dependent on methods the're not interested in
+* Highly cohesive classes and interfaces leads a software that is generally easier to maintain and to extend
+* So keep an eye on cohesion in your interfaces. Keep them highly cohesive by segregating them and allowing clients don't being dependent on methods they're not interested in
 
 ## Dependency Inversion Principle
 
@@ -144,5 +144,14 @@ by Eric Freeman – Linkedin Learning
   ![Typical Object-Oriented Thinking](.assets/advanced-design-patterns-design-principles-linkedin.md/typical_oo_thinking.png)
 
 * Taking a problem, we factor it into a high-level set of components that depend on a low-level set of components
+
 * The most common problem with this approach is that tightly couples out high-level components to our low-level ones
-* 
+
+* Thinking with Dependency Inversion
+
+  ![Dependency Inversion Thinking](.assets/advanced-design-patterns-design-principles-linkedin.md/dependency_inversion_thinking.png)
+
+* Tells us 2 things
+
+  * High-level modules doesn't depend on low-level ones. Actually, both should depend on abstraction
+  * Abstractions should not depend on details. Actually, details should depend on abstractions
