@@ -21,6 +21,7 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 * [Outside-In Test-Driven Development](courses/outside-in-tdd-pluralsight.md), by **Mark Seemann**. Pluralsight
 * [Shipping Docker](courses/shipping-docker-serversforhackers.md), by **Chris Fidao**. Servers for Hackers
 * [Software Architecture: Domain-Driven Design](courses/software-architecture-domain-driven-design-linkedin.md), by **Allen Holub**. Linkedin Learning
+* [Symfony Escalable y Mantenible](courses/symfony-escalable-y-mantenible.md), by **Dani Santamaría, Javier Ferrer**. CodelyTV
 
 ## 🗣️ Talks
 
