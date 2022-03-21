@@ -106,8 +106,18 @@ Scenario: searching for a non-existing product
   * Mejora la mantenibilidad de los tests de UI
   * Encapsula cómo es una aplicación. Expone públicamente métodos que llevan a otros Page Objects, representando la navegación y acciones para que sean ejecutadas en el navegador (seguir un enlace, completar un formulario...) y métodos para conocer el estado de la página
 
+## Example Mapping
+
+* Técnica colaborativa. Actividad de equipo para explorar el dominio y conocer los detalles de una historia de usuario. Facilita llegar a un entendimiento compartido entre los miembros del equipo de una forma estructurada
+* Uno de los objetivos de esta actividad es llegar a obtener ejemplos concretos que nos lleven a la especificación. Esto guía a conocer cuáles son los tests de aceptación
+* Otro objetivo es extraer y mapear las reglas de negocio, preguntas o dudas que nos surjan de la historia de usuario. O incluso nuevas historias de usuario de las que no nos habíamos percatado inicialmente
+* Se usan distintos postit de colores para visualizar la información
+  * Amarillo: para las historias de usuarios
+  * Azul: para las reglas de negocio
+  * Verde: para los ejemplos
+  * Rojo: para las preguntas
+
 ## Referencias
 
 * [BDD is like TDD if](https://dannorth.net/2012/05/31/bdd-is-like-tdd-if/)
 * [SpecificationByExample](https://martinfowler.com/bliki/SpecificationByExample.html)
-* 
