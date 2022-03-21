@@ -16,6 +16,7 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 
 * [Advanced Design Patterns: Design Principles](courses/advanced-design-patterns-design-principles-linkedin.md), by **Eric Freeman**. LinkedIn Learning
 * [Agile Fundamentals](courses/agile-fundamentals-pluralsight.md), by **Stephen Haunts**. Pluralsight
+* [Buenas prácticas de BDD con Gherkin](courses/buenas-practicas-de-bdd-con-gherkin-cucumber-behat-codelytv.md), by **Dani Latorre**, **Javier Rubio**. CodelyTV
 * [Contributing to an Open Source Project on GitHub](courses/contributing-to-an-open-source-project-on-gitHub-pluralsight.md), by **Kamran Ayub**. Pluralsight
 * [Outside-In Test-Driven Development](courses/outside-in-tdd-pluralsight.md), by **Mark Seemann**. Pluralsight
 * [Software Architecture: Domain-Driven Design](courses/software-architecture-domain-driven-design-linkedin.md), by **Allen Holub**. Linkedin Learning
