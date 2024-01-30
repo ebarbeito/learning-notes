@@ -58,3 +58,105 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
 * En este controlador es donde se maneja la ejecución del controlador legacy para cuando esta ruta no tenga todavía un reemplazo en la configuración de rutas del proyecto
 * Aquí ya no hablamos de fallback, pues las rutas legacy son ahora manejadas como rutas del proyecto Symfony al mismo nivel (e.g. se pueden ver utilzando el comando `debug:router`)
 
+## Configurar y adaptar Symfony para mejorar la mantenibilidad
+
+* Detalles sobre el Contenedor de Inyección de Dependencias de Symfony ([componente](https://symfony.com/doc/current/components/dependency_injection.html))
+* Creación de distintos Kernels para distintos front controllers para distintas aplicaciones desarrolladas en un único monorepo
+* Uso del autoconfigure de Symfony y la opción `_instanceof`del contenedor para tanguear servicios delegando en Symfony sin tener que hacerlo manualmente. [Autoconfiguring tags](https://symfony.com/doc/current/service_container/tags.html#autoconfiguring-tags) y [Reference tagged services](https://symfony.com/doc/current/service_container/tags.html#reference-tagged-services)
+
+## Optimizaciones habituales en peticiones HTTP
+
+### Gestión de errores
+
+* Control de una excepción no capturada transformándola en una respuesta controlada con un determinado HTTP status code
+
+* Cada vez que en un controlador hay que añadir el control de una nueva excepción, hay que modificar la clase del controlador. Si se quiere aplicar SOLID aquí, se podría no modificar la clase y controlar las excepciones de todos los controladores en un punto común
+
+* Varias formas de hacerlo. La manera propuesta
+
+  ```php
+  abstract class ApiController
+  {
+      public function __construct(
+          // (...)
+          ApiExceptionsHttpStatusCodeMapping $exceptionHandler
+      ) {
+          each(
+              fn(int $httpCode, string $exceptionClass) => $exceptionHandler->register($exceptionClass, $httpCode),
+              $this->exceptions()
+          );
+      }
+
+      // (...)
+
+      abstract protected function exceptions(): array;
+  }
+
+  final class CoursesCounterGetController extends ApiController
+  {
+      public function __invoke(): JsonResponse
+      { /* (...) */ }
+
+      protected function exceptions(): array
+      {
+          return [
+              CoursesCounterNotExist::class => Response::HTTP_NOT_FOUND,
+              // ...
+          ];
+      }
+  }
+  ```
+
+  ```php
+  final class ApiExceptionsHttpStatusCodeMapping
+  {
+      private const DEFAULT_STATUS_CODE = Response::HTTP_INTERNAL_SERVER_ERROR;
+
+      // (...)
+
+      public function statusCodeFor(string $exceptionClass): int
+      {
+          return get(
+              key: $exceptionClass,
+              collection: $this->exceptions,
+              default: self::DEFAULT_STATUS_CODE
+          );
+      }
+  }
+
+  final class ApiExceptionListener
+  {
+      public function __construct(private ApiExceptionsHttpStatusCodeMapping $exceptionHandler)
+      {
+      }
+
+      public function onException(ExceptionEvent $event): void
+      {
+          $exception = $event->getThrowable();
+
+          $event->setResponse(new JsonResponse(
+              [
+                  'code'    => $this->exceptionCodeFor($exception),
+                  'message' => $exception->getMessage(),
+              ],
+              $this->exceptionHandler->statusCodeFor($exception::class)
+          ));
+
+          // (...)
+      }
+  }
+  ```
+
+  **ApiController**: Clase abstracta que usa el patron [template method](https://refactoring.guru/design-patterns/template-method) en el método exceptions para que los controladores definan el un diccionario que mapee la excepción con un código de respuesta HTTP
+
+  **ApiExceptionsHttpStatusCodeMapping**: Maneja el mapeo de códigos
+
+  **ApiExceptionListener**: Symfony EventListener donde se hace uso de la clase anterior; reacciona a las excepciones para construir una respuesta de error HTTP
+
+### Optimizar el rendimiento
+
+* Ejemplo de enviar un email tras devolver la respuesta
+
+### **Procesado de eventos de dominio en Event Subscriber**
+
+* Hacer uso del `kernel.terminate` para todo lo que no sea nbecesario procesar para darle la respuesta al usuario
