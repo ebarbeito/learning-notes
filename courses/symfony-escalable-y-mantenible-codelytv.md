@@ -78,7 +78,7 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
   abstract class ApiController
   {
       public function __construct(
-          // (...)
+          // ...
           ApiExceptionsHttpStatusCodeMapping $exceptionHandler
       ) {
           each(
@@ -86,17 +86,17 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
               $this->exceptions()
           );
       }
-
-      // (...)
-
+  
+      // ...
+  
       abstract protected function exceptions(): array;
   }
-
+  
   final class CoursesCounterGetController extends ApiController
   {
       public function __invoke(): JsonResponse
-      { /* (...) */ }
-
+      { /* ... */ }
+  
       protected function exceptions(): array
       {
           return [
@@ -111,9 +111,9 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
   final class ApiExceptionsHttpStatusCodeMapping
   {
       private const DEFAULT_STATUS_CODE = Response::HTTP_INTERNAL_SERVER_ERROR;
-
-      // (...)
-
+  
+      // ...
+  
       public function statusCodeFor(string $exceptionClass): int
       {
           return get(
@@ -123,17 +123,17 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
           );
       }
   }
-
+  
   final class ApiExceptionListener
   {
       public function __construct(private ApiExceptionsHttpStatusCodeMapping $exceptionHandler)
       {
       }
-
+  
       public function onException(ExceptionEvent $event): void
       {
           $exception = $event->getThrowable();
-
+  
           $event->setResponse(new JsonResponse(
               [
                   'code'    => $this->exceptionCodeFor($exception),
@@ -141,8 +141,8 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
               ],
               $this->exceptionHandler->statusCodeFor($exception::class)
           ));
-
-          // (...)
+  
+          // ...
       }
   }
   ```
@@ -160,3 +160,114 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
 ### **Procesado de eventos de dominio en Event Subscriber**
 
 * Hacer uso del `kernel.terminate` para todo lo que no sea nbecesario procesar para darle la respuesta al usuario
+
+### Otras optimizaciones
+
+#### Parsear JSON del request body
+
+* La solución que se explica es interesante siempre que los argumentos de entrada vengan todos en el body de la petición HTTP (nota: aunque no está limitado al body, y podrían leerse cabeceras o cualquier información pública del objeto de la request)
+
+* El método invocado del controlador recibe un argumento con un DTO ya instanciado (resuelto y deserializado) con los datos de la petición, sin necesidad de tratar el objecto Http Request
+
+* Se hace uso de Symfony [Argument Resolver](https://symfonycasts.com/screencast/deep-dive/argument-resolver)
+
+  ```php
+  final class RegisterUserPutController
+  {
+      public function __invoke(RegisterUserCommand $command): JsonResponse
+      {
+  // ...
+  ```
+
+  ```php
+  use CodelyTv\Shared\Domain\Bus\Command\Command;
+  use Symfony\Component\HttpFoundation\Request;
+  use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+  use Symfony\Component\Serializer\SerializerInterface;
+  // use ...
+  
+  final class CommandValueResolver implements ArgumentValueResolverInterface
+  {
+      public function __construct(private SerializerInterface $serializer)
+      {
+      }
+      
+      public function supports(Request $request, ArgumentMetadata $argument): bool
+      {
+          return is_subclass_of($argument->getType(), Command::class);
+      }
+  
+      public function resolve(Request $request, ArgumentMetadata $argument): Generator
+      {
+          yield $this->serializer->deserialize($request->getContent(), $argument->getType(), 'json');
+      }
+  }
+  ```
+
+#### Serializar respuestas automáticamente a JSON
+
+* En lugar de devolver un objeto Http Response, se devuelve un DTO de la capa de aplicación que será serializado a JSON por Symfony
+
+  ```php
+  final class CourseCounterGetController
+  {
+      public function __invoke(): CoursesCounterResponse
+      {
+          // ...
+          return new CoursesCounterResponse(10);
+      }
+  }
+  ```
+
+* Implementar un EventListener que escuche al evento KernelView de Symfony
+
+  ```php
+  // ...
+  public function onKernelView(ViewEvent $event)
+  {
+     if (!$event->getControllerResult() instanceof Response) { return; }
+  
+     $event->setResponse(
+         new JsonResponse(
+             $this->serializer->serialize($event->getControllerResult(), 'json')
+         )
+     );
+  }
+  // ...
+  ```
+
+#### Añadir headers de forma global
+
+* Si todas las respuestas tienen una o varias cabeceras que son siempre las mismas (e.g. CORS, o caché)
+
+* Se puede hacer también vía Symfony Event Listener
+
+  ```php
+  // ...
+  public function onKernelResponse(ResponseEvent $event)
+  {
+     $response = $event->getResponse();
+     $response->setMaxAge(180);
+     $response->setPublic();
+  }
+  // ...
+  ```
+
+#### Feature flags y Dark Launching
+
+* Tener funcionalidades a producción donde solo ciertos usuarios pueden verlas (dark launching), o que las podamos activar sin necesidad de deployar código (feature flag / toggle)
+
+* Una opción que se ve es para dark launching vía el evento de Symfony Kernel Request
+
+  ```php
+  // ...
+  public function onKernelRequest(RequestEvent $event)
+  {
+  		// lógica para determinar si el usuario puede ver la funcionalidad
+  
+  		// en caso negativo, podemos enviarle una respuesta 404 Not Found
+      $event->setResponse($response);
+  }
+  // ...
+  ```
+
