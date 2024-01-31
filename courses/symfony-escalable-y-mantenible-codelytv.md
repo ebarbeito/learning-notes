@@ -271,3 +271,74 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
   // ...
   ```
 
+#### Progressive Rollout y A/B testing
+
+* Caso de tener 2 controladores, uno nuevo y otro el actual para un mismo caso, y redirigir peticiones a uno u otro. Se propone varias alternativas
+
+* Modificar el valor de _controller
+
+  * El componente kernel de Symfony define un listener para reaccionar ante una request, es el `kernel.request`. Aquí añade la referencia al controlador en el atributo  `_controller`
+
+    ```php
+    // ...
+    public function onKernelRequest(RequestEvent $event)
+    {
+        // lógica para determinar qué controlador usar
+
+        $event->getRequest()->attributes->set('_controller', $controller);
+    }
+    // ...
+    ```
+
+  * Con un EventListener propio se puede modificar esta referencia. Hay que tener en cuenta las prioridades de llamada de los event listener, y usar una prioridad más baja que la usada por Symfony
+
+    ```sh
+    $ bin/console debug:event-dispatcher kernel.request
+
+    Registered Listeners for "kernel.request" Event
+    ===============================================
+
+     ------- --------------------------------------------------------------------------------------- ----------
+      Order   Callable                                                                                Priority
+     ------- --------------------------------------------------------------------------------------- ----------
+      #1      Symfony\Component\HttpKernel\EventListener\DebugHandlersListener::configure()           2048
+      #2      Symfony\Component\HttpKernel\EventListener\ValidateRequestListener::onKernelRequest()   256
+      #3      Symfony\Component\HttpKernel\EventListener\SessionListener::onKernelRequest()           128
+      #4      Symfony\Component\HttpKernel\EventListener\LocaleListener::setDefaultLocale()           100
+      #5      Symfony\Component\HttpKernel\EventListener\RouterListener::onKernelRequest()            32
+      #6      Symfony\Component\HttpKernel\EventListener\LocaleListener::onKernelRequest()            16
+     ------- --------------------------------------------------------------------------------------- ----------
+    ```
+
+* Reaccionar al evento Controller
+
+  * Settear el método de llamada del controlador justo antes de que se llame al mismo
+
+    ```php
+    // ...
+    public function onKernelController(ControllerEvent $event)
+    {
+        // ...
+        $event->setController($controllerCallable);
+    }
+    // ...
+    ```
+
+* Implementar un ControllerResolver
+
+  * Crear un controller resolver propio y establecer en él el controlador a llamar
+  * Algunas referencias: [1](https://symfony.com/doc/current/create_framework/http_kernel_controller_resolver.html), [2](https://symfonycasts.com/screencast/deep-dive/controller-resolver)
+
+
+#### Poner la web en estado de mantenimiento
+
+* Una opción es reaccionando de nuevo a `kernel.request`
+
+  ```php
+  public function onKernelRequest(RequestEvent $event)
+  {
+      // ...
+      $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE)
+      $event->setResponse($response);
+  }
+  ```
