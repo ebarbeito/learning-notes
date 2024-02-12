@@ -342,3 +342,13 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
       $event->setResponse($response);
   }
   ```
+## Persistencia con Doctrine
+
+### ORM, Dbal, SQL ¿Cuándo usar cada uno?
+
+* Si se elige usar ORM, tener siempre en cuenta que las SQL queries que se ejecutarán finalmente van a depender mucho de cómo están modeladas las entidades implicadas. Se puede usar el Symfony profiler para analizar estas queries y ver si se pueden mejorar en caso de ser necesario
+* Siempre binding de valores a parámetros tanto con PDO como con Dbal para evitar SQL injection
+
+### Streaming de datos: procesar archivo y enviar respuesta HTTP
+
+* 
