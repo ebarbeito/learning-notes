@@ -294,10 +294,10 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
 
     ```sh
     $ bin/console debug:event-dispatcher kernel.request
-
+    
     Registered Listeners for "kernel.request" Event
     ===============================================
-
+    
      ------- --------------------------------------------------------------------------------------- ----------
       Order   Callable                                                                                Priority
      ------- --------------------------------------------------------------------------------------- ----------
@@ -351,4 +351,44 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
 
 ### Streaming de datos: procesar archivo y enviar respuesta HTTP
 
-* 
+* [Symfony\Component\HttpFoundation\StreamedResponse](https://symfony.com/doc/current/components/http_foundation.html#streaming-a-response)
+* StreamedResponse allows to serve small chunks of data to the client
+
+```php
+$response = new StreamedResponse();
+$response->setCallback(function () use ($fileHandle) {
+    while (!feof($fileHandle)) {
+        if (!$line = fgets($fileHandle)) {
+            break;
+        }
+				echo $line; // sends data
+    }
+
+    fclose($fileHandle);
+});
+$response->headers->set('Content-Type', 'text/plain');
+```
+
+* It uses a function callback where is possible to iterate over a set of big data and stream it in small chunks
+* Next example is using Doctrine to stream data from the database
+
+```php
+$response->setCallback(function() {
+    $query = $this->entityManager->createQuery("SELECT f FROM App\Entity\Food f ORDER BY f.id DESC");
+    /** @var Food $food */
+    foreach ($query->toIterable() as $key => $food) {
+        echo $food->id() . ' ' . $food->name() . PHP_EOL;
+
+        $this->entityManager->clear($food);
+    }
+});
+$response->headers->set('Content-Type', 'text/plain');
+```
+
+* Doctrine allows it, and if the dbms you are using allows it as well and you have it correctly configured, then the data can be sent streamed to the HTTP responsedoc
+* `toIterable()` facility to iterate over the query results step by step instead of loading the whole result into memory at once — [Doctrine Batch Processing, iterating results](https://www.doctrine-project.org/projects/doctrine-orm/en/3.0/reference/batch-processing.html#iterating-results)
+* Another reference: [Streaming Files in Symfony](https://www.slingacademy.com/article/streaming-files-in-symfony-complete-guide-examples/)
+
+### Streaming de datos y procesos en batch con Doctrine
+
+* [Doctrine Batch Processing](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/batch-processing.html)
