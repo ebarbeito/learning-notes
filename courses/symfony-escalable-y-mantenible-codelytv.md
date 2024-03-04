@@ -392,3 +392,76 @@ $response->headers->set('Content-Type', 'text/plain');
 ### Streaming de datos y procesos en batch con Doctrine
 
 * [Doctrine Batch Processing](https://www.doctrine-project.org/projects/doctrine-orm/en/current/reference/batch-processing.html)
+
+## Rendimiento, Profiling y DevEx
+
+### DevEx en Symfony: Profiling, Debug y PHPUnit Bridge
+
+* Componente Symfony [VarDumper](https://symfony.com/doc/current/components/var_dumper.html) como alternativa a `var_dump`
+* Debug y profiling con el componente Symfony [Web Profiler](https://symfony.com/doc/current/profiler.html): consta principalmente del Symfony Profiler que recopila toda la información de la ejecución y el Web Debug Toolbar que es el UI con el que se puede acceder y visualizar toda esa información
+  * Es extensible y los bundles pueden añadir sus propias plantillas a la web toolbar
+  * La API pública del componente [permite acceder](https://symfony.com/doc/current/profiler.html#accessing-profiling-data-programmatically) a toda la información del profiler mediante código usando el servicio `@profiler`
+  * [Mitigating Risks: Securing Symfony Profiler from Unwanted Exposure](https://samshadow.medium.com/mitigating-risks-securing-symfony-profiler-from-unwanted-exposure-14e90a53dd65)
+* PHPUnit Bridge: [Trigger Deprecation Notices](https://symfony.com/doc/current/components/phpunit_bridge.html#trigger-deprecation-notices)
+
+## Testing de aplicaciones Symfony
+
+### Añadiendo las dependencias mínimas e indispensables con Symfony Flex
+
+* `composer require --dev phpunit/phpunit symphony/test-pack`
+
+* `symfony/test-pack`: Metapaquete de Composer (o un Recipe en Symfony Flex) que agrupa varias dependencias para hacer testing funcional y E2E en una aplicación Symfony
+
+  ```json
+  {
+      "phpunit/phpunit": "^9.5",
+      "symfony/browser-kit": "*",
+      "symfony/css-selector": "*",
+      "symfony/phpunit-bridge": "*"
+  }
+  ```
+
+* En una aplicación Symfony, utiliza Symfony Flex para que autoconfigure las dependencias dentro del proyecto
+
+### Test de integración para base de datos
+
+* Preparar una base de datos limpia antes de cada test. Se plantea dos maneras
+
+  * Hacer un `TRUNCATE` de todas las tablas antes de ejecutar cada test
+
+    ```php
+    protected function setUp(): void
+    {
+        $this->clearDatabase();
+    }
+
+    protected function clearDatabase(): void
+    {
+        foreach ($this->connection()->getSchemaManager()->listTableNames() as $tableName) {
+            $this->connection()->executeQuery('TRUNCATE ' . $tableName);
+        }
+    }
+    ```
+
+  * Envolver el test en una tranasacción de base de datos, y hacer un `rollback` de la misma al acabar el test para devolver la base de datos al estado inicial
+
+    ```php
+    protected function setUp(): void
+    {
+        $this->connection()->beginTransaction();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->connection()->rollBack();
+    }
+    ```
+
+* La preparación de datos de cada test se encarga el propio test-case, como parte de "arrange" en la típica estructura "arrange - act - assert" de un test-case
+
+* Relacionado con lo anterior, se evita el uso de fixtures globales para popular un estado inicial de datos no vacío / limpio
+
+* Referencias
+
+  * [Symfony Testing documentation](https://symfony.com/doc/current/testing.html)
+  * Componente [PHPUnit Bridge](https://symfony.com/doc/current/components/phpunit_bridge.html)
