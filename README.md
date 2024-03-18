@@ -18,6 +18,7 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 * [Agile Fundamentals](courses/agile-fundamentals-pluralsight.md), by **Stephen Haunts**. Pluralsight
 * [Buenas prácticas de BDD con Gherkin](courses/buenas-practicas-de-bdd-con-gherkin-cucumber-behat-codelytv.md), by **Dani Latorre**, **Javier Rubio**. CodelyTV
 * [Contributing to an Open Source Project on GitHub](courses/contributing-to-an-open-source-project-on-gitHub-pluralsight.md), by **Kamran Ayub**. Pluralsight
+* [Learning How to Learn](courses/learning-how-to-learn-coursera.md), by **Barbara Oakley**. Courseraa
 * [Outside-In Test-Driven Development](courses/outside-in-tdd-pluralsight.md), by **Mark Seemann**. Pluralsight
 * [Shipping Docker](courses/shipping-docker-serversforhackers.md), by **Chris Fidao**. Servers for Hackers
 * [Software Architecture: Domain-Driven Design](courses/software-architecture-domain-driven-design-linkedin.md), by **Allen Holub**. Linkedin Learning
