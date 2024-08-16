@@ -465,3 +465,59 @@ $response->headers->set('Content-Type', 'text/plain');
 
   * [Symfony Testing documentation](https://symfony.com/doc/current/testing.html)
   * Componente [PHPUnit Bridge](https://symfony.com/doc/current/components/phpunit_bridge.html)
+
+### Test de aceptación de API HTTP con Behat y Mink
+
+* Tests de aceptación con [Behat](https://docs.behat.org/en/latest/), [Mink](https://github.com/minkphp/Mink), [Behat Symfony Extension](https://github.com/FriendsOfBehat/SymfonyExtension) y [Mink Symfony Extension](https://github.com/FriendsOfBehat/SymfonyExtension/blob/master/DOCUMENTATION.md#mink-integration).
+* Con Mink Symfony Extension, conseguimos que los tests sean más rápidos al no usar un navegador o web driver real
+  * Utiliza el mismo thread de PHP que ejecutó el test para comunicarse con el proyecto Symfony
+  * No se realizan llamadas HTTP sino que es el proyecto Symfony quien controla las peticiones directamente
+  * Por lo que, a pesar de que puedan ser escritos y poder considerarse como tests de aceptación, no son llegan a ser tests E2E del todo, o son menos E2E al no realizar esas peticiones HTTP que nos ahorramos
+
+* Pequeños ejemplos
+  * Testear [peticiones HTTP](https://github.com/CodelyTV/symfony-maintainable-scalable-course/blob/main/72-acceptance-test/apps/mooc/backend/tests/features/courses/course_put.feature)
+  * O un caso que se ejecutan como [reacción a un evento](https://github.com/CodelyTV/symfony-maintainable-scalable-course/blob/main/72-acceptance-test/apps/mooc/backend/tests/features/courses_counter/courses_counter_get.feature) que ha ocurrido en nuestro sistema
+
+* Contextos de tests E2E con un propósito
+
+### Test E2E con Panther: Login en Codely Pro
+
+* [Symfony Panther](https://symfony.com/components/Panther) nos permite hacer tests E2E, y al estar implementado como un [Browser Kit](https://symfony.com/doc/current/components/browser_kit.html), podemos reemplazar nuestros test E2E actuales de Symfony por Panther
+* Con Panther se puede hacer tanto web scraping como testing de navegador muy real. Testing de caja negra al tener el test que no conoce ni interacciona con ningún elemento interno de la aplicación
+* Usado para tests E2E, serán muy fráfiles y lentos. Se vuelven la mejor opción para los tests E2E solo de la/s partes más críticas
+* Existen alternativas más maduras a Panther, como el super popular [Cypress](https://www.cypress.io/)
+
+## Autenticación de APIs HTTP y SaaS con JWT
+
+### Autenticación sin estado con JWT: Certificado de curso
+
+* [JSON Web Tokens](https://jwt.io/introduction) (JWT) firmados por el servidor antes de ser enviados
+  * El servidor emite tokens firmados con clave asimñetrica que son verificables de forma segura
+  * La información que contiene el token es pues verificable de forma segura
+* Tokens que caducan que no son persistidos en el servidor, solo emitidos
+  * Al no desear almacenarlos, tampoco se tiene por qué revocar
+  * Autenticación sin estado, tokens emitidos sin almacenamiento ni posibilidad de revocarlos
+  * Invalidación / revocación de tokens introduce persistencia en algún punto del sistema
+* No usar JWT para crear un token de autenticación (*access token*) para almacenar variables de sesión
+* [LexikJWTAuthenticationBundle](https://github.com/lexik/LexikJWTAuthenticationBundle)
+
+```php
+public function __invoke(): Response
+{
+    // \Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface
+    $token = $this->jwtEncoder->encode([
+        // ...
+    ]);
+// ...
+```
+
+```sh
+$ php ./bin/console lexik:jwt:generate-keypair
+# --
+config/jwt
+├── private.pem
+└── public.pem
+
+1 directory, 2 files
+```
+
