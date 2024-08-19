@@ -450,7 +450,7 @@ $response->headers->set('Content-Type', 'text/plain');
     {
         $this->connection()->beginTransaction();
     }
-
+    
     protected function tearDown(): void
     {
         $this->connection()->rollBack();
@@ -520,4 +520,112 @@ config/jwt
 
 1 directory, 2 files
 ```
+
+### Autenticación en Symfony 6.0: API HTTP con JWT
+
+`config/packages/security.yaml`
+
+```yaml
+security:
+    # Deprecated in >=6.2 https://github.com/symfony/symfony/pull/47890
+    enable_authenticator_manager: true
+
+    providers:
+        jwt_user_provider:
+            id: App\Infrastructure\Symfony\Security\JwtUserProvider
+
+    encoders:
+        App\Infrastructure\Symfony\Security\JwtUser:
+            algorithm: auto
+
+        firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login:
+            pattern: ^/login
+            stateless: true
+            provider: jwt_user_provider
+            json_login:
+                check_path: /login
+                # successful auth. Service from LexikJWTAuthenticationBundle. Generates JSON response with JWT token
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                # login incorrect / not auth. Also by LexikJWTAuthenticationBundle
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        main:
+            stateless: true
+            # use the default settings defined by LexikJWTAuthenticationBundle, so no need to manually specify each
+            # configuration parameter related to JWT
+            jwt: ~
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
+```
+
+`src/Infrastructure/Controller/ProfileGetController.php`
+
+```php
+// ...
+use Symfony\Component\Security\Core\Security;
+// ...
+public function __invoke(): Response
+{
+    $jwtUser = $this->security->getUser();
+    $student = ($this->findStudent)(
+        new FindStudentRequest($jwtUser->getUserIdentifier())
+    );
+    return new JsonResponse($student->id());
+}
+// ...
+```
+
+`src/Infrastructure/Symfony/Security/JwtUser.php`
+
+```php
+// ..
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+final class JwtUser implements UserInterface, PasswordAuthenticatedUserInterface
+{
+// ...
+```
+
+`src/Infrastructure/Symfony/Security/JwtUserProvider.php`
+
+```php
+// ...
+use App\Domain\StudentDoesNotExist;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+
+final class JwtUserProvider implements UserProviderInterface
+{
+    public function __construct(
+        private FindStudent $findStudent
+    ) {}
+    // ...
+    public function loadUser(string $identifier): JwtUser
+    {
+        try {
+            $student = ($this->findStudent)(new FindStudentRequest($identifier));
+            return new JwtUser(
+                $student->studentId(),
+                $student->studentEmail(),
+                $student->studentPassword()
+            );
+        } catch (StudentDoesNotExist $exception) {
+            throw new UserNotFoundException($identifier);
+        }
+    }
+//...
+```
+
+### Personalizar la autenticación JWT: Login aplicación SaaS
+
+* Un enfoque con multitenant. Visto ()[link](https://pro.codely.com/library/symfony-mantenible-y-escalable-127478/308903/path/step/132263130/discussion/1800416/))
 
