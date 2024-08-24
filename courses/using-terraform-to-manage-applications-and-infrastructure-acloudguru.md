@@ -10,60 +10,53 @@ by Jesse Hoch – A Cloud Guru
 
 **Available resources**
 
--  [Course materials](https://localhost)
+* [Course materials](https://learn.acloud.guru/course/using-terraform-to-manage-applications-and-infrastructure)
 
-🏷️ Tags: `course`, `2023`, `acloudguru`, `terraform`, `iac`, `infrastructure`, `automation`, `cloud`, `aws`
+🏷️ Tags: `course`, `2023`, `acloudguru`, `cloud`, `terraform`, `iac`, `infrastructure`, `automation` , `aws`, `hashicorp`, `hcl`
 
 ------
 
 ## Introduction
 
-* Build, change, and version infrastructure safely; can be done locally or in the cloud
-* Manage existing service providers, as well as custom in-house solutions
-* Key features
-  - **Infrastructure as Code** – IaC
-  - **Execution plan**. It generates an execution with its “planning” steps. Like a dry-run, avoiding surprises when Terraform manipulates infrastructure
-  - **Resource graph**. It builds infrastructure as efficiently as possible, by building a graph of all your resources
-  - **Change automation**. Complex changes can be applied to your infrastructure with minimal interaction. Combining the execution plan and resource graph, you will know exactly what Terraform will change and in what order. Avoids many possible human errors
+* Safely build, change, and version infrastructure, either locally or in the cloud.
+* Manage existing service providers as well as custom in-house solutions.
+* Key features:
+  - **Infrastructure as Code (IaC):** Manage and provision infrastructure using code, enabling automation and consistency.
+  - **Execution Plan:** Terraform generates an execution plan that outlines the steps required for infrastructure changes. This functions as a "dry run," helping to prevent unexpected outcomes during deployment.
+  - **Resource Graph:** Terraform constructs a dependency graph of all your resources, optimizing the order in which they are created or modified for maximum efficiency.
+  - **Change Automation:** Complex infrastructure changes can be automated with minimal manual intervention. By combining the execution plan with the resource graph, Terraform provides transparency into what will change and in what sequence, reducing the likelihood of human errors.
 
 **Typical terraform project structure**
 
 ![Terraform Architecture](./.assets/using-terraform-to-manage-applications-and-infrastructure-acloudguru.md/terraform_architecture.png)
 
-- Configuration file
-- Variables file
-- Provisioning changes into a Cloud provider
-  - With your configuration file, vars file, and other config files if created. You would then plan and use those configuration files with Terraform to apply those configurations to your cloud provider,
-  - Which would then in turn build your cloud environment and deploy your infrastructure with your resources
-  - That information would then be sent back to Terraform where it would then write it to a Terraform state file
-- Terraform state file
-  - Is like a backup or snapshot of your successfully applied Terraform configuration.
+* **Configuration File:** The primary file where infrastructure is defined using Terraform's syntax.
+* **Variables File:** A file that stores variable values, allowing for dynamic and reusable configurations.
+* **Provisioning Changes to a Cloud Provider:**
+  - Using your configuration and variables files, along with any additional configuration files, you can plan and apply these configurations using Terraform.
+  - Terraform then interacts with your cloud provider to build the cloud environment and deploy the specified infrastructure and resources.
+  - The results of this deployment are then captured and stored by Terraform in a state file.
+* **Terraform State File:**
+  - A state file acts as a backup or snapshot of the successfully applied Terraform configurations, preserving the state of your infrastructure.
 
 ## Command Line Interface
 
-* `terraform <subcommand>`
-
-* BASH tab autocompletion: `terraform -install-autocomplete`
-
+* General command structure: `terraform <subcommand>`
+* Enable BASH tab autocompletion: `terraform -install-autocomplete`
 * Change the working directory: `terraform -chdir=<path_to/tf> <subcommand>`
-
-* Initialize the current directory: `terraform init` (when you create a new terraform configuration, or when you clone one)
-
-* Create execution plan: `terraform plan`
-  - Output a deployment plan: `terraform plan -out <plan_name>
-  - Output a destroy plan: `terraform plan -destroy`
-  
-* Apply changes: `terraform apply`
+* Initialize the current directory: `terraform init`
+  - Used when creating a new Terraform configuration or when cloning an existing one
+* Create an execution plan:
+  - Generate a deployment plan: `terraform plan -out <plan_name>`
+  - Generate a destroy plan: `terraform plan -destroy`
+* Apply changes:
+  - Apply the plan: `terraform apply`
   - Apply a specific plan: `terraform apply <plan_name>`
-  - Apply only changes to a targeted resource: `terraform apply -target=<resource_name>`
+  - Apply changes to a specific resource: `terraform apply -target=<resource_name>`
   - Pass a variable via the command line: `terraform apply -var my_variable=<value>`
-  
 * Destroy the managed infrastructure: `terraform destroy`
-
-* Get provider info used in your configuration: `terraform providers`
-
-* Use an interactive console for evaluating [expressions](https://developer.hashicorp.com/terraform/language/expressions): terraform cons
-
+* Retrieve provider information used in your configuration: `terraform providers`
+* Access the interactive console for evaluating [expressions](https://developer.hashicorp.com/terraform/language/expressions): `terraform console`
 * ```shell
   $ terraform console
   > list("newark", "atlanta", "dallas")
@@ -74,281 +67,276 @@ by Jesse Hoch – A Cloud Guru
   ]
   >`
   ```
-
-  * Is also possible to use it as non-interactive scripts by piping newline-separated commands to it. Only the output from the final command is printed unless an error occurs earlier
-
-* `terragrunt state list`: lists all resources that are tracked in the Terraform state for the Terragrunt module you are located
-
-  * It is basically a wrapper around the `terraform state list`, that helps to show the managed infrastructure resources
-
-* Sample of use of `state show`: `terragrunt state show module.geo_service_command.aws_lambda_function`
-
-  * Shows detailed information regarding `aws_lambda_function` resource within the `geo_service_command` module which is stored in the Terraform state
-  * With this you can see the attributes and configurations of the resource
+  * It is also possible to use Terragrunt in non-interactive scripts by piping newline-separated commands to it.
+  * Only the output from the final command is printed, unless an error occurs earlier.
+* `terragrunt state list`: Lists all resources tracked in the Terraform state for the Terragrunt module you are currently in.
+  * This command essentially acts as a wrapper around `terraform state list`, providing a convenient way to display the managed infrastructure resources.
+* Example of using `state show`: `terragrunt state show module.geo_service_command.aws_lambda_function`
+  * This command displays detailed information about the `aws_lambda_function` resource within the `geo_service_command` module, as stored in the Terraform state.
+  * It allows you to view the attributes and configurations of the specified resource.
 
 ## Configuration Language
 
-- The main purpose of the [Terraform language](https://developer.hashicorp.com/terraform/language) is to declare resources
-  - [Resources](https://developer.hashicorp.com/terraform/language/resources) represent infrastructure objects
-  - The other language features exist only to make the definition of resources more flexible and convenient
-- Terraform language is a superset of the low-level syntax called [HCL, HashiCorp Language](https://github.com/hashicorp/hcl), which is also used by other configuration languages in other tools, in particular, other HashiCorp tools and products
-- The syntax is built around these key syntax constructs
-  - Arguments — `<IDENTIFIER> = <EXPRESSION>`
-  - Blocks — `<BLOCK TYPE> "<BLOCK LABEL>" "<BLOCK LABEL>" { }`
-  - Identifiers — argument names, block type names, resources, input variables, etc.
-  - Comments — `#`, `//`, `/* */`
-- Two types of syntax
-  - Native syntax — intended to be pleasant to read and write for humans (`.tf` files)
-  - JSON syntax — easier for machines to generate and parse (`.tf.json` files)
+* The primary purpose of the [Terraform language](https://developer.hashicorp.com/terraform/language) is to declare resources.
+  - [Resources](https://developer.hashicorp.com/terraform/language/resources) represent infrastructure objects.
+  - Other language features are designed to make resource definitions more flexible and convenient.
+* The Terraform language is a superset of the low-level syntax called [HCL (HashiCorp Configuration Language)](https://github.com/hashicorp/hcl), which is also utilized by other configuration languages and tools, particularly within the HashiCorp ecosystem.
+* The syntax is organized around these key constructs:
+  - **Arguments** — `<IDENTIFIER> = <EXPRESSION>`
+  - **Blocks** — `<BLOCK TYPE> "<BLOCK LABEL>" "<BLOCK LABEL>" { }`
+  - **Identifiers** — Include argument names, block types, resources, input variables, etc.
+  - **Comments** — `#`, `//`, `/* */`
+* Two types of syntax:
+  - **Native Syntax** — Designed to be human-readable and writable (`.tf` files).
+  - **JSON Syntax** — Easier for machines to generate and parse (`.tf.json` files).
 
 ### Configuration document
 
-- A *Terraform configuration* is a complete document that specifies Terraform how to manage a given collection of infrastructure
-
-- The syntax consists of only a few basic elements:
-
-  - 
-
+* A *Terraform configuration* is a complete document that instructs Terraform on how to manage a specific set of infrastructure.
+* The syntax consists of a few basic elements:
+  - ```hcl
+    <BLOCK TYPE> "<BLOCK LABEL>" "<BLOCK LABEL>" {
+      # Block body
+      <IDENTIFIER> = <EXPRESSION> # Argument
+    }
     
-
-    `<BLOCK TYPE> "<BLOCK LABEL>" "<BLOCK LABEL>" {  # Block body  <IDENTIFIER> = <EXPRESSION> # Argument } resource "aws_vpc" "main" {  cidr_block = var.base_cidr_block }`
-
-  - **Blocks** — containers for other content. They represent the configuration of some kind of object, like a resource. Blocks have a
-
-    - *block type —* can have zero or more *labels*
-    - *block body —* contains any number of arguments and nested blocks
-
-  - **Arguments** — assign a value to a name
-
-  - **Expressions** — represent a value, either literally or by referencing and combining other values
-
-- The Terraform language is declarative, describing an intended goal
-
-  - The ordering of blocks and the files they are organized into are generally not significant
-  - Terraform only considers implicit and explicit relationships between resources when determining an order of operations
-
-- Code is stored in plain text files with the `.tf` file extension
-
-  - There is also [a JSON-based variant](https://developer.hashicorp.com/terraform/language/syntax/json) that uses the `.tf.json` file extension
+    # Sample code
+    resource "aws_vpc" "main" {
+      cidr_block = var.base_cidr_block
+    }
+    ```
+  - **Blocks:** Containers for other content that represent the configuration of objects, such as resources. Blocks have:
+    - **Block type:** Can have zero or more labels.
+    - **Block body:** Contains any number of arguments and nested blocks.
+  - **Arguments:** Assign a value to a specific name.
+  - **Expressions:** Represent a value, either literally or by referencing and combining other values.
+* The Terraform language is declarative, describing the desired outcome.
+  - The order of blocks and the structure of files are generally not significant.
+  - Terraform determines the order of operations based solely on implicit and explicit relationships between resources.
+* Code is stored in plain text files with the `.tf` file extension.
+  - There is also [a JSON-based variant](https://developer.hashicorp.com/terraform/language/syntax/json) that uses the `.tf.json` file extension.
 
 #### Version constraints
 
-- Anywhere that Terraform lets you specify a range of acceptable versions for something, it expects a specially formatted string known as a version constraint. Version constraints are used when configuring: [Modules](https://developer.hashicorp.com/terraform/language/modules), [Provider requirements](https://developer.hashicorp.com/terraform/language/providers/requirements), and [the required Terraform version](https://developer.hashicorp.com/terraform/language/settings#specifying-a-required-terraform-version)
-- Syntax — Similar to other dependency management systems like NPM. Sample: `version = ">= 1.2.0, < 2.0.0"` See [Version constraint syntax](https://developer.hashicorp.com/terraform/language/settings#specifying-a-required-terraform-version) for further info
+* Anywhere that Terraform lets you specify a range of acceptable versions for something, it expects a specially formatted string known as a version constraint. Version constraints are used when configuring: [Modules](https://developer.hashicorp.com/terraform/language/modules), [Provider requirements](https://developer.hashicorp.com/terraform/language/providers/requirements), and [the required Terraform version](https://developer.hashicorp.com/terraform/language/settings#specifying-a-required-terraform-version)
+* Syntax — Similar to other dependency management systems like NPM. Sample: `version = ">= 1.2.0, < 2.0.0"` See [Version constraint syntax](https://developer.hashicorp.com/terraform/language/settings#specifying-a-required-terraform-version) for further info
 
 ### Configuration module
 
-- A *module* is a collection of `.tf` (and/or `.tf.json`) files kept together in a directory
+* A *module* is a collection of `.tf` (and/or `.tf.json`) files stored together in a directory.
+* Modules serve as containers for multiple resources.
+* A module consists solely of the top-level files in the directory.
+  - Nested directories are treated as completely separate modules.
+  - Nested directories are not automatically included in the configuration.
+* Terraform evaluates all configuration files within a module, treating the entire module as a single document.
+* Separating blocks into different files is done for the convenience of readers and maintainers; it does not affect the module's behavior.
+* Types of modules:
+  - **Root Module:** Terraform always operates within the context of a single *root module.* A complete *configuration* includes a root module and a hierarchy of child modules (including those called by the root module and any further nested modules).
+    - In Terraform CLI, the root module is the working directory where Terraform is executed (though you can specify a different directory using command-line options).
+    - In Terraform Cloud and Terraform Enterprise, the root module for a workspace defaults to the top level of the configuration directory (provided via version control repository or direct upload), but workspace settings can specify a subdirectory instead.
+  - **Child Module:** A Terraform module can use [module calls](https://developer.hashicorp.com/terraform/language/modules) to explicitly include other modules in the configuration. Child modules can be sourced from local directories (either nested within the parent module's directory or elsewhere on disk) or from external sources like the [Terraform Registry](https://registry.terraform.io/).
+  - **Published Module:** In addition to local filesystem modules, you can load modules from a public or private registry. The [Terraform Registry](https://registry.terraform.io/browse/modules) hosts a wide range of publicly available modules for configuring various types of common infrastructure.
+* Module Block: A module that includes a `module` block is calling a child module.
+  - To *call* a module means to incorporate the contents of that module into the configuration, specifying values for its [input variables](https://developer.hashicorp.com/terraform/language/values/variables). Modules are called from within other modules using `module` blocks:
+    ```hcl
+    module "servers" {
+      source  = "./app-cluster"
+      servers = 5
+    }
+    ```
 
-- They are container for multiple resources
-
-- It only consists of the top-level files in the directory
-
-  - nested directories are treated as completely separate modules
-  - nested directories are not automatically included in the configuration
-
-- Terraform evaluates all of the configuration files in a module, treating the entire module as a single document
-
-- Separating various blocks into different files is purely for the convenience of readers and maintainers, and has no effect on the module's behaviour
-
-- Types of modules
-
-  - **Root module** — Terraform always runs in the context of a single *root module.* A complete *configuration* consists of a root module and the tree of child modules (which includes the modules called by the root module, any modules called by those modules, etc.)
-    - In Terraform CLI, the root module is the working directory where Terraform is invoked (use command line options to specify a different one)
-    - In Terraform Cloud and Terraform Enterprise, the root module for a workspace defaults to the top level of the configuration directory (supplied via version control repository or direct upload), but the workspace settings can specify a subdirectory to use instead
-  - **Child module** — A Terraform module can use [module calls](https://developer.hashicorp.com/terraform/language/modules) to explicitly include other modules in the configuration. These child modules can come from local directories (nested in the parent module's directory, or anywhere else on disk), or from external sources like the [Terraform Registry](https://registry.terraform.io/)
-  - **Published module** — In addition to modules from the local filesystem, is possible to load modules from a public or private registry. The [Terraform Registry](https://registry.terraform.io/browse/modules) hosts a broad collection of publicly available Terraform modules for configuring many kinds of common infrastructure
-
-- Module block — A module that includes a `module` block is calling a child module
-
-  - To *call* a module means to include the contents of that module into the configuration with specific values for its [input variables](https://developer.hashicorp.com/terraform/language/values/variables). Modules are called from within other modules using `module` blocks:
-
-    
-
-    
-
-    `module "servers" {  source = "./app-cluster"   servers = 5 }`
-
-- The `source` argument tells Terraform where to find the source code for the desired child module. Is used during the module installation step of `terraform init` to download the source code to a directory on the local disk so that other Terraform commands can use it
-
-  - The module installer supports installation from a number of different source types: [Local paths](https://developer.hashicorp.com/terraform/language/modules/sources#local-paths), [Terraform Registry](https://developer.hashicorp.com/terraform/language/modules/sources#terraform-registry), [GitHub](https://developer.hashicorp.com/terraform/language/modules/sources#github), [Bitbucket](https://developer.hashicorp.com/terraform/language/modules/sources#bitbucket), Generic [Git](https://developer.hashicorp.com/terraform/language/modules/sources#generic-git-repository), [Mercurial](https://developer.hashicorp.com/terraform/language/modules/sources#generic-mercurial-repository) repositories, [HTTP URLs](https://developer.hashicorp.com/terraform/language/modules/sources#http-urls), [S3 buckets](https://developer.hashicorp.com/terraform/language/modules/sources#s3-bucket), [GCS buckets](https://developer.hashicorp.com/terraform/language/modules/sources#gcs-bucket), [Modules in Package Sub-directories](https://developer.hashicorp.com/terraform/language/modules/sources#modules-in-package-sub-directories)
+* The `source` argument tells Terraform where to find the source code for the desired child module. It is used during the module installation step of `terraform init` to download the source code to a directory on the local disk, allowing other Terraform commands to use it.
+  - The module installer supports installation from a variety of source types: [Local paths](https://developer.hashicorp.com/terraform/language/modules/sources#local-paths), [Terraform Registry](https://developer.hashicorp.com/terraform/language/modules/sources#terraform-registry), [GitHub](https://developer.hashicorp.com/terraform/language/modules/sources#github), [Bitbucket](https://developer.hashicorp.com/terraform/language/modules/sources#bitbucket), generic [Git](https://developer.hashicorp.com/terraform/language/modules/sources#generic-git-repository) and [Mercurial](https://developer.hashicorp.com/terraform/language/modules/sources#generic-mercurial-repository) repositories, [HTTP URLs](https://developer.hashicorp.com/terraform/language/modules/sources#http-urls), [S3 buckets](https://developer.hashicorp.com/terraform/language/modules/sources#s3-bucket), [GCS buckets](https://developer.hashicorp.com/terraform/language/modules/sources#gcs-bucket), and [modules in package sub-directories](https://developer.hashicorp.com/terraform/language/modules/sources#modules-in-package-sub-directories).
 
 ### HCL Key Elements
 
-- HCL syntax comprises *blocks* (aka *stanzas*) that define a variety of configurations available to Terraform
-  - [Provider plugins](https://developer.hashicorp.com/terraform/language/providers/configuration) give more details about the available base Terraform configurations
-- Stanzas or blocks are comprised of key = value pairs. Terraform accepts values of type `string`, `number`, `boolean`, `map`, and `list`
-- Interpolation syntax — can be used to reference values stored outside of a configuration block in an input variable, or from a Terraform module’s output
-  - Interpolated variable reference: is constructed with the `${var.region}` syntax. This example references a variable named `region`, which is prefixed by `var.`
-  - The opening `${` and closing `}` indicates the start of interpolation syntax
-- You can include multi-line strings by using an opening <<EOF, followed by a closing EOF on the line
-- Strings are wrapped in double quotes
-- Lists of primitive types (`string`, `number`, and `boolean`) are wrapped in square brackets `[]`
-- Maps use curly braces `{}` and colons `:`
+* HCL syntax is structured around *blocks* (also known as *stanzas*), which define various configurations for Terraform.
+  - [Provider plugins](https://developer.hashicorp.com/terraform/language/providers/configuration) offer detailed information about available Terraform configurations.
+* Blocks consist of key-value pairs. Terraform accepts values of the following types: `string`, `number`, `boolean`, `map`, and `list`.
+* **Interpolation Syntax:** Used to reference values stored outside of a configuration block, such as in an input variable or from a Terraform module’s output.
+  - Interpolated variable reference is denoted by the `${var.region}` syntax. In this example, `region` is a variable prefixed by `var.`
+  - The `${` and `}` symbols indicate the start and end of the interpolation syntax.
+* Multi-line strings can be included using the `<<EOF` syntax, with `EOF` on a new line to close the string.
+* Strings are enclosed in double quotes.
+* Lists of primitive types (`string`, `number`, `boolean`) are enclosed in square brackets `[]`.
+* Maps are enclosed in curly braces `{}` and use colons `:` to separate keys and values.
 
 ### Resources
 
-- They describe infrastructure objects
-- Resource types
-  - **Providers** — which are plugins that offers a collection of resource types
-  - **Arguments** — which are specific to the selected resource type
-  - **Documentation** — which every provider uses to describe its resource types and arguments
-- [Meta arguments](https://developer.hashicorp.com/terraform/language/meta-arguments/depends_on) defined by Terraform, that can be used with any resource type to change behaviour of the resource
-  - `depends_on` — Specify hidden dependencies (Terraform cannot infer automatically)
-  - `count` — Create a fixed number of resource instances
-  - `for_each` — Create multiple instances according to a map or a set of strings
-  - `provider` — Select a non-default provider configutation
-  - `lifecycle` — Set lifecycle customizations
-  - `provisioner` and `connection` — Take extra actions after resource creation
-- `timeout` nested block — Some resource types provide special timeouts to customize how long certain operations are allowed to take before time out
-  - timeout string examples: `"60m"`, `"10s"`, `"2h"`
-- How configuration represented by a resource block is applied
-  - The identifier of that resource object is saved in [Terraform state](https://developer.hashicorp.com/terraform/language/state), which allows it to be updated or destroyed
-  - **Create** — Create resources that exists in the configuration but are not associated with a real infrastructure object in the state
-  - **Destroy** — Destroy resources that exist in the state but are no longer in the configuration
-  - **Update in-place** — Update resources whose arguments have changed and API allows it
-  - **Destroy and re-create** — Update resources but which cannot be updated in-place due to remote API limitations
+* Resources describe infrastructure objects.
+
+* **Resource Types:**
+  - **Providers:** Plugins that offer a collection of resource types.
+  - **Arguments:** Specific to the selected resource type.
+  - **Documentation:** Each provider includes documentation to describe its resource types and arguments.
+
+* [Meta Arguments](https://developer.hashicorp.com/terraform/language/meta-arguments/depends_on) defined by Terraform, which can be used with any resource type to modify its behavior:
+  - `depends_on` — Specifies hidden dependencies that Terraform cannot infer automatically.
+  - `count` — Creates a fixed number of resource instances.
+  - `for_each` — Creates multiple instances based on a map or a set of strings.
+  - `provider` — Selects a non-default provider configuration.
+  - `lifecycle` — Configures lifecycle customizations.
+  - `provisioner` and `connection` — Executes additional actions after resource creation.
+
+* **Timeout Nested Block:** Some resource types support special timeouts to customize the duration allowed for certain operations before timing out.
+  - Timeout string examples: `"60m"`, `"10s"`, `"2h"`
+
+* **Application of Configuration Represented by a Resource Block:**
+  - The resource identifier is saved in the [Terraform state](https://developer.hashicorp.com/terraform/language/state), allowing it to be updated or destroyed.
+  - **Create:** Creates resources specified in the configuration but not yet associated with a real infrastructure object in the state.
+  - **Destroy:** Removes resources that exist in the state but are no longer in the configuration.
+  - **Update In-Place:** Updates resources whose arguments have changed, provided the API allows it.
+  - **Destroy and Re-create:** Updates resources that cannot be updated in-place due to remote API limitations.
 
 ### Input Variables
 
-- [Input variables](https://developer.hashicorp.com/terraform/language/values/variables) are like function arguments
-- They are Terraform configuration parameters: serve as parameters for a Terraform module, so behaviour can be customized without editing the source
-- Input variables must be declared using a variable block
+* [Input variables](https://developer.hashicorp.com/terraform/language/values/variables) function like arguments for a function.
+* They serve as parameters for a Terraform module, allowing customization of behavior without modifying the source code.
+* Input variables must be declared using a `variable` block:
 
+  ```hcl
+  variable "image_id" {
+    type = string
+  }
+  
+  # Sample code
+  variable "availability_zone_names" {
+    type    = list(string)
+    default = ["eu-central-1"]
+  }
+  ```
 
-
-
-
-```
-variable "image_id" {  type = string } variable "availability_zone_names" {  type    = list(string)  default = ["eu-central-1"] }
-```
-
-- The name of the variable can be any valid identifier, except `source`, `version`, `providers`, `count`, `for_each`, `lifecycle`, `depends_on`, `locals`
-- Optional arguments for variable declaration used in the variable block: `default`, `type`, `description`, `validation`, `sensitive`
-- By convention, input variables are normally defined within a file named `variables.tf`
-- Variable type: type can be `string`, `number`, `boolean`, `map`, or `list`. Default type: `string`, if a variable type is not explicitly defined
-- Input variable can have a `default` value (optional)
-- Supplying Variable Values
-  - Variable values can be specified in `.tfvars` files
-  - Terraform automatically loads values from filenames which match `terraform.tfvars` or `*.auto.tfvars`. If you store values in a file with another name, you need to specify that file with the `-var-file` option when running `terraform apply`
-- Values can also be specified in environment variables when running `terraform apply`. The name of the variable should be prefixed with `TF_VAR_`. Sample `TF_VAR_token=my-token-value TF_VAR_region=us-west terraform apply`
+* The name of the variable can be any valid identifier, except `source`, `version`, `providers`, `count`, `for_each`, `lifecycle`, `depends_on`, and `locals`.
+* Optional arguments for variable declaration in the `variable` block include `default`, `type`, `description`, `validation`, and `sensitive`.
+* By convention, input variables are typically defined in a file named `variables.tf`.
+* **Variable Types:** Can be `string`, `number`, `boolean`, `map`, or `list`. If not explicitly defined, the default type is `string`.
+* An input variable can have an optional `default` value.
+* **Supplying Variable Values:**
+  - Variable values can be specified in `.tfvars` files.
+  - Terraform automatically loads values from files named `terraform.tfvars` or `*.auto.tfvars`. For files with other names, specify the file using the `-var-file` option when running `terraform apply`.
+  - Values can also be set via environment variables, prefixed with `TF_VAR_`. For example: `TF_VAR_token=my-token-value TF_VAR_region=us-west terraform apply`.
 
 ### Output Values
 
-- [Output values](https://developer.hashicorp.com/terraform/language/values/outputs) are like function return values
+* [Output values](https://developer.hashicorp.com/terraform/language/values/outputs) function similarly to return values in programming languages.
+* They provide information about your infrastructure and are accessible via the command line. Output values have several uses:
+  - A child module can use outputs to expose specific resource attributes to a parent module.
+  - A root module can use outputs to display certain values in the CLI output after running `terraform apply`.
+  - When using [remote state](https://developer.hashicorp.com/terraform/language/state/remote), root module outputs can be accessed by other configurations through a `terraform_remote_state` data source.
+* Each output value exported by a module must be declared using an `output` block:
 
-- They make information about your infrastructure available on the command line. They are similar to return values in programming languages. They have several uses:
+  ```hcl
+  output "instance_ip_addr" {
+    value = aws_instance.server.private_ip
+  }
+  ```
 
-  - A child module can use outputs to expose a subset of its resource attributes to a parent module
-  - A root module can use outputs to print certain values in the CLI output after running `terraform apply`
-  - When using [remote state](https://developer.hashicorp.com/terraform/language/state/remote), root module outputs can be accessed by other configurations via a `terraform_remote_state` data source
-
-- Each output value exported by a module must be declared using an `output` block:
-
-  
-
-  
-
-  `output "instance_ip_addr" {  value = aws_instance.server.private_ip }`
-
-- Accessing child module outputs in a parent module: `module.<module_name>.<output_name>`
-
-- **Note:** Outputs are only rendered when Terraform applies your plan. Running `terraform plan` will not render outputs
+* To access child module outputs in a parent module, use the syntax: `module.<module_name>.<output_name>`.
+* **Note:** Outputs are only rendered when Terraform applies your configuration. Running `terraform plan` will not display outputs.
 
 ### Local Values
 
-- [Local values](https://developer.hashicorp.com/terraform/language/values/locals) are like a function's temporary local variables
+* [Local values](https://developer.hashicorp.com/terraform/language/values/locals) function like temporary local variables in a programming language.
+* A local value assigns a name to an [expression](https://developer.hashicorp.com/terraform/language/expressions), allowing the name to be used multiple times within a module instead of repeating the expression.
+  - **When to Use:** Local values are useful for avoiding repetition of the same values or expressions within a configuration, but they should be used judiciously.
+* A set of related local values can be declared together in a `locals` block:
 
-- A local value assigns a name to an [expression](https://developer.hashicorp.com/terraform/language/expressions), so you can use the name multiple times within a module instead of repeating the expression
+  ```hcl
+  locals {
+    service_name = "forum"
+    owner        = "Community Team"
+  }
+  ```
 
-  - When to use it: they can be helpful to avoid repeating the same values or expressions multiple times in a configuration, but don’t overuse them
-
-- A set of related local values can be declared together in a single `locals` block:
-
-  
-
-  
-
-  `locals {  service_name = "forum"  owner        = "Community Team" }`
-
-- Accessing a local value: `local.<name>`
+*	To access a local value, use the syntax: `local.<name>`
 
 ### Settings
 
-- [Terraform Settings](https://developer.hashicorp.com/terraform/language/settings) — The special `terraform` configuration block type is used to configure some behaviours of Terraform itself, such as requiring a minimum Terraform version to apply your configuration.
-- Use the `terraform` blocks
+* [Terraform Settings](https://developer.hashicorp.com/terraform/language/settings) — The `terraform` configuration block type is used to configure Terraform's behavior, such as specifying a minimum required Terraform version for applying your configuration.
+* Use `terraform` blocks to configure these settings:
 
+  ```hcl
+  terraform {
+    # ...
+  }
+  ```
 
+* Each `terraform` block can include various settings related to Terraform's behavior. Within a `terraform` block, only constant values can be used; arguments cannot refer to named objects such as resources or input variables, nor use Terraform language built-in functions.
+* **Backend Configuration** — Defines where your state is stored:
+  - Each Terraform configuration can specify a backend, which can be a **local** backend (recommended for beginners) or a **remote** backend (suitable for teams or large infrastructures).
+  - Backend configuration is only relevant to the Terraform CLI. Terraform Cloud and Enterprise use their own state storage and ignore any `backend` block in the configuration.
+  - The backend determines two key behaviors: where the state is stored and where operations are performed.
+* **Configuring a Backend** — To configure a backend, add a `backend` block within the top-level `terraform` block.
 
-
-
-```
-terraform {  # ... }
-```
-
-- Each `terraform` block can contain a number of settings related to Terraform's behaviour. Within a `terraform` block, only constant values can be used; arguments may not refer to named objects such as resources, input variables, etc, and may not use any of the Terraform language built-in functions
-
-- Backend configuration — to store your state in
-
-  - Each Terraform configuration can specify a backend. Can be a **local** backend (recommended for beginners) or a **remote** one (for teams or large infrastructure)
-  - Backend configuration is only used by terraform CLI. terraform Cloud and Enterprise always use their own state storage (so these last two ignore any `backend` block in the configuration)
-  - Two areas of behaviour are determined by the backend: Where the state is stored, and Where operations are performed
-
-- Using a Backend Block — To configure a backend, add a nested `backend` block within the top-level `terraform` block
-
+  ```hcl
+  # The following example configures the remote backend
+  terraform {
+    backend "remote" {
+      organization = "example_corp"
   
-
+      workspaces {
+        name = "my-app-prod"
+      }
+    }
+  }
   
+  # The following example configures the local backend
+  terraform {
+    backend "local" {
+      path = "${path.module}/../../terraform.tfstate"
+    }
+  }
+  ```
 
-  `# The following example configures the remote backend terraform {  backend "remote" {    organization = "example_corp"     workspaces {      name = "my-app-prod"    }  } } # The following example configures the local backend terraform {  backend "local" {    path = "${path.module}/../../terraform.tfstate"  } }`
+  - Important limitations on backend configuration:
+    - A configuration can include only one `backend` block.
+    - A `backend` block cannot reference named values such as input variables, locals, or data source attributes.
 
-  - There are some important limitations on backend configuration:
-    - A configuration can only provide one backend block
-    - A backend block cannot refer to named values (like input variables, locals, or data source attributes)
 
-- When the backend changes, you must run `terraform init`
-
-- When the backend changes, Terraform gives you the option to migrate the state
-
-- HashiCorp recommends you manually backup your state. This is simply by copying the `terraform.tfstate` file
+* When changing the backend, you must run `terraform init`.
+* Terraform provides an option to migrate the state when the backend changes.
+* HashiCorp recommends manually backing up your state by copying the `terraform.tfstate` file.
 
 ## Terraform Providers
 
-- Terraform relies on plugins called [providers](https://developer.hashicorp.com/terraform/language/providers) to interact with cloud providers, SaaS providers, and other APIs or Services
-- Terraform configurations must declare which providers they require so that Terraform can install and use them
-- Additionally, some providers require configuration (like endpoint URLs or cloud regions) before they can be used
-- Terraform is comprised of Terraform Core and [Terraform Plugins](https://developer.hashicorp.com/terraform/plugin)
-- ![image-20230110-085326.png](blob:https://floyt.atlassian.net/7effdd4d-f9c8-468c-922d-fb00ac4d64d4#media-blob-url=true&id=dfe27caa-2e54-4b85-86c2-9e71f1c74e5d&collection=contentId-2508390676&contextId=2508390676&height=666&width=2002&alt=)
-  1. Terraform Core — reads the configuration and builds the [resource dependency graph](https://developer.hashicorp.com/terraform/internals/graph)
-  2. Terraform Plugins (providers and provisioners) — bridges Terraform Core and their respective target APIs. Terraform provider plugins implement resources via basic CRUD (create, read, update, and delete) APIs to communicate with third-party services
+* Terraform relies on plugins called [providers](https://developer.hashicorp.com/terraform/language/providers) to interact with cloud providers, SaaS providers, and other APIs or services.
+* Terraform configurations must declare the required providers so that Terraform can install and use them.
+* Some providers also require additional configuration, such as specifying endpoint URLs or cloud regions, before they can be utilized.
+* Terraform consists of Terraform Core and [Terraform Plugins](https://developer.hashicorp.com/terraform/plugin).
+* ![Terraform Core](.assets/using-terraform-to-manage-applications-and-infrastructure-acloudguru.md/terraform_core.png)
+  1. **Terraform Core** — Reads the configuration and builds the [resource dependency graph](https://developer.hashicorp.com/terraform/internals/graph).
+  2. **Terraform Plugins** (providers and provisioners) — Serve as intermediaries between Terraform Core and their respective target APIs. Provider plugins implement resources through basic CRUD (create, read, update, delete) operations to communicate with third-party services.
 
 ## State
 
-- Terraform requires some sort of database to map configuration to the real infrastructure. Terraform uses its own state structure to map configuration to resources, keep track of metadata, and improve performance for large infrastructures
-  - metadata: Terraform must track it. Sample: resource dependencies; which Terraform retains a copy of the most recent set of dependencies within the state
-  - performance: Terraform stores a cache of attribute values for all resources in the state (useful for large configuration)
-  - syncing: when working in a team, is recommended to use a remote state. In this scenario, is important that all members are working with the same state
-- By default, the state is stored locally in `terraform.tfstate`
-  - It can also be stored remotely, which works better in a team environment
-  - The state file format is a private API that is meant only for internal use within Terraform. You should never edit the Terraform state files by hand or write code that reads them directly. If for some reason you need to manipulate the state file — which should be a relatively rare occurrence — use the `terraform import` or `terraform state` commands
-- Terraform uses this local state to create plans and make changes to your infrastructure. Prior to any operation, Terraform does a [refresh](https://developer.hashicorp.com/terraform/cli/commands/refresh) to update the state with the real infrastructure
-- A [terraform state](https://developer.hashicorp.com/terraform/cli/commands/state) command is provided to perform basic modifications of the state using the CLI
-  - All `terraform state` subcommands that modify the state write backup files. Those backups cannot be disabled. The path of these backup files can be controlled with `-backup`
-  - `terraform state list` — Lists all resources in the state file matching the given [address](https://developer.hashicorp.com/terraform/cli/state/resource-addressing) (if there are any)
-  - `terraform state show` — Shows the attributes of a single resource in the state file that matches the given address
-  - `terraform state mv` — Changes which resource address in your configuration is associated with a particular real-world object. Use this to preserve an object when renaming a resource, or when moving a resource into or out of a child module
-  - `terraform state rm` — tells Terraform to stop managing a resource as part of the current working directory and workspace, without destroying the corresponding real-world object
-  - `terraform state pull` — Manually download and output the state from [remote state](https://developer.hashicorp.com/terraform/language/state/remote). This command also works with the local state. It upgrades the local copy to the latest state file version. Useful for reading vañlues out of state
-  - `terraform state push` — Manually upload a local state file to a [remote state](https://developer.hashicorp.com/terraform/language/state/remote). This command also works with the local state. This command should rarely be used
-- If supported by your [backend](https://developer.hashicorp.com/terraform/language/settings/backends/configuration), Terraform will lock your state for all operations that could write state. This prevents others from acquiring the lock and potentially corrupting your state
-  - State locking happens automatically on all operations that could write state. Locking for most commands can be disabled with the `-lock` flag but it is not recommended.
-- Terraform has a [force-unlock command](https://developer.hashicorp.com/terraform/cli/commands/force-unlock) to manually unlock the state if unlocking failed
-  - Be very careful with this command. Force unlock should only be used to unlock your own lock in a situation where automatic unlocking failed
-  - To protect you, the `force-unlock` command requires a unique lock ID. Terraform will output this lock ID if unlocking fails. This lock ID acts as a nonce, ensuring that locks and unlocks target the correct lock
-- The remote state allows Terraform to write the state data to a remote data store, which can be shared between all team members
-  - It allows sharing output values with other configurations
-  - It allows teams to share infrastructure resources in a read-only way
-  - It can be a convenient, built-in mechanism for sharing data between configurations
--  
+* Terraform uses a state file to map configuration to real infrastructure. This state file serves several purposes:
+  - **Metadata:** Tracks resource dependencies, retaining the most recent set of dependencies within the state file.
+  - **Performance:** Stores a cache of attribute values for all resources, which is useful for large configurations.
+  - **Syncing:** In a team environment, using a remote state is recommended to ensure all team members work with the same state.
 
- 
+* By default, the state is stored locally in `terraform.tfstate`.
+  - It can also be stored remotely, which is preferable for team environments.
+  - The state file format is a private API for internal Terraform use only. You should not edit the state files manually or write code that reads them directly. For rare cases where you need to manipulate the state file, use `terraform import` or `terraform state` commands.
+
+* Terraform uses the local state to create plans and make changes to your infrastructure. Before any operation, Terraform performs a [refresh](https://developer.hashicorp.com/terraform/cli/commands/refresh) to update the state with the real infrastructure.
+
+* The `terraform state` command provides tools for basic modifications of the state using the CLI:
+  - All `terraform state` subcommands that modify the state create backup files, which cannot be disabled. The path for these backup files can be controlled with the `-backup` option.
+  - `terraform state list` — Lists all resources in the state file matching a given [address](https://developer.hashicorp.com/terraform/cli/state/resource-addressing), if any.
+  - `terraform state show` — Shows the attributes of a single resource in the state file that matches a given address.
+  - `terraform state mv` — Changes the resource address in your configuration associated with a real-world object. Use this to preserve an object when renaming a resource or moving it between modules.
+  - `terraform state rm` — Stops managing a resource in the current working directory and workspace, without destroying the real-world object.
+  - `terraform state pull` — Manually downloads and outputs the state from [remote state](https://developer.hashicorp.com/terraform/language/state/remote), or upgrades the local copy to the latest state file version. Useful for reading values from state.
+  - `terraform state push` — Manually uploads a local state file to [remote state](https://developer.hashicorp.com/terraform/language/state/remote). This should be used rarely.
+
+* If supported by your [backend](https://developer.hashicorp.com/terraform/language/settings/backends/configuration), Terraform will lock your state for all operations that could write to it. This prevents others from acquiring the lock and potentially corrupting the state.
+  - State locking happens automatically for all operations that could modify the state. Locking can be disabled with the `-lock` flag, but it is not recommended.
+
+* Terraform includes a [force-unlock command](https://developer.hashicorp.com/terraform/cli/commands/force-unlock) to manually unlock the state if automatic unlocking fails:
+  - Use this command with caution. It should only be used to unlock your own lock when automatic unlocking fails.
+  - The `force-unlock` command requires a unique lock ID, which Terraform provides if unlocking fails. This lock ID ensures that locks and unlocks target the correct lock.
+
+* Remote state allows Terraform to write the state data to a remote data store, which can be shared among all team members:
+  - It facilitates sharing output values with other configurations.
+  - It allows teams to share infrastructure resources in a read-only manner.
+  - It provides a built-in mechanism for sharing data between configurations.
