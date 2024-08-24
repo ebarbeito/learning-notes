@@ -11,6 +11,8 @@ by Jesse Hoch – A Cloud Guru
 **Available resources**
 
 * [Course materials](https://learn.acloud.guru/course/using-terraform-to-manage-applications-and-infrastructure)
+* [GitHub repository](https://github.com/ACloudGuru-Resources/content-terraform-2021)
+* [A comprehensive guide to Terraform](https://blog.gruntwork.io/a-comprehensive-guide-to-terraform-b3d32832baca#.b6sun4nkn)
 
 🏷️ Tags: `course`, `2023`, `acloudguru`, `cloud`, `terraform`, `iac`, `infrastructure`, `automation` , `aws`, `hashicorp`, `hcl`
 
@@ -38,6 +40,13 @@ by Jesse Hoch – A Cloud Guru
   - The results of this deployment are then captured and stored by Terraform in a state file.
 * **Terraform State File:**
   - A state file acts as a backup or snapshot of the successfully applied Terraform configurations, preserving the state of your infrastructure.
+  - It is created when you run the `terraform apply` for the first time.
+* Here’s how the process works:
+  1. **Initialization**: `terraform init`. It prepares the working directory containing Terraform configuration files. It downloads necessary provider plugins and sets up the backend (if configured). However, this step does not create the state file.
+  2. **Planning**: `terraform plan`. It creates an execution plan, showing what actions Terraform will take to reach the desired state as defined in the configuration files. Again, this step does not create the state file.
+  3. **Applying**: `terraform apply`. Running this, it executes the actions needed to create, update, and/or destroy resources to match the desired state defined in the configuration. During this process, Terraform creates the state file (commonly named `terraform.tfstate`) in your working directory to record the current state of the infrastructure.
+
+![Terraform Workflow](./.assets/using-terraform-to-manage-applications-and-infrastructure-acloudguru.md/terraform_workflow.png)
 
 ## Command Line Interface
 
@@ -57,7 +66,8 @@ by Jesse Hoch – A Cloud Guru
 * Destroy the managed infrastructure: `terraform destroy`
 * Retrieve provider information used in your configuration: `terraform providers`
 * Access the interactive console for evaluating [expressions](https://developer.hashicorp.com/terraform/language/expressions): `terraform console`
-* ```shell
+
+  ```shell
   $ terraform console
   > list("newark", "atlanta", "dallas")
   [
@@ -65,9 +75,20 @@ by Jesse Hoch – A Cloud Guru
     "atlanta",
     "dallas",
   ]
-  >`
+  >
   ```
+
   * It is also possible to use Terragrunt in non-interactive scripts by piping newline-separated commands to it.
+
+    ```shell
+    $ echo 'split(",", "foo,bar,baz")' | terraform console
+    tolist([
+      "foo",
+      "bar",
+      "baz",
+    ])
+    ```
+
   * Only the output from the final command is printed, unless an error occurs earlier.
 * `terragrunt state list`: Lists all resources tracked in the Terraform state for the Terragrunt module you are currently in.
   * This command essentially acts as a wrapper around `terraform state list`, providing a convenient way to display the managed infrastructure resources.
