@@ -708,3 +708,13 @@ final class JwtUserProvider implements UserProviderInterface
         - discovery.type=single-node
   ```
 
+## Mantener Symfony al día
+
+### ¿Qué versión de Symfony me conviene más?
+
+* [The release process](https://symfony.com/doc/current/contributing/community/releases.html)
+* [Symfony releases](https://symfony.com/releases)
+
+### Tips para actualizar Symfony
+
+...
