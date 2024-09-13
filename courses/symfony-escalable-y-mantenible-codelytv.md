@@ -629,3 +629,82 @@ final class JwtUserProvider implements UserProviderInterface
 
 * Un enfoque con multitenant. Visto ()[link](https://pro.codely.com/library/symfony-mantenible-y-escalable-127478/308903/path/step/132263130/discussion/1800416/))
 
+## Login y Observabilidad
+
+### Exprimiento Monolog: Consigue mayor contexto con el menor ruido en logs
+
+* [Symfony HTTP Kernel Logger](https://symfony.com/doc/current/logging.html), opción simplificada para casos muy pequeños
+* [Monolog Bundle](https://symfony.com/components/Monolog%20Bundle)
+
+### Observabilidad en sistemas distribuidos: Añadir correlation id a todos tus logs
+
+* Monolog processor
+
+  ```php
+  use Monolog\Processor\ProcessorInterface;
+  use Symfony\Component\HttpFoundation\RequestStack;
+
+  final class CorrelationIdProcessor implements ProcessorInterface
+  {
+      public function __construct(private RequestStack $requestStack) {}
+
+      public function __invoke(array $record): array
+      {
+          $request = $this->requestStack->getMainRequest();
+          if (!$request->headers->has('X-CID')) {
+              return $record;
+          }
+
+          $record['extra']['correlation_id'] = $request->headers->get('X-CID');
+
+          return $record;
+      }
+  }
+  ```
+
+* Symfony DIC
+
+  ```yaml
+  services:
+      _defaults:
+          autowire: true
+          autoconfigure: true
+  
+      App\Monolog\CorrelationIdProcessor:
+  #        tags:
+  #            - { name: monolog.processor }
+  ```
+
+### Volcando logs desde Monolog hasta ELK
+
+* `config/packages/dev/monolog.yaml`
+
+  ```yaml
+  monolog:
+      handlers:
+          elastic:
+              type: service
+              id: Symfony\Bridge\Monolog\Handler\ElasticsearchLogstashHandler
+              level: debug
+              channels: [ "!event" ]
+  ```
+
+* `docker-compose.yml`
+
+  ```yaml
+  services:
+    kibana:
+      image: docker.elastic.co/kibana/kibana:7.13.2
+      ports:
+        - 5601:5601
+      depends_on:
+        - elasticsearch
+    elasticsearch:
+      image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+      ports:
+        - 9200:9200
+        - 9300:9300
+      environment:
+        - discovery.type=single-node
+  ```
+
