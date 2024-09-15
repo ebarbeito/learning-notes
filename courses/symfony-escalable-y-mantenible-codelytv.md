@@ -41,9 +41,9 @@ by Dani Santamaría, Javier Ferrer – CodelyTV
 ## Migración progresiva del Legacy a Symfony
 
 * La clave del proceso es hacerlo progresivo. No tratar de reemplazar el sistema legacy por el nuevo de un solo golpe, sino ir haciendo cambios y despliegues progresivos
-* Explican 2 posibles estrategias para ir reemplazando el legacy por Symfony [*sidenote*: <aunque siempre hay más alternativas. Elegir una u otra puede depender de qué tipo de legacy hay que migrar o de su complejidad]
+* Explican 2 posibles estrategias para ir reemplazando el legacy por Symfony (*sidenote*: aunque siempre hay más alternativas. Elegir una u otra puede depender de qué tipo de legacy hay que migrar o de su complejidad)
 
-### Fallback al front controller Legacy
+### Fallback al front controller Legacy
 
 * Se crea un nuevo proyecto Symfony totalmente separado del legacy
 * El front controller de Symfony es el punto de entrada a la aplicación (`public/index.php`)
