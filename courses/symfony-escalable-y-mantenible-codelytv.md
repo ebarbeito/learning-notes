@@ -717,4 +717,49 @@ final class JwtUserProvider implements UserProviderInterface
 
 ### Tips para actualizar Symfony
 
-...
+* Rector
+
+* [How to Install or Upgrade to the Latest, Unreleased Symfony Version](https://symfony.com/doc/current/setup/unstable_versions.html)
+
+* Guías de actualización: [Patch version](https://symfony.com/doc/current/setup/upgrade_patch.html), [Minor version](https://symfony.com/doc/current/setup/upgrade_minor.html), [Major version](https://symfony.com/doc/current/setup/upgrade_major.html)
+
+* Deprecation warnings
+
+  * Symfony Profiler
+
+  * PHPUnit y PHPUnit Bridge (`SYMFONY_DEPRECATIONS_HELPER`) eg. `SYMFONY_DEPRECATIONS_HELPER=max php bin/phpunit` ([ref](https://symfony.com/doc/current/components/phpunit_bridge.html#configuration))
+
+  * Logs en `var/log`
+
+  * Monolog y los channel `php` (>=6.3.9, [pr](https://github.com/symfony/symfony/pull/52707)) y `deprecation`
+
+    ```yaml
+    monolog:
+        channels: ['deprecation']
+        handlers:
+            deprecation:
+                type: stream
+                path: "%kernel.logs_dir%/deprecations.log"
+                channels: [deprecation]
+    ```
+
+* Composer
+
+  * Plugin [composer-patches](https://github.com/cweagans/composer-patches): permite aplicar parches a las dependencias instaladas ([web](https://www.cweagans.net/project/composer-patches/))
+    * Ejemplo de uso es cuando `composer update` falla por una librería no tiene soporte para la versión de Symfony o PHP que necesitamos
+      * Hacemos PR a la librería para añadir soporte pero hasta que los mantenedores no lo integren, nuestro `composer update` seguira fallando
+      * Lo típico es referenciar en `composer.json` a nuestro fork mientras tanto. El invonveniente es tener que mantener el fork con su upstream
+      * Usar este plugin como alternativa: composer seguirá descargando la librería original y aplicará nuestro parche/s
+
+* Actualizar return y argument types
+
+  * A partir de la versión 6.0 Symfony ha introducido muchos tipos de retorno y de argumentos que faltaban en su código. Hasta ahora se seguía manteniendo sin tipos para mantener la retrocompatibilidad.
+  * [Symfony 6: PHP 8 Native Types & Why we Need You](https://wouterj.nl/2021/09/symfony-6-native-typing)
+  * [Symfony 7.0 Type Declarations](https://symfony.com/blog/symfony-7-0-type-declarations)
+  * Referencias extra: [1](https://github.com/symfony/symfony/issues/51563), 
+
+* Algunas referencias
+
+  * [Mastering the Symfony Upgrade: A Step-by-Step Guide](https://accesto.com/blog/mastering-the-symfony-upgrade/)
+  * Extras: [1](https://symfonycasts.com/screencast/symfony7-upgrade/upgrade-7), [2](https://symfony.com/blog/prepare-yourself-for-symfony-6-4-and-symfony-7-0), [3](https://symfonycasts.com/screencast/symfony7-upgrade/deprecations), [4](https://symfonycasts.com/screencast/symfony5-upgrade/last-deprecations), [5](https://www.solucionex.com/blog/actualizando-symfony-7), [6](https://itnext.io/upgrade-to-symfony-v7-e9bc252b47ea), ...
+
