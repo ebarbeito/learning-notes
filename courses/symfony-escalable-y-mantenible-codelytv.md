@@ -1,6 +1,6 @@
 # Symfony mantenible y escalable
 
-by Dani Santamaría, Jabvier Ferrer – CodelyTV
+by Dani Santamaría, Javier Ferrer – CodelyTV
 
 ------
 
@@ -17,14 +17,14 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
 
 ## Introducción, historia, filosofía, arquitectura Symfony
 
-* Se dan notas históritcas sobre Symfony. Aquí unas notas
+* Se dan notas históricas sobre Symfony. Aquí unas notas
 * Uso del patrón DataMapper reemplazando al ActiveRecord utilizado inicialmente
 * Symfony Flex
 * Definición de servicios vía autowiring
 * Parametrización vía variables de entorno
 * Symfony trata de segregar interfaces con propósitos muy concretos, permitiendo que los clientes puedan usarlas y expandirlas si quieren. Un ejemplo es `\Symfony\Component\HttpKernel\Kernel`
 * Componentes Symfony EventDispatcher y Symfony Messenger
-* Iteración del framework para permitir difinición de todo como servicios, incluso los controladores. Era típico el buscar cómo definir controladores como servicios
+* Iteración del framework para permitir definición de todo como servicios, incluso los controladores. Era típico el buscar cómo definir controladores como servicios
 * Uso de event dispatchers de Symfony y middleware de Laravel
 
 ![Event dispatcher and middleware](.assets/symfony-escalable-y-mantenible-codelytv.md/event_dispatcher_and_middleware.png)
@@ -41,7 +41,7 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
 ## Migración progresiva del Legacy a Symfony
 
 * La clave del proceso es hacerlo progresivo. No tratar de reemplazar el sistema legacy por el nuevo de un solo golpe, sino ir haciendo cambios y despliegues progresivos
-* Explican 2 posibles estrategias para ir reemplazando el legacy por Symfony [*sidenote*: <unque siempre hay más alternativas. Elegir una u otra puede depender de qué tipo de legacy hhay que migrar o de su complejidad]
+* Explican 2 posibles estrategias para ir reemplazando el legacy por Symfony [*sidenote*: <aunque siempre hay más alternativas. Elegir una u otra puede depender de qué tipo de legacy hay que migrar o de su complejidad]
 
 ### Fallback al front controller Legacy
 
@@ -56,7 +56,7 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
 * Para las rutas legacy, se crea un nuevo custom Symfony Loader que [se etiqueta](https://symfony.com/doc/current/routing/custom_route_loader.html#creating-a-custom-loader) en el inyector de dependencias como tal para que sea cargado
 * En este custom Loader, es donde se crea el nuevo controlador para manejar las rutas legacy, asociando estas rutas legacy a un nuevo controlador manejado en la aplicación de Symfony
 * En este controlador es donde se maneja la ejecución del controlador legacy para cuando esta ruta no tenga todavía un reemplazo en la configuración de rutas del proyecto
-* Aquí ya no hablamos de fallback, pues las rutas legacy son ahora manejadas como rutas del proyecto Symfony al mismo nivel (e.g. se pueden ver utilzando el comando `debug:router`)
+* Aquí ya no hablamos de fallback, pues las rutas legacy son ahora manejadas como rutas del proyecto Symfony al mismo nivel (e.g. se puede ver utilzando el comando `debug:router`)
 
 ## Configurar y adaptar Symfony para mejorar la mantenibilidad
 
@@ -159,7 +159,7 @@ by Dani Santamaría, Jabvier Ferrer – CodelyTV
 
 ### **Procesado de eventos de dominio en Event Subscriber**
 
-* Hacer uso del `kernel.terminate` para todo lo que no sea nbecesario procesar para darle la respuesta al usuario
+* Hacer uso del `kernel.terminate` para todo lo que no sea necesario procesar para darle la respuesta al usuario
 
 ### Otras optimizaciones
 
@@ -443,7 +443,7 @@ $response->headers->set('Content-Type', 'text/plain');
     }
     ```
 
-  * Envolver el test en una tranasacción de base de datos, y hacer un `rollback` de la misma al acabar el test para devolver la base de datos al estado inicial
+  * Envolver el test en una transacción de base de datos, y hacer un `rollback` de la misma al acabar el test para devolver la base de datos al estado inicial
 
     ```php
     protected function setUp(): void
@@ -484,7 +484,7 @@ $response->headers->set('Content-Type', 'text/plain');
 
 * [Symfony Panther](https://symfony.com/components/Panther) nos permite hacer tests E2E, y al estar implementado como un [Browser Kit](https://symfony.com/doc/current/components/browser_kit.html), podemos reemplazar nuestros test E2E actuales de Symfony por Panther
 * Con Panther se puede hacer tanto web scraping como testing de navegador muy real. Testing de caja negra al tener el test que no conoce ni interacciona con ningún elemento interno de la aplicación
-* Usado para tests E2E, serán muy fráfiles y lentos. Se vuelven la mejor opción para los tests E2E solo de la/s partes más críticas
+* Usado para tests E2E, serán muy frágiles y lentos. Se vuelven la mejor opción para los tests E2E solo de la/s partes más críticas
 * Existen alternativas más maduras a Panther, como el super popular [Cypress](https://www.cypress.io/)
 
 ## Autenticación de APIs HTTP y SaaS con JWT
@@ -492,7 +492,7 @@ $response->headers->set('Content-Type', 'text/plain');
 ### Autenticación sin estado con JWT: Certificado de curso
 
 * [JSON Web Tokens](https://jwt.io/introduction) (JWT) firmados por el servidor antes de ser enviados
-  * El servidor emite tokens firmados con clave asimñetrica que son verificables de forma segura
+  * El servidor emite tokens firmados con clave asimétrica que son verificables de forma segura
   * La información que contiene el token es pues verificable de forma segura
 * Tokens que caducan que no son persistidos en el servidor, solo emitidos
   * Al no desear almacenarlos, tampoco se tiene por qué revocar
@@ -631,7 +631,7 @@ final class JwtUserProvider implements UserProviderInterface
 
 ## Login y Observabilidad
 
-### Exprimiento Monolog: Consigue mayor contexto con el menor ruido en logs
+### Exprimiendo Monolog: Consigue mayor contexto con el menor ruido en logs
 
 * [Symfony HTTP Kernel Logger](https://symfony.com/doc/current/logging.html), opción simplificada para casos muy pequeños
 * [Monolog Bundle](https://symfony.com/components/Monolog%20Bundle)
@@ -747,8 +747,8 @@ final class JwtUserProvider implements UserProviderInterface
 
   * Plugin [composer-patches](https://github.com/cweagans/composer-patches): permite aplicar parches a las dependencias instaladas ([web](https://www.cweagans.net/project/composer-patches/))
     * Ejemplo de uso es cuando `composer update` falla por una librería no tiene soporte para la versión de Symfony o PHP que necesitamos
-      * Hacemos PR a la librería para añadir soporte pero hasta que los mantenedores no lo integren, nuestro `composer update` seguira fallando
-      * Lo típico es referenciar en `composer.json` a nuestro fork mientras tanto. El invonveniente es tener que mantener el fork con su upstream
+      * Hacemos PR a la librería para añadir soporte pero hasta que los mantenedores no lo integren, nuestro `composer update` seguirá fallando
+      * Lo típico es referenciar en `composer.json` a nuestro fork mientras tanto. El inconveniente es tener que mantener el fork con su upstream
       * Usar este plugin como alternativa: composer seguirá descargando la librería original y aplicará nuestro parche/s
 
 * Actualizar return y argument types
@@ -762,4 +762,3 @@ final class JwtUserProvider implements UserProviderInterface
 
   * [Mastering the Symfony Upgrade: A Step-by-Step Guide](https://accesto.com/blog/mastering-the-symfony-upgrade/)
   * Extras: [1](https://symfonycasts.com/screencast/symfony7-upgrade/upgrade-7), [2](https://symfony.com/blog/prepare-yourself-for-symfony-6-4-and-symfony-7-0), [3](https://symfonycasts.com/screencast/symfony7-upgrade/deprecations), [4](https://symfonycasts.com/screencast/symfony5-upgrade/last-deprecations), [5](https://www.solucionex.com/blog/actualizando-symfony-7), [6](https://itnext.io/upgrade-to-symfony-v7-e9bc252b47ea), ...
-
