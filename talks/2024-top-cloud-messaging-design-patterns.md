@@ -17,16 +17,16 @@ José Antonio Muro - Centro de Novas Tecnoloxías de Galicia
 ### Falacias dentro de la computación distribuida
 
 * La red es fiable. Falacia: no podemos asumir que la red es fiable ni que siempre estará disponible.
-  * Timeout, circuit breaker, diseño basado en colas, ...
+  * Timeout, circuit breaker, diseño basado en colas
   * Para mitigar este problema:
     * Patrones de retry, pero con precaución
     * Protegernos de sistemas externos
     * Patrón de *circuit breaker*: si se alcanza cierto número de reintentos, se abre el circuito (se abandona el mecanismo de reintentos)
 * La latencia es cero. En sistemas distribuidos, la latencia nunca es nula.
   * Considerar la latencia cuando se realizan llamadas concatenadas a microservicios.
-  * Evitar llamadas innecesarias -> usar caché.
+  * Evitar llamadas innecesarias. Usar caché.
   * Para mitigar este problema:
-    * Estrategias de caché como *cache-aside*, solicitudes masivas, alojamiento de contenido estático cerca de los clientes.
+    * Estrategias de caché como *cache-aside*, solicitudes masivas, static content hosting cerca de los clientes.
 * Ancho de banda infinito. No lo es, ni tampoco lo es la capacidad de computación.
   * Para mitigar este problema:
     * Políticas de *throttling*.
@@ -106,7 +106,7 @@ Patrones de diseño:
 * Vista materializada
 * *Sharding*
 * *Sidecar*
-* Alojamiento de contenido estático
+* Static content hosting
 * etc.
 
 #### Optimización de costes
