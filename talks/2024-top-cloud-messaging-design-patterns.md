@@ -1,6 +1,6 @@
 # Top Cloud Messaging Design Patterns
 
-Jose Antonio Muro - Centro de Novas Tecnoloxías de Galicia
+José Antonio Muro - Centro de Novas Tecnoloxías de Galicia
 
 ------
 
@@ -14,86 +14,86 @@ Jose Antonio Muro - Centro de Novas Tecnoloxías de Galicia
 
 ## General notes (mostly Spanish)
 
-### Falacies dentro de la computación distribuida
+### Falacias dentro de la computación distribuida
 
-* La red es fiable. Falacia, no podemos asumir que la red es fiable y/o está disponible
-  * timeout, circuit breaker, quque-base design patterms, ...
+* La red es fiable. Falacia: no podemos asumir que la red es fiable ni que siempre estará disponible.
+  * Timeout, circuit breaker, diseño basado en colas, ...
   * Para mitigar este problema:
-    * Patrones de retry, pero con ojo
+    * Patrones de retry, pero con precaución
     * Protegernos de sistemas externos
-    * Patrón circuit breaker: si se alcanza cierto número de retries, se abre el circuito (se sale del mecanismo de retry)
-* La latencia es cero. En SD la latencia nunca es nula
-  * Atender a la latencia cuando se producen distintas llamadas concatenadas a microservicios
-  * Evitar llamadas innecesarias -> cachear / usar cache
+    * Patrón de *circuit breaker*: si se alcanza cierto número de reintentos, se abre el circuito (se abandona el mecanismo de reintentos)
+* La latencia es cero. En sistemas distribuidos, la latencia nunca es nula.
+  * Considerar la latencia cuando se realizan llamadas concatenadas a microservicios.
+  * Evitar llamadas innecesarias -> usar caché.
   * Para mitigar este problema:
-    * Caching strategies like cache-aside, bulk requests static content hosting near clients
-* Ancho de banda infinito. Nunca es infinita, ni la capacidad de computación lo es tampoco
+    * Estrategias de caché como *cache-aside*, solicitudes masivas, alojamiento de contenido estático cerca de los clientes.
+* Ancho de banda infinito. No lo es, ni tampoco lo es la capacidad de computación.
   * Para mitigar este problema:
-    * Throttling policies
+    * Políticas de *throttling*.
     * Small payloads such as claim-check patterns
-      * Mensajes con menos información, con URI a recuperar información más pesada: reduce tamaño de mensajes, optimiza recursos, recuperación de información pesada solo cuando se necesite (uso explícito de la URI)
-* La topología no cambia. Nada está exento a cambio
+      * Mensajes con menos información, con URI para recuperar la información más pesada: reduce el tamaño de los mensajes, optimiza recursos, y recupera la información pesada solo cuando se necesite (uso explícito de la URI).
+* La topología no cambia. Nada está exento de cambios.
   * Para mitigar este problema:
-    * Herramientas de Service discovery
-    * No hardcoding IPs
+    * Herramientas de descubrimiento de servicios.
+    * No codificar IPs directamente.
     * Offload cross-curring concerns
-* Asumir que siempre hay un SysOp que se encargue de operaciones. No es siempre así
+* Asumir que siempre hay un SysOp que se encargue de las operaciones. No siempre es así.
   * Para mitigar este problema:
-    * Embrace DevOps
-    * Reduce Bus Factor dependency
-      * Esto es la probabilidad de que a nuestro SysOp le pase algo (eg, tenga un accidente)
-      * No depender de personas específicas. Que se reparta el conocimiento
-* El coste de transporte es cero
+    * Adoptar DevOps.
+    * Reducir la dependencia del *Bus Factor*.
+      * Este es el riesgo de que algo le suceda al SysOp (por ejemplo, un accidente).
+      * No depender de personas específicas, distribuir el conocimiento.
+* El coste de transporte es cero.
   * Para mitigar este problema:
-    * Cost calculation
-    * Choose best protocol for your use case suck as JSON, gRPC, etc.
-* Component versioning is simple. Luego se demustra que no fue tan simple ...
+    * Cálculo de costes.
+    * Elegir el mejor protocolo para tu caso de uso, como JSON, gRPC, etc.
+* El versionado de componentes es simple. Posteriormente se demuestra que no fue tan sencillo...
   * Para mitigar este problema:
-    * Embrace continuous optimization culture
-    * Know your platform
-    * Focus on key components and store insightful logs
-    * Automatize alerts on critical events
-    * Create standard data logging formats
-    * Ensure data can be aggregated and centralized
+    * Adoptar una cultura de optimización continua.
+    * Conocer tu plataforma.
+    * Centrarte en los componentes clave y almacenar registros útiles.
+    * Automatizar alertas ante eventos críticos.
+    * Crear formatos estándar para el registro de datos.
+    * Asegurar que los datos puedan ser agregados y centralizados.
 
-### Cloud pilars and design patterns 
+### Pilares de la nube y patrones de diseño
 
-#### Reliability
+#### Fiabilidad
 
-The ability of a system to recover from failures and continue to work properly.
+La capacidad de un sistema para recuperarse de fallos y seguir funcionando correctamente.
 
 Patrones de diseño:
 
 * **Design for self-healing**
   * Apply retry, circuit breaker, bulkhead, load-leveling, throttling patterns, etc.
-* **Apply redundancy**
-  * Use replication, health probes, automatic service discovery mechanisms for dynamic connectivity, automatic failovers, etc.
+* **Aplicar redundancia**
+  * Utilizar replicación, health probes, mecanismos automáticos de descubrimiento de servicios para conectividad dinámica, automatic failovers, etc.
 
-#### Operational Excellence
+#### Excelencia Operacional
 
-Operations processes that keep a system running in production without issues or outages.
+Procesos operativos que mantienen un sistema funcionando en producción sin problemas ni interrupciones.
 
-(en resumen, aplicar Cultura DevOps)
+(En resumen, aplicar la cultura DevOps)
 
 Patrones de diseño:
 
-* **Establish development standards (DevOps)**
-  * Apply solid principles, quality code policies, clean architectures, offload cross-cutting concerns, use event-driven architectures, etc.
-* **Design for operations (DevOps)**
-  * Automate for efficiency (CI/CD, laC), adopt safe deployment practices, evolve operations with observability, testing, monitoring and versioning.
+* **Establecer estándares de desarrollo (DevOps)**
+  * Aplicar solid principles, políticas de código de calidad, arquitecturas limpias, offload cross-cutting concerns, usar arquitecturas basadas en eventos, etc.
+* **Diseñar para la operación (DevOps)**
+  * Automatizar para la eficiencia (CI/CD, laC), adoptar prácticas de despliegue seguro, evolucionar las operaciones con observabilidad, pruebas, monitoreo y versionado.
 
-#### Performance Efficiency
+#### Eficiencia en el rendimiento
 
-The ability of a system to adapt to changes in load with no loss of performance.
+La capacidad de un sistema para adaptarse a cambios en la carga sin perder rendimiento.
 
-* **Negotiate realistic performance targets**
-  * Make an effort to fully understand your use case and collaborate with business owners.
-* **Design to meet elastic capacity requirements**
-  * Scale out as load increases and scale in when the extra capacity is not needed.
-*  **Use best data store as per your scenario**
-  * Embrace polyglot persistence scenarios, specially in distributed or microservices-oriented applications.
-* **Continuous optimization**
-  * Build a culture of performance-driven optimization, proactively monitor performance patterns and fine-tune apps.
+* **Negociar objetivos de rendimiento realistas**
+  * Esforzarse por comprender completamente tu caso de uso y colaborar con los propietarios del negocio.
+* **Diseñar para cumplir con los requisitos de capacidad elástica**
+  * Escalar hacia fuera a medida que aumenta la carga y escalar hacia dentro cuando no se necesite capacidad adicional.
+* **Usar el mejor almacenamiento de datos según tu escenario**
+  * Adoptar escenarios de persistencia poliglota, especialmente en aplicaciones distribuidas o orientadas a microservicios.
+* **Optimización continua**
+  * Fomentar una cultura de optimización impulsada por el rendimiento, monitorear proactivamente los patrones de rendimiento y ajustar las aplicaciones.
 
 Patrones de diseño:
 
@@ -102,23 +102,23 @@ Patrones de diseño:
 * Bulkhead
 * Claim check
 * CQRS
-* Index table
-* Materialized view
-* Sharding
-* Sidecar
-* Static content hosting
+* Tabla de índices
+* Vista materializada
+* *Sharding*
+* *Sidecar*
+* Alojamiento de contenido estático
 * etc.
 
-#### Cost Optimization
+#### Optimización de costes
 
-Managing costs to maximize the value delivered aligned with business needs and budgets.
+Gestionar los costes para maximizar el valor entregado alineado con las necesidades empresariales y los presupuestos.
 
 Patrones de diseño:
 
-* **Optimize for business needs and costs**
-  * Align design with business and cost needs considering SLAs, RTOS, RPOs, etc.
-* **Design to scale out / scale in**
-  * Scale out as load increases and scale in when the extra capacity is not needed.
+* **Optimizar según las necesidades empresariales y los costes**
+  * Alinear el diseño con las necesidades empresariales y los costes considerando SLAs, RTOS, RPOs, etc.
+* **Diseñar para escalar hacia fuera / escalar hacia dentro**
+  * Escalar hacia fuera a medida que aumenta la carga y escalar hacia dentro cuando no se necesite capacidad adicional.
 
 Patrones de diseño:
 
@@ -129,178 +129,73 @@ Patrones de diseño:
 * Throttling
 * etc.
 
-#### Security
+#### Seguridad
 
-Protecting applications and data from threats.
+Proteger las aplicaciones y los datos de amenazas.
 
-### Architecture styles
+### Estilos de arquitectura
 
 #### N-Tiers
 
-* **N-Tier architecture**. Divides an application into logical layers and physical tiers
+* **Arquitectura N-Tier**. Divide una aplicación en capas lógicas y niveles físicos.
 
-  * **Layers** are a logical way of reflecting internal architecture, separating responsibilities and manage dependencies between software components.
-  * **Tiers** are a physical way of separating layers and usually run on separate machines,
+  * **Layers** son una forma lógica de reflejar la arquitectura interna, separando responsabilidades y gestionando las dependencias entre componentes de software.
+  * **Tiers** son una forma física de separar las capas, generalmente corriendo en máquinas separadas.
 
-Cuándo usarla
+Cuándo usarla:
 
-* Simple web applications or traditional on-premises applications
-* There is a need for simple portability between cloud and on-premises, and between cloud platforms with minimal refactoring
+* Aplicaciones web simples o aplicaciones tradicionales locales.
+* Se necesita una portabilidad sencilla entre la nube y el entorno local, y entre plataformas de nube con un mínimo de refactorización.
 
-#### Web QUeue Worker
+#### Web Queue Worker
 
-* A Web Queue Worker architecture typically is made of:
-  * A Web App or Web APl that serves client requests
-  * A Worker that performs resource-intensive tasks, long-running workflows, or batch jobs
-  * A Queue to provide asynchronous communication between web front end and worker.
-* The front end might consist of a web API. On the client side, the web API can be consumed by a single-page application that makes AJAX calls, or by a native client application.
+* Una arquitectura *Web Queue Worker* generalmente se compone de:
+  * Una aplicación web o API web que atiende las solicitudes de los clientes.
+  * Un trabajador que realiza tareas intensivas en recursos, flujos de trabajo largos o trabajos por lotes.
+  * Una cola que proporciona comunicación asincrónica entre el frontend web y el trabajador.
+* El frontend puede consistir en una API web. En el lado del cliente, la API web puede ser consumida por una aplicación de una sola página que realiza llamadas AJAX o por una aplicación nativa.
 
-Cuándo usarla
+Cuándo usarla:
 
-* Applications with simple domain
-  Applications with some long-running workflows or batch operations
-* When you want to use managed services, rather than infrastructure as a service (laaS)
+* Aplicaciones con dominios simples.
+* Aplicaciones con flujos de trabajo largos o operaciones por lotes.
+* Cuando se prefiera usar servicios gestionados en lugar de infraestructura como servicio (IaaS).
 
 #### Event Driven
 
-* An event-driven architecture consists of event producers that generate a stream of events, and event consumers that listen for the events.
-* There are different event-driven flavours such as:
-  * **Pub/Sub**: When an event is published, it sends the event to each subscriber. After an event is received, it can't be replayed, and new subscribers don't see the event.
-  * **Event Streaming**: Events are written to a log. Events are strictly ordered (within a partition) and durable. Clients don't subscribe to the stream, instead a client can read from any part of the stream. The client is responsible for advancing its position in the stream. That means a client can join at any time, and can replay events.
+* Una arquitectura orientada a eventos se compone de productores de eventos que generan un flujo de eventos, y consumidores de eventos que escuchan esos eventos.
+* Existen diferentes variantes de la arquitectura orientada a eventos:
+  * **Pub/Sub**: Cuando se publica un evento, se envía a cada subscriber. Después de que un evento es recibido, no puede ser reproducido, y los nuevos subscribers no verán ese evento.
+  * **Event Streaming**: Los eventos se escriben en un registro. Los eventos son estrictamente ordenados (dentro de una partición) y duraderos. Los clientes no se suscriben al flujo; en su lugar, un cliente puede leer desde cualquier parte del flujo. El cliente es responsable de avanzar en su posición en el flujo, lo que significa que puede unirse en cualquier momento y reproducir eventos.
 
-Cuándo usarla?
+Cuándo usarla:
 
-* Multiple subsystems must process the same events.
-* Real-time processing with minimum time lag.
-* High volume and high velocity of data, such as loT
-* There is a need to decouple consumers and producers yet providing asynchronous
-integration with eventual consistency
+* Múltiples subsistemas deben procesar los mismos eventos.
+* Procesamiento en tiempo real con el menor retraso posible.
+* Alto volumen y alta velocidad de datos, como IoT.
+* Es necesario desacoplar productores y consumidores, pero proporcionando una integración asincrónica con consistencia eventual.
 
-#### Microservices
+#### Microservicios
 
-* A Microservices architecture consists of a collection of small, independent, autonomous, self-contained and loosely coupled services.
-* Each service is self-contained and should implement a single business capability within a bounded context, improving scalability and fault isolation
-* Services can be developed and deployed independently improving agility. A team can update an existing service without redeploying the entire application.
-* Each service is a separate codebase, which can be managed by a small development team, improving productivity while lowering management overhead caused in large teams.
-* Services are responsible for persisting their own data or external state.
-* Services communicate with each other by using well-defined and versioned contracts and APls.
-* Supports polyglot programming, data persistence and mix of technologies
+* Una arquitectura de microservicios consiste en una colección de servicios pequeños, independientes, autónomos, auto contenidos y desacoplados.
+* Cada servicio es autónomo y debe implementar una única capacidad empresarial dentro de un contexto limitado, mejorando la escalabilidad y el aislamiento de fallos.
+* Los servicios pueden desarrollarse y desplegarse de forma independiente, mejorando la agilidad. Un equipo puede actualizar un servicio existente sin necesidad de volver a desplegar toda la aplicación.
+* Cada servicio es una base de código separada, que puede ser gestionada por un pequeño equipo de desarrollo, lo que mejora la productividad y reduce la sobrecarga de gestión.
 
-Retos de esta arquitectura:
+Cuándo usarla:
 
-* **Complexity**. Each service is simple but the entire system is much more complex.
-* **Development and testing** in a distributed environment. Refactoring across service boundaries can be very hard and test service dependencies is a big challenge in very fast evolving applications.
-* **Network congestion and latency**. Avoid chatty synchronous communications, think of serialization formats and embrace asynchronous communication patterns.
-* **Data Integrity**. Data consistency is a challenge. Embrace eventual consistency whenever possible. Apply saga or compensating transaction patterns to deal with transactional failures.
-* **Management**. A mature DevOps culture is a must. No sense it only a small low-skilled team must manage all microservices.
-* **Versioning**. Updates to a service must not break services that depend on it.
-0 Skill Set. Lack of gobernance. You might end up with so many different languages and frameworks that the application becomes hard to maintain
+* Cuando la capacidad de escalar componentes individuales de manera independiente sea esencial.
+* Cuando se requieren equipos autónomos responsables de partes de la aplicación.
+* Cuando se necesiten lanzamientos rápidos y actualizaciones frecuentes.
 
+#### Serverless
 
-#### Uber Microservices Orientes Architecture Summary
+* **Serverless** se refiere a una arquitectura sin servidores, donde los proveedores de la nube gestionan las infraestructuras y los recursos de computación, en lugar de gestionarlos uno mismo.
+* Los recursos de cómputo se asignan bajo demanda, basados en los eventos que provocan las ejecuciones de funciones.
+* En este modelo, los costos se basan en la cantidad de recursos utilizados en función de la carga, ya que no se paga por la infraestructura reservada.
 
-Caso de Uber. Problemas que tenían con su arquitectura en monolito
+Cuándo usarla:
 
-* Extremely complex which made develop new features and fix bug very
-hard
-* Obstacle for continuos deployment
-* Unable to scale efficiently and separately as per funcionality requirements. Only scale by "cloning all application".
-* Reliability was a problem because all modules run in the same process
-* Extremely difficult to adopt new frameworks and languages
-
-Cómo lo solucionan / atacan:
-
-* Uber solved issues by adopting Microservice architecture:
-* Each microservice is a mini-application that has its own hexagonal architecture consisting of business logic along with various adapters
-* Each microservice is simpler than the previous whole monolith.
-* Microservices can be scaled independently aligned with peak loads based on most used app functionality. Support scale by "splitting different things or functionality". See scale cube for details.
-* Microservices can be deployed separately.
-
-
-#### Modular Monolyth
-
-* "Choose microservices for the benefits, not because your monolithic codebase is a mess" — Simon Brown
-
-Características
-
-* The biggest difference between Modular monoliths and Microservices is how they are deployed.
-* Microservices elevate the logical boundaries inside a modular monolith into physical boundaries.
-* The problem is **people end up using microservices to enforce code boundaries**. * **Modular monoliths** give you high cohesion, low coupling, data encapsulation, focus on business functionalities, and more.
-* **Microservices** give you all that, plus independent deployments and independent scalability plus the ability to use different technology stacks per service.
-
-### Cloud Archiecture Bootcamp
-
-#### Asynchrongus vs Synchronous Worlds
-
-#### Synchronous
-
-* The client expects a timely final response from the target service and might even block while it waits
-* Request / Response (one-to-one)
-  * A client makes a request to a service and waits for a response.
-  * The client expects the final response to arrive in a timely fashion.
-  * In a thread-based application, at single process scope, the thread that makes the request might even block while waiting. Use always async / await in Input/Output (10) operations to not block threads.
-  * Main drawback of this type of integration is that even using async / await 10 calls other resources different from threads are consumed (for instance, sockets) so that some issues could arise such as loss of requests or exhaustion of client resources.
-
-##### Asynchronous
-
-* Async Request / Response (one-to-one)
-  * A client sends a request to a service, which replies asynchronously. The client does not block while waiting and is designed with the assumption that the response might not arrive for a while.
-* Async Publish / Responses (one to many)
-  * A client publishes a request message. It waits a certain amount of time for responses from interested services.
-* Notification (one-to-one)
-  * A client sends a request to a service but no reply with content payload is expected or sent.
-* Publish / Subscribe (one to many)
-  * A client publishes a notification message, which is consumed by zero or more interested services. No response with content payload is expected from subscribers
-
-Patrones de diseño
-
-* Asynchronous Request-Response
-  * The client sends a request and receives an HTTP 202 (Accepted) response.
-  * The client sends an HTTP GET request to the status endpoint. The work is still pending, so this call returns НТТР 200.
-  * At some point, the work is complete and the status endpoint returns 302 (Found) redirecting to the resource.
-  * The client fetches the resource at the specified URL.
-
-* Quque-bases Asynchronous Messaging patterns
-  * QUé permite este patrón?
-    * Decoupling workloads
-    * Cross-Platform Integration
-    * Reliable Asynchronous workflows
-    * Temporal Decoupling
-    * Queue-Based Load Leveling
-  * En qué se basa?
-    * Senders can POST or PUSH a message to the queue.
-    * Receivers can RETRIEVE or PULL message from the queue
-      * Normally the message is removed if retrieved successfully. Otherwise, the message remains in the queue.
-      * A LOCK can be applied to make the message not visible during this action until the lock is released
-    * Receivers can PEEK a message, that is, examine without removing and decide if they retrieve the message for processing based on custom criteria.
-      * A LOCK can be applied to make the message not visible during this action until the lock is released
-
-* Quque-bases Asynchronous Messaging patterns: Competing Consumers
-  * Multiple concurrent consumers to process messages received on the same messaging channel
-  * A system can process multiple messages concurrently to optimize throughput, to improve reliability, scalability, availability and to optimize costs
-  * Cuándo usar este patrón?
-    * Tasks are independent and can run in parallel
-    * Volume of work is highly variable requiring scalability
-  * Y Cuándo no?
-    * Tasks must be performed synchronously, and the application logic must wait for a task to complete before continuing
-    * Tasks must be performed in a specific sequence
-
-* Quque-bases Asynchronous Messaging patterns: Queue-based Load Leveling
-  * Use a queue that acts as a buffer between a task and a service it invokes in order to smooth intermittent heavy loads that can cause the service to fail or the task to time out
-  * This can help to minimize the impact of peaks in demand on availability and responsiveness for both the task and the service
-  * Cuándo se usaría este patrón?
-    * This pattern is useful to any application that uses services that are subject to overloading
-
-* Quque-bases Asynchronous Messaging patterns: Publish & Subscribe
-
-....
-Dejé de apuntar, muchísimo contenido útil
-
-
-#### Top Messaging Design patterns
-
-...
-
-#### Top Resilient Design patterns
-
-...
+* Ideal para aplicaciones con cargas variables.
+* Para aplicaciones con alta variabilidad en la demanda.
+* Para desarrollar rápidamente sin preocuparse por la infraestructura.
