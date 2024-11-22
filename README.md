@@ -10,7 +10,7 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 
 ## 📚 Books
 
-* _.gitkeep_
+* [Advanced Web Application Architecture](books/advanced-web-application-architecture.md), by **Matthias Noback**, 2020
 
 ## 🎓 Courses
 
