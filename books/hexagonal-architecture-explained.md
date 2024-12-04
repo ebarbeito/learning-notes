@@ -99,18 +99,46 @@ class Main {
 
 * **Application**, **App**, **Hexagon**, **Core**, **System**, **SuD**, **SuT**. All the business logic, without references to tech nor UI
 * **Extended system**. The wider system, including adapters and directly connected technologies (databases, network, UI, external systems)
-* **Actor**.
-* **Primary or driving actor**.
-* **Secondary or driven actor**.
-* **Interactor**.
-* **Interface**.
-* **Required interface**.
-* **Port**.
-* **Primary or Driving Port**.
-* **Secondary or Driven Port**.
-* **Adapter**.
-* **Primary or Driving adapter**.
-* **Secondary or Driven adapter**.
+* **Actor**. _Anything_ (no matter what) with behavior / A thing has behaviour if it is able to execute an "if" statement
+* **Primary or driving actor**. Actor that calls / initiates  request / sends message to the app / service. Actors can be primary in some scenarios, secondary in others
+  * Analogy: *A Driving Actor presses the gas pedal, initiating action*
+
+* **Secondary or driven actor**. A component or external system that the application interacts with to fulfill its tasks. It is “driven” by requests or commands from the application’s core
+  * Analogy: *A Driven Actor is the engine or wheels, responding to the input to produce a result*
+
+* **Interactor**. Piece of software that interacts direcly with the port
+  * Analogy 1: Conductor of an Orchestra. The interactor ensures the musicians (driving and driven actors) perform their roles in harmony to produce the desired music (application behavior)
+  * Analogy 2. Switchboard Operator. It connects callers (driving actors) to the right lines (driven actors) based on the context of the request
+
+* **Interface**. Set of method definitions declsred by an actor. Specifies a contract
+  * **Provided interface**. Defines the services offered by the app. Used by driving interactors, implemented by the app
+    * Driving Actors (Adapters) interact with the provided interface of the application
+
+  * **Required interface**. Defines the services needed by the app to perform its function. Implemented by the driven interactors
+    * Driven Actors (Adapters) implement the required interface that the application core depends on
+
+* **Port**. Provided or Required interface defined by the app. Created for some intention (eg. `ForPlacingOrders`) 
+  * Boundary between the application core and the outside world
+  * **Primary or Driving Port**.
+  * **Secondary or Driven Port**.
+
+* **Adapter**. Translates requests from an external actor linked to a specific technology, into technologically neutral requests at a port, and vice versa
+  * **Primary or Driving adapter**.
+  * **Secondary or Driven adapter**.
+
+
+### Elements: App, Ports, Actors, Adapters
+
+* This pattern is made by these four elements: **Application** (or system) aka the app; the **Ports**, the driving and driven external **Actors**; **Adapters** as needed at each port
+* There is a fifth element (officially outside the pattern) that you need: the configurator. The code that connect these four parts
+* The applicaion, app, or system
+  * ...
+* The ports
+  * ...
+* The external actors
+  * ...
+* The adapters
+  * ...
 
 ## Code Samples
 
