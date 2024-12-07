@@ -166,6 +166,22 @@ class Main {
   * How you design the configurator is not specified by the pattern
   * In testing, the test cases act both as the configurator and the driving actor: creates and connects the players, and then drives the app
 
+### Required constraints to meet the pattern
+
+* App defines an interface (provided or required) for all external interactions
+* App defines driving ports for the provided interfaces, and driven ports for the driven interfaces
+* External actors are not allowed to access anything inside the hexagon directly
+* Ports and interfaces, technology-neutral. They use terms hat only express business needs
+
+### Non required things. Up to you
+
+* The patterns says nothing about how to implement the configurator
+* It also does not legislate how you name your ports. Nor how granular the ports are
+* Nothing about how the code base is organized
+* How you organize and design your adapters
+* The pattern does not exclude the possibility that you have "nested Ports & Adapters"
+* Nothing to say about how you structure your application internally. You're welcome to use DDD or not, separate functions from model or not, etc.
+
 ## Code Samples
 
 * A series of samples in several langs. From dead simple to complete samples
