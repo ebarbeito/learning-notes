@@ -132,13 +132,39 @@ class Main {
 * This pattern is made by these four elements: **Application** (or system) aka the app; the **Ports**, the driving and driven external **Actors**; **Adapters** as needed at each port
 * There is a fifth element (officially outside the pattern) that you need: the configurator. The code that connect these four parts
 * The applicaion, app, or system
-  * ...
+  * Whatever business logic you need. Written only in terms of the business
+  * Technology-agnostic. No reference to any particular technology/platform connected to it
+  * Ports & Adapters has you identify the places where your application meets the outside world
+  * Creates a component, which declares two interfaces
+    * Provided interface(s): set of services the app offers to the outside world
+    * Required interface(s): for all external entities (promary or secondary) the app defines "I will only talk to you if you talk in my language", and explicitly defines that language
 * The ports
-  * ...
+  * Defines the boundaries of the application
+  * Every interaction between the app and the outside world happens at a port interface
+  * Each set of interactions **with a given purpose** (intention) is a port. Interactions grouped by their intentions
+  * Convention name: "For doing something" (For + verb-ing + whatever else needed to make the purpose clear). Samples: "For managing he contents of the shopping cart", "For configuring the system", "For sending notifications"
+  * Within type-declared languages (eg. Java) the port has to be declared explicitly
+  * Within dynamic or type-inferred (eg. Ruby) ports are not explicitly visible
 * The external actors
-  * ...
+  * Actors that drive the app (Driving actors) — Primary
+    * Any entity (human or electronic) that **kicks the app** into action
+    * It makes a service request **of the app**
+  * Actors that are driven by the app (Driven actors) — Secondary
+    * Any entity (human or electronic) that the **app kicks** into action
+    * Requesting a service from it
+  * Match perfectly with the ports
+    * Primary actors become driving actors, which interfact at the driving (primary) ports
+    * Secondary actors become driven actors, which interact at the driven (secondary) ports
 * The adapters
-  * ...
+  * A human sitting at the computer can't directly call the app. Instead, they interact via some UI (CLI, GUI, voice, ...something)
+  * These adapters convert human movements into the needed inerface, sllowing the app and the human to interact
+  * Adapters are generally needed for ant sott of real.world technology
+  * Adapters exist outside the app
+* The configurator
+  * Something has to connect all the pieces: tell the drivers how to reach the app. Tell the app which driven actors to use
+  * It has to know all the players: the app, the driving actors (or their adapters), and the driven actors (or their adapters)
+  * How you design the configurator is not specified by the pattern
+  * In testing, the test cases act both as the configurator and the driving actor: creates and connects the players, and then drives the app
 
 ## Code Samples
 
