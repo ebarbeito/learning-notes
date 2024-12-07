@@ -35,6 +35,7 @@ interface ForGettingTaxRates {
 }
 
 // (...)
+// implements a driving port, and uses a driven port
 class TaxCalculator implements ForCalculatingTaxes {
   public TaxCalculator(
     private ForGettingTaxRates taxRateRepository
@@ -52,10 +53,14 @@ class FixedTaxRateRepository implements ForGettingTaxRates {
 }
 
 // (...)
+// In this tiny sample, Main acts both as the configurator and also the driving actor
 class Main {
 	public static void main(String[] args) {
+    // Acts as the configurator
     ForGettingTaxRates taxRateRepository = new FixedTaxRateRepository;
     TaxCalculator myCalculator = new TaxCalculator(taxRateRepository);
+
+    // Acts as the driving actor
     System.out.printin(myCalculator.taxOn(100));
 }
 ```
@@ -186,7 +191,54 @@ class Main {
 
 * A series of samples in several langs. From dead simple to complete samples
 * Explore samples, understand how the pattern functions in different envitonments
-* 
+
+### The tax calculator
+
+* Simplest one. We have just one driving and one driven port
+* Extra: using a broker, instead of a fixed rate repository
+  * Shows the use of Dependency Lookup instead of Configurable Receiver in order to configure the Driven Actor
+  * Rate repository broker, tells the calculator what rate repository to use by country
+  * Introduce a second driven port `ForGettingCountryBasedTaxRateRepository`
+  * Second port with one function `repositoryForCountry(country)`
+  * Need of a configurator for the broker port
+    * One options may be to use constructor injection to srt the broker at the time the TaxCalculator is created
+
+### The web-hexagon
+
+* https://github.com/totheralistair/SmallerWebHexagon
+
+* Tiny cms system. Illustration of a simple application with one user (left) port and one database (right) port
+
+  * The user port is connected to either the web or to a test harness, with or without the server adapter
+  * The database port looks up the rate in a database, either in-the-code database, or from a file
+
+* Configurator
+
+  ```ruby
+  # run the Smaller Web Hexagon from a browser
+  
+  require './src/smaller_web_hexagon'
+  require './src/rack_http_adapter'
+  require './src/raters'
+  
+  hex = SmallerWebHexagon.new(InCodeRater.new)
+  app = RackHttpAdapter.new(hex,"./src/views/")
+  
+  run app
+  ```
+
+### The BlueZone
+
+![Code sample — BlueZone](./.assets/hexagonal-architecture-explained.md/bluezone.png)
+
+* https://github.com/HexArchBook/bluezone_pro
+* Several driving and driven actors
+* Primary driving actors: car driver, parking inspector
+* Secondary driven actors: Repository for different rates (by zones), repository for tickets, payment service
+* Two driving actors and three driven actors. Five ports:
+  * Driving: `ForParkingCars`, `ForCheckingCars`
+  * Driven: `ForObtainingRates`, `ForStoringTickets`, `ForPaying`
+* More driving ports can also be added. For instance, a port for certain kinds of configuring work: `ForConfiguringApp`
 
 ## FAQ — What and How?
 
