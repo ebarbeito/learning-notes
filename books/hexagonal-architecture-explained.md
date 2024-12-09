@@ -104,29 +104,26 @@ class Main {
 
 * **Application**, **App**, **Hexagon**, **Core**, **System**, **SuD**, **SuT**. All the business logic, without references to tech nor UI
 * **Extended system**. The wider system, including adapters and directly connected technologies (databases, network, UI, external systems)
+* **System Under Design** (SUD). Can be any sort of system: hardware, software, an organization, or any combination of those
 * **Actor**. _Anything_ (no matter what) with behavior / A thing has behaviour if it is able to execute an "if" statement
 * **Primary or driving actor**. Actor that calls / initiates  request / sends message to the app / service. Actors can be primary in some scenarios, secondary in others
+  * It is any actor that drives the SUD
   * Analogy: *A Driving Actor presses the gas pedal, initiating action*
-
 * **Secondary or driven actor**. A component or external system that the application interacts with to fulfill its tasks. It is “driven” by requests or commands from the application’s core
   * Analogy: *A Driven Actor is the engine or wheels, responding to the input to produce a result*
-
 * **Interactor**. Piece of software that interacts direcly with the port
   * Analogy 1: Conductor of an Orchestra. The interactor ensures the musicians (driving and driven actors) perform their roles in harmony to produce the desired music (application behavior)
   * Analogy 2. Switchboard Operator. It connects callers (driving actors) to the right lines (driven actors) based on the context of the request
-
 * **Interface**. Set of method definitions declsred by an actor. Specifies a contract
   * **Provided interface**. Defines the services offered by the app. Used by driving interactors, implemented by the app
     * Driving Actors (Adapters) interact with the provided interface of the application
 
   * **Required interface**. Defines the services needed by the app to perform its function. Implemented by the driven interactors
     * Driven Actors (Adapters) implement the required interface that the application core depends on
-
 * **Port**. Provided or Required interface defined by the app. Created for some intention (eg. `ForPlacingOrders`) 
   * Boundary between the application core and the outside world
   * **Primary or Driving Port**.
   * **Secondary or Driven Port**.
-
 * **Adapter**. Translates requests from an external actor linked to a specific technology, into technologically neutral requests at a port, and vice versa
   * **Primary or Driving adapter**.
   * **Secondary or Driven adapter**.
@@ -279,10 +276,33 @@ A suggested folder structure
 
 * Alistair's preference is to always do 1 first
 * Once step 1 is completed, the architecture is in place. After that, the rest cab be done in any order
+* In order to change from one step to other, it is not mandatory to implement the whole business logic at once. The app does not have to be implemented at once for the first or any other step
+  * See section 5.2 *How does this relate to Walking Skeleton*
 
 ## FAQ — Related Concepts
 
-* 
+### How does this relate to use cases?
+
+* The System Under Design in use cases is what we are calling the app
+* Primary actors in Use-Cases language are Driving actors in Ports & Adapters language; Seconday actors are Driven actors
+* Properly speaking, the concept of ports doesn't exist in use-case modeling
+
+### How does this relate to Walking Skeleton?
+
+* [Walking Skeleton](https://wiki.c2.com/?WalkingSkeleton)
+
+  > a tiny implementation of the system that performs a small end-to-end function. It need not use the final architecture, but it should link together the main architectural components. The architecture and the functionality can then evolve in parallel
+
+* Where Ports & Adapters defines the architecture, Walking Skeleton advises on the process of building it
+
+  * It advises against building the whole application at once, even using only the test harnesses (Step 1 in the development sequence)
+  * Instead, it advises to first create the initial nearly-empty transaction in the tests, then to connect the real technologies for that nearly-empty transaction
+
+* You don't have to use Walking Skeleton
+
+* Whole business logic can not be implemented at once for the first step in the sequence
+
+  * you can do little tiny implementation in step 1, add real things in steps 2, 3, 4, ... then back to step 1, and so on
 
 ## Summary
 
