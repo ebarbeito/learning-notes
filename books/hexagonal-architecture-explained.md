@@ -242,7 +242,43 @@ class Main {
 
 ## FAQ — What and How?
 
-* 
+### The dinner boat analogy 
+
+![The dinner boat analogy ](./.assets/hexagonal-architecture-explained.md/dinner_boat.png)
+
+### More about Ports and External systems
+
+> *Make a driven port for an external system, not for a domain concept* — Juan
+
+* The pattern says: Put a driven port interface for any "real world thing" (driven actor) that the hexagon needs to talk to
+* Instead of putting a driven port for the domain concept, do it for the external system; to represent the conversation with an external system, not just the domain concept
+* An external system is basically one whose interface your team can’t change
+
+### How many ports should I have?
+
+* Recommended is to begin with one port for each primary and secondary actor
+* There is a rapid increase in complexity and decrease in value as you continue splitting
+* The number of driven ports is determined by the number of external systems the app has to talk to
+
+### Hoe do I structure the inside of my app?
+
+* Just one warning is about making hexagons within hexagons, as this pattern does not next. Not impossible, but is easily possible to run into difficulty when trying it
+
+### Where do i put my files?
+
+A suggested folder structure
+
+![Folder structure sample](./.assets/hexagonal-architecture-explained.md/folder_structure_sample.png)
+
+### What is the development sequence?
+
+1. **Test-to-test**. Create the test as the fist driver of the app, and connect it to a test double
+2. Real-to-test
+3. Test-to-real
+4. Real-to-real
+
+* Alistair's preference is to always do 1 first
+* Once step 1 is completed, the architecture is in place. After that, the rest cab be done in any order
 
 ## FAQ — Related Concepts
 
