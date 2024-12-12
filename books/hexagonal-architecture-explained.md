@@ -304,6 +304,19 @@ A suggested folder structure
 
   * you can do little tiny implementation in step 1, add real things in steps 2, 3, 4, ... then back to step 1, and so on
 
+### Is the pattern symmetric or asymmetric?
+
+* The pattern is symmetric, the implementation is asymmetric
+* Other patterns, such as Model-View-Controller and its siblings, regulate only the driving side.
+* Ports & Adapters differs in that it says the app can have no knowledge of what its external connections are made of, no matter whether they are driving or driven
+* The app may never know its driving actors, but the configurator has to hand the app the secondary actors to use at the driven ports. This causes an asymmetry in the code, making for provided interfaces at the driving ports and required interfaces at the driven ports
+
+### Layered, onion, clean, hexagonal: what is the difference?
+
+* Ports & Adapters has only two layers: the inside (the app), and the outside (everything else)
+* Ports & Adapters requires that you organize the external actors so they connect to specific ports
+* A layered architecture has you separate code by concerns and arrange them from “higher” and “lower,” such that higher-level items call or have a dependency upon lower-level ones.More abstract concerns are placed higher in the architecture, while hardware and drivers sit on the bottom while policy-oriented items rise to the top
+
 ## Summary
 
 * Synopsis of the book. Patern definition in short form
