@@ -94,7 +94,8 @@ class Main {
 
 * History of the pattern, evolution. Original 3 articles
 * The Hexagonal (Ports & Adapters) Architecture — HaT Technical Report 2005.02. Date: 2005-09-04
-* 
+* [Component-plus-Strategy generalizes Ports-and-Adapters](https://alistaircockburn.com/Component%20plus%20strategy.pdf) — Alistair Cockburn, 2022
+* [Configurable Receiver Subsumes DependencyInjection and Dependency Lookup](https://alistaircockburn.com/Configurable%20receiver.pdf) — Alistair Cockburn, 2023
 
 ## Ports & Adapters defined
 
@@ -316,6 +317,18 @@ A suggested folder structure
 * Ports & Adapters has only two layers: the inside (the app), and the outside (everything else)
 * Ports & Adapters requires that you organize the external actors so they connect to specific ports
 * A layered architecture has you separate code by concerns and arrange them from “higher” and “lower,” such that higher-level items call or have a dependency upon lower-level ones.More abstract concerns are placed higher in the architecture, while hardware and drivers sit on the bottom while policy-oriented items rise to the top
+
+### How this relare to DDD?
+
+* They work really well together. Consider Ports & Adapters (P&A) as an architectural precursor of DDD
+* Can a bounded context (BC) have ports? Yes
+* Are all BC implementations of the P&A pattern? No
+* Are Anti-Corruption Layers (ACLs) the adapters of P&A? If a BC does not have ports around it, with their proper tests, then that BC doesn't capture a system boundary as is needed for P&A
+* ACL from DDD is a broader concept than the adapter from P&A
+
+### Is CQRS an example of Ports & Adapters?
+
+* CQRS might be implemented using the P&A. Nevertheless, CQRS itself is not inherently an example of P&A
 
 ## Summary
 
