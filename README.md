@@ -10,7 +10,7 @@ Here is a personal collection of highlight quotes, notes and summaries on differ
 
 ## 📚 Books
 
-* _.gitkeep_
+* [Hexagonal Architecture Explained](books/hexagonal-architecture-explained.md), by **Alistair Cockburn and Juan Manuel Garrido de Paz**, 2024
 
 ## 🎓 Courses
 
