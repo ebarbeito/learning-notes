@@ -24,17 +24,17 @@ Related resources
 * Small sample code piece (copy, paste it, give it a try), brief timeline of the pattern, associated costs and benefits
 
 ```java
-// (...)/ports/driving
+// sidenote: (...)/core/ports/driving
 interface ForCalculatingTaxes {
   double taxOn(double amount);
 }
 
-// (...)/ports/driven
+// sidenote: (...)/core/ports/driven
 interface ForGettingTaxRates {
   double taxRate(double amount);
 }
 
-// (...)
+// sidenote: (...)/core/interactors
 // implements a driving port, and uses a driven port
 class TaxCalculator implements ForCalculatingTaxes {
   public TaxCalculator(
@@ -45,14 +45,15 @@ class TaxCalculator implements ForCalculatingTaxes {
 	}
 }
 
-// (...)
+// sidenote: (...)/adapters/driven
 class FixedTaxRateRepository implements ForGettingTaxRates {
 	public double taxRate(double amount) {
 		return 0.15;
 	}
 }
 
-// (...)
+// sidenote: (...)/configurator         (option 1 because of the configurator role)
+// sidenote: (...)/adapters/driving/cli (option 2 because of the driving actor role)
 // In this tiny sample, Main acts both as the configurator and also the driving actor
 class Main {
 	public static void main(String[] args) {
@@ -333,4 +334,3 @@ A suggested folder structure
 ## Summary
 
 * Synopsis of the book. Patern definition in short form
-
