@@ -10,7 +10,7 @@ by Alistair Cockburn and Juan Manuel Garrido de Paz
 
 Related resources
 
-* [jmgarridopaz/discounter](jmgarridopaz/discounter) — An implementation of the application included in the "Sample Code" section of "Hexagonal Architecture" pattern
+* [jmgarridopaz/discounter](jmgarridopaz/discounter) — An implementation of the application included in the "Sample Code" section of the "Hexagonal Architecture" pattern
 * [Hexagonal architecture](https://alistair.cockburn.us/hexagonal-architecture/)
 * [Hexagonal Me](https://jmgarridopaz.github.io/), by Juan Manuel Garrido de Paz
 * [Hexagonal Architecture (Ports & Adapters) The 2023 version](https://alistaircockburn.com/Hexagonal%20Budapest%2023-05-18.pdf)
@@ -21,7 +21,7 @@ Related resources
 ## Introduction
 
 * This is a preview edition. 1st edition may come next 2025
-* Small sample code piece (copy, paste it, give it a try), brief timeline of the pattern, associated costs and benefits
+* Small sample code piece (copy, paste it, give it a try), a brief timeline of the pattern, associated costs and benefits
 
 ```java
 // sidenote: (...)/core/ports/driving
@@ -73,7 +73,7 @@ class Main {
   * Why "Hexagonal Architecture"
 
     * It was a placeholder name before Alistair understood what the sides of the hexagon stood for
-    * Not appropriate name, since number six has no meaning
+    * Not an appropriate name, since the number six has no meaning
 
   * History of the name — [Ward's wikiwiki site](http://c2.com/cgi/wiki?PortsAndAdaptersArchitecture)
 
@@ -100,7 +100,7 @@ class Main {
 
 ## Ports & Adapters defined
 
-* Explains the pattern. Definition of terms. The four elements of the pattern (Apps, Ports, Actor, Adapters), the configurator. WHat is required and specified. Useful tricks
+* Explains the pattern. Definition of terms. The four elements of the pattern (Apps, Ports, Actor, Adapters), the configurator. What is required and specified? Useful tricks
 
 ### Glossary
 
@@ -111,12 +111,12 @@ class Main {
 * **Primary or driving actor**. Actor that calls / initiates  request / sends message to the app / service. Actors can be primary in some scenarios, secondary in others
   * It is any actor that drives the SUD
   * Analogy: *A Driving Actor presses the gas pedal, initiating action*
-* **Secondary or driven actor**. A component or external system that the application interacts with to fulfill its tasks. It is “driven” by requests or commands from the application’s core
+* **Secondary or driven actor**. A component or external system that the application interacts with to fulfil its tasks. It is “driven” by requests or commands from the application’s core
   * Analogy: *A Driven Actor is the engine or wheels, responding to the input to produce a result*
-* **Interactor**. Piece of software that interacts direcly with the port
+* **Interactor**. Piece of software that interacts directly with the port
   * Analogy 1: Conductor of an Orchestra. The interactor ensures the musicians (driving and driven actors) perform their roles in harmony to produce the desired music (application behavior)
   * Analogy 2. Switchboard Operator. It connects callers (driving actors) to the right lines (driven actors) based on the context of the request
-* **Interface**. Set of method definitions declsred by an actor. Specifies a contract
+* **Interface**. Set of method definitions declared by an actor. Specifies a contract
   * **Provided interface**. Defines the services offered by the app. Used by driving interactors, implemented by the app
     * Driving Actors (Adapters) interact with the provided interface of the application
 
@@ -134,14 +134,14 @@ class Main {
 ### Elements: App, Ports, Actors, Adapters
 
 * This pattern is made by these four elements: **Application** (or system) aka the app; the **Ports**, the driving and driven external **Actors**; **Adapters** as needed at each port
-* There is a fifth element (officially outside the pattern) that you need: the configurator. The code that connect these four parts
-* The applicaion, app, or system
+* There is a fifth element (officially outside the pattern) that you need: the configurator. The code that connects these four parts
+* The application, app, or system
   * Whatever business logic you need. Written only in terms of the business
   * Technology-agnostic. No reference to any particular technology/platform connected to it
   * Ports & Adapters has you identify the places where your application meets the outside world
   * Creates a component, which declares two interfaces
     * Provided interface(s): set of services the app offers to the outside world
-    * Required interface(s): for all external entities (promary or secondary) the app defines "I will only talk to you if you talk in my language", and explicitly defines that language
+    * Required interface(s): for all external entities (primary or secondary) the app defines "I will only talk to you if you talk in my language", and explicitly defines that language
 * The ports
   * Defines the boundaries of the application
   * Every interaction between the app and the outside world happens at a port interface
@@ -157,12 +157,12 @@ class Main {
     * Any entity (human or electronic) that the **app kicks** into action
     * Requesting a service from it
   * Match perfectly with the ports
-    * Primary actors become driving actors, which interfact at the driving (primary) ports
+    * Primary actors become driving actors, which interact at the driving (primary) ports
     * Secondary actors become driven actors, which interact at the driven (secondary) ports
 * The adapters
   * A human sitting at the computer can't directly call the app. Instead, they interact via some UI (CLI, GUI, voice, ...something)
-  * These adapters convert human movements into the needed inerface, sllowing the app and the human to interact
-  * Adapters are generally needed for ant sott of real.world technology
+  * These adapters convert human movements into the needed interface, slowing the app and the human to interact
+  * Adapters are generally needed for any sott of real-world technology
   * Adapters exist outside the app
 * The configurator
   * Something has to connect all the pieces: tell the drivers how to reach the app. Tell the app which driven actors to use
@@ -175,21 +175,21 @@ class Main {
 * App defines an interface (provided or required) for all external interactions
 * App defines driving ports for the provided interfaces, and driven ports for the driven interfaces
 * External actors are not allowed to access anything inside the hexagon directly
-* Ports and interfaces, technology-neutral. They use terms hat only express business needs
+* Ports and interfaces, technology-neutral. They use terms that only express business needs
 
-### Non required things. Up to you
+### Non-required things. Up to you
 
-* The patterns says nothing about how to implement the configurator
+* The pattern says nothing about how to implement the configurator
 * It also does not legislate how you name your ports. Nor how granular the ports are
 * Nothing about how the code base is organized
-* How you organize and design your adapters
+* How do you organize and design your adapters
 * The pattern does not exclude the possibility that you have "nested Ports & Adapters"
 * Nothing to say about how you structure your application internally. You're welcome to use DDD or not, separate functions from model or not, etc.
 
 ## Code Samples
 
 * A series of samples in several langs. From dead simple to complete samples
-* Explore samples, understand how the pattern functions in different envitonments
+* Explore samples, understand how the pattern functions in different environments
 
 ### The tax calculator
 
@@ -199,8 +199,8 @@ class Main {
   * Rate repository broker, tells the calculator what rate repository to use by country
   * Introduce a second driven port `ForGettingCountryBasedTaxRateRepository`
   * Second port with one function `repositoryForCountry(country)`
-  * Need of a configurator for the broker port
-    * One options may be to use constructor injection to srt the broker at the time the TaxCalculator is created
+  * Need for a configurator for the broker port
+    * One option may be to use constructor injection to srt the broker at the time the TaxCalculator is created
 
 ### The web-hexagon
 
@@ -261,7 +261,7 @@ class Main {
 
 ### Hoe do I structure the inside of my app?
 
-* Just one warning is about making hexagons within hexagons, as this pattern does not next. Not impossible, but is easily possible to run into difficulty when trying it
+* Just one warning is about making hexagons within hexagons, as this pattern does not nest. Not impossible, but is easily possible to run into difficulty when trying it
 
 ### Where do i put my files?
 
@@ -277,8 +277,8 @@ A suggested folder structure
 4. Real-to-real
 
 * Alistair's preference is to always do 1 first
-* Once step 1 is completed, the architecture is in place. After that, the rest cab be done in any order
-* In order to change from one step to other, it is not mandatory to implement the whole business logic at once. The app does not have to be implemented at once for the first or any other step
+* Once step 1 is completed, the architecture is in place. After that, the rest can be done in any order
+* To change from one step to other, it is not mandatory to implement the whole business logic at once. The app does not have to be implemented at once for the first or any other step
   * See section 5.2 *How does this relate to Walking Skeleton*
 
 ## FAQ — Related Concepts
@@ -286,8 +286,8 @@ A suggested folder structure
 ### How does this relate to use cases?
 
 * The System Under Design in use cases is what we are calling the app
-* Primary actors in Use-Cases language are Driving actors in Ports & Adapters language; Seconday actors are Driven actors
-* Properly speaking, the concept of ports doesn't exist in use-case modeling
+* Primary actors in Use-Cases language are Driving actors in Ports & Adapters language; Secondary actors are Driven actors
+* Properly speaking, the concept of ports doesn't exist in use-case modelling
 
 ### How does this relate to Walking Skeleton?
 
@@ -298,17 +298,17 @@ A suggested folder structure
 * Where Ports & Adapters defines the architecture, Walking Skeleton advises on the process of building it
 
   * It advises against building the whole application at once, even using only the test harnesses (Step 1 in the development sequence)
-  * Instead, it advises to first create the initial nearly-empty transaction in the tests, then to connect the real technologies for that nearly-empty transaction
+  * Instead, it advises to first create the initial nearly-empty transaction in the tests, then connecting the real technologies for that nearly-empty transaction
 
 * You don't have to use Walking Skeleton
 
 * Whole business logic can not be implemented at once for the first step in the sequence
 
-  * you can do little tiny implementation in step 1, add real things in steps 2, 3, 4, ... then back to step 1, and so on
+  * you can do a little tiny implementation in step 1, add real things in steps 2, 3, 4, ... then back to step 1, and so on
 
 ### Is the pattern symmetric or asymmetric?
 
-* The pattern is symmetric, the implementation is asymmetric
+* The pattern is symmetric, but the implementation is asymmetric
 * Other patterns, such as Model-View-Controller and its siblings, regulate only the driving side.
 * Ports & Adapters differs in that it says the app can have no knowledge of what its external connections are made of, no matter whether they are driving or driven
 * The app may never know its driving actors, but the configurator has to hand the app the secondary actors to use at the driven ports. This causes an asymmetry in the code, making for provided interfaces at the driving ports and required interfaces at the driven ports
@@ -319,9 +319,9 @@ A suggested folder structure
 * Ports & Adapters requires that you organize the external actors so they connect to specific ports
 * A layered architecture has you separate code by concerns and arrange them from “higher” and “lower,” such that higher-level items call or have a dependency upon lower-level ones.More abstract concerns are placed higher in the architecture, while hardware and drivers sit on the bottom while policy-oriented items rise to the top
 
-### How this relare to DDD?
+### How does this relates to DDD?
 
-* They work really well together. Consider Ports & Adapters (P&A) as an architectural precursor of DDD
+* They work well together. Consider Ports & Adapters (P&A) as an architectural precursor of DDD
 * Can a bounded context (BC) have ports? Yes
 * Are all BC implementations of the P&A pattern? No
 * Are Anti-Corruption Layers (ACLs) the adapters of P&A? If a BC does not have ports around it, with their proper tests, then that BC doesn't capture a system boundary as is needed for P&A
@@ -333,4 +333,4 @@ A suggested folder structure
 
 ## Summary
 
-* Synopsis of the book. Patern definition in short form
+* Synopsis of the book. Pattern definition in a short form
